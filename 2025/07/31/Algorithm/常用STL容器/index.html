@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="tiny_star">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://tiny-star3.github.io/2025/07/31/algorithm/常用stl容器/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用STL容器">
+<meta property="og:url" content="http://tiny-star3.github.io/2025/07/31/Algorithm/%E5%B8%B8%E7%94%A8STL%E5%AE%B9%E5%99%A8/index.html">
+<meta property="og:site_name" content="tiny_star_blog">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale">
+<meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
+<meta property="article:published_time" content="2025-07-31T09:25:59.000Z">
+<meta property="article:modified_time" content="2025-08-01T05:52:24.063Z">
+<meta property="article:author" content="tiny_star">
+<meta property="article:tag" content="algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/mystar.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/mystar.png">
+    <meta name="theme-color" content="#6495ed">
+    <link rel="shortcut icon" href="/images/mystar.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            常用STL容器 | tiny_star_blog
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"tiny-star3.github.io","root":"/","language":"zh","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#6495ed","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"tiny_star","subtitle":{"text":["渺如尘埃，灿若星辰！","You are more than what you have become. Remember who you are!"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#87CEFA","dark":"#6495ED"},"text_style":{"title_size":"3rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Life":{"path":"/categories/Life","icon":"fa-regular fa-face-awesome"},"Metaphysics":{"path":"/categories/Metaphysics","icon":"fa-regular fa-stars"},"Cpp":{"icon":"fa-regular fa-face-glasses","path":"/categories/Cpp"},"Algorithm":{"path":"/categories/Algorithm","icon":"fa-regular fa-face-explode"},"Ai":{"path":"/categories/Ai","icon":"fa-regular fa-alien-8bit"},"Sundry":{"path":"/categories/Sundry","icon":"fa-regular fa-earth-asia"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2025/7/22 22:28:54"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/images/mystar.png" class="w-full h-full rounded-xs">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                tiny_star_blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    INICIO
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Life"
+                                        >
+                                    <i class="fa-regular fa-face-awesome fa-fw"></i>
+                                    LIFE
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Metaphysics"
+                                        >
+                                    <i class="fa-regular fa-stars fa-fw"></i>
+                                    METAPHYSICS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Cpp"
+                                        >
+                                    <i class="fa-regular fa-face-glasses fa-fw"></i>
+                                    CPP
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Algorithm"
+                                        >
+                                    <i class="fa-regular fa-face-explode fa-fw"></i>
+                                    ALGORITHM
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Ai"
+                                        >
+                                    <i class="fa-regular fa-alien-8bit fa-fw"></i>
+                                    AI
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Sundry"
+                                        >
+                                    <i class="fa-regular fa-earth-asia fa-fw"></i>
+                                    SUNDRY
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                INICIO
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Life"
+                        >
+                            <span>
+                                LIFE
+                            </span>
+                            
+                                <i class="fa-regular fa-face-awesome fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Metaphysics"
+                        >
+                            <span>
+                                METAPHYSICS
+                            </span>
+                            
+                                <i class="fa-regular fa-stars fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Cpp"
+                        >
+                            <span>
+                                CPP
+                            </span>
+                            
+                                <i class="fa-regular fa-face-glasses fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Algorithm"
+                        >
+                            <span>
+                                ALGORITHM
+                            </span>
+                            
+                                <i class="fa-regular fa-face-explode fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Ai"
+                        >
+                            <span>
+                                AI
+                            </span>
+                            
+                                <i class="fa-regular fa-alien-8bit fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Sundry"
+                        >
+                            <span>
+                                SUNDRY
+                            </span>
+                            
+                                <i class="fa-regular fa-earth-asia fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">Etiquetas</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">Categorías</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
+        <div class="label text-third-text-color text-sm">Publicaciones</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">常用STL容器</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/staravatar.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">tiny_star</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-07-31 17:25:59</span>
+        <span class="mobile">2025-07-31 17:25:59</span>
+        <span class="hover-info">Creado</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-08-01 13:52:24</span>
+            <span class="mobile">2025-08-01 13:52:24</span>
+            <span class="hover-info">Actualizado</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Algorithm/">Algorithm</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/algorithm/">algorithm</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<p><strong>无情的搬运工！（从CSDN往回搬）</strong></p>
+<p><strong>STL容器底层实现，移步Cpp    链接先欠着，还没开始写&#x2F;(ㄒoㄒ)&#x2F;~~</strong></p>
+<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><h3 id="1-about"><a href="#1-about" class="headerlink" title="1.about"></a>1.about</h3><p>vector可理解为变长数组，内部实现基于倍增思想。</p>
+<p>vector支持随机访问，即对于任意的下标0&lt;&#x3D;i&lt;n，可以像数组一样用 [i] 取值。</p>
+<h3 id="2-声明"><a href="#2-声明" class="headerlink" title="2.声明"></a>2.声明</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span>			<span class="comment">//头文件</span></span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; a;				<span class="comment">//相当于一个长度动态变化的int数组</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; b[<span class="number">233</span>];			<span class="comment">//相当于第一维长233，第二维长度动态变化的int数组</span></span><br><span class="line">vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; c;		<span class="comment">//相当于一个第一维和第二维的长度动态变化的二维int数组</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">rec</span>&#123;...&#125;;</span><br><span class="line">vector&lt;rec&gt; d;				<span class="comment">//自定义的结构体类型也可以保存在vector中</span></span><br><span class="line"></span><br><span class="line">vector&lt;T&gt; v1;				<span class="comment">//v1 是一个元素类型为 T 的空 vector</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v2</span><span class="params">(v1)</span></span>;			<span class="comment">//使 v1 中所有元素初始化 v2</span></span><br><span class="line">vector&lt;T&gt; v2 = v1;			<span class="comment">//使 v1 中所有元素初始化 v2</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v3</span><span class="params">(n, val)</span></span>;		<span class="comment">//v3 中包含了 n 个值为 val 的元素</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v4</span><span class="params">(n)</span></span>;			<span class="comment">//v4 中包含了 n 个默认值初始化的元素</span></span><br><span class="line">vector&lt;T&gt; v5&#123;a, b, c...&#125;;	<span class="comment">//使用 a, b, c... 初始化 v5</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v6</span><span class="params">(*p, *q)</span></span>;		<span class="comment">//使用另外一个数组的指针来初始化v6，这里即可以使用vector的指针，也可以使用普通数组的指针。 </span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="3-size-empty"><a href="#3-size-empty" class="headerlink" title="3.size&#x2F;empty"></a>3.size&#x2F;empty</h3><p>size函数返回vector的实际长度（包含的元素个数）。</p>
+<p>empty函数返回一个bool类型，表明vector是否为空。</p>
+<p>注：所有的STL容易都支持这两个方法，含义也都相同。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="built_in">size</span>();			<span class="comment">//返回数组vector a的长度</span></span><br><span class="line">a.<span class="built_in">empty</span>();			<span class="comment">//返回一个bool值，true为vector为空，false为vector不为空</span></span><br></pre></td></tr></table></figure></div>
+
+<p>时间复杂度：常数，即 O(1)</p>
+<h3 id="4-clear"><a href="#4-clear" class="headerlink" title="4.clear"></a>4.clear</h3><p>clear函数把vector清空。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="built_in">clear</span>();			<span class="comment">//清空数组vector a</span></span><br></pre></td></tr></table></figure></div>
+
+<p>时间复杂度：线性，即 O(n)</p>
+<p>5.迭代器<br>迭代器就像STL容器的”指针“，可以用星号”*“操作符解除引用。</p>
+<p>vector的迭代器是”随机访问迭代器“，可以把vector的迭代器与一个整数相加减，其行为和指针的移动类似。可以把vector的两个迭代器相减，其结果也和指针相减类似，得到两个迭代器对应下标之间的距离。</p>
+<p>一个保存int的vector的迭代器声明方法为：</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;<span class="type">int</span>&gt;::iterator it;			</span><br></pre></td></tr></table></figure></div>
+
+<p>6.begin&#x2F;end<br>begin函数返回指向vector中第一个元素的迭代器。例如a是一个非空的vector，则 *a.begin() 与 a[0] 的作用相同。</p>
+<p>所有容器都可以视作一个”前闭后开“的结构，end函数返回vector的尾部，即第n个元素再往后的”边界“。 *a.end() 与 a[n] 都是越界访问，其中 n&#x3D;a.size()。</p>
+<p>下标遍历vector数组</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;a.<span class="built_in">size</span>();i++)</span><br><span class="line">&#123;</span><br><span class="line">    cout&lt;&lt;a[i]&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>迭代器遍历vector数组</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(vector&lt;<span class="type">int</span>&gt;::iterator it=a.<span class="built_in">begin</span>();it!=a.<span class="built_in">end</span>();it++)</span><br><span class="line">&#123;</span><br><span class="line">    cout&lt;&lt;*it&lt;&lt;endl;			<span class="comment">//遍历输出数组vector a的值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>时间复杂度：常数，即 O(1)</p>
+<h3 id="7-front-back"><a href="#7-front-back" class="headerlink" title="7.front&#x2F;back"></a>7.front&#x2F;back</h3><p>front函数返回vector的第一个元素，等价于 *a.begin() 和 a[0]。</p>
+<p>back函数返回vector的最后一个元素，等价于 *–a.end() 和 a[a.size()-1]。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="built_in">front</span>()			<span class="comment">//返回数组vector a的第一个元素</span></span><br><span class="line">a.<span class="built_in">back</span>()			<span class="comment">//返回数组vector a的最后一个元素</span></span><br></pre></td></tr></table></figure></div>
+
+<p>时间复杂度：常数，即 O(1)</p>
+<h3 id="8-push-back-pop-back"><a href="#8-push-back-pop-back" class="headerlink" title="8.push_back&#x2F;pop_back"></a>8.push_back&#x2F;pop_back</h3><p>push_back(x)函数将元素x插入到vector的尾部。</p>
+<p>pop_back()函数删除vector的最后一个元素。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="built_in">push_back</span>(x)			<span class="comment">//把元素x插入到vector a的尾部</span></span><br><span class="line">a.<span class="built_in">pop_back</span>()			<span class="comment">//删除vector a的最后一个元素</span></span><br></pre></td></tr></table></figure></div>
+
+<p>时间复杂度：常数，即 O(1)</p>
+<h3 id="9-resize"><a href="#9-resize" class="headerlink" title="9.resize"></a>9.resize</h3><p>resize() 改变vector的大小。如果 <code>n</code> 小于当前大小，则销毁额外的元素。如果 <code>n</code> 大于当前容器大小，则在向量末尾插入新元素。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">resize</span> <span class="params">(size_type n)</span></span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">resize</span> <span class="params">(size_type n, <span class="type">const</span> value_type&amp; val)</span></span>;			<span class="comment">//n为新容器的大小，val为容器元素的初始值</span></span><br></pre></td></tr></table></figure></div>
+
+<p>时间复杂度：线性，即 O(n)</p>
+<h3 id="10-emplace-back（C-11）"><a href="#10-emplace-back（C-11）" class="headerlink" title="10.emplace_back（C++ 11）"></a>10.emplace_back（C++ 11）</h3><p>emplace_back()在向量的末尾插入新元素。如果需要更多空间，则会发生重新分配。此方法将容器大小增加一倍。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">emplace_back</span> <span class="params">(Args&amp;&amp;... args)</span></span>;			<span class="comment">//转发参数以构造新元素。</span></span><br><span class="line"></span><br><span class="line">a.<span class="built_in">emplace_back</span>(b);			<span class="comment">//在a的末尾插入b</span></span><br></pre></td></tr></table></figure></div>
+
+<p>时间复杂度：常数，即 O(1)</p>
+<h3 id="11-insert"><a href="#11-insert" class="headerlink" title="11.insert"></a>11.insert</h3><p>insert()在容器中的 <code>position</code> 插入新元素来扩展向量。如果需要更多空间，则会发生重新分配。此函数将容器大小增加一。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">iterator <span class="title">insert</span> <span class="params">(const_iterator position, <span class="type">const</span> value_type&amp; val)</span></span>;	</span><br><span class="line"><span class="comment">//position为向量中要插入新元素的索引。val为要分配给新插入元素的值。返回一个指向新插入元素的迭代器。</span></span><br></pre></td></tr></table></figure></div>
+
+<p>时间复杂度：线性，即 O(n)</p>
+<h3 id="12-erase"><a href="#12-erase" class="headerlink" title="12.erase"></a>12.erase</h3><p>erase() 从vector中删除单个元素，从vector中删除元素范围。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">iterator <span class="title">erase</span> <span class="params">(const_iterator position)</span></span>;	</span><br><span class="line"><span class="comment">//position为迭代器指向向量元素。返回一个被删除元素后面的元素的迭代器。</span></span><br><span class="line"><span class="function">iterator <span class="title">erase</span> <span class="params">(const_iterator first, const_iterator last)</span></span>;</span><br><span class="line"><span class="comment">//first为输入迭代器到范围内的初始位置。last为输入迭代器到范围内的最终位置。返回一个被删除元素后面的元素迭代器。</span></span><br></pre></td></tr></table></figure></div>
+
+<p>时间复杂度：线性，即 O(n)</p>
+<h2 id="queue"><a href="#queue" class="headerlink" title="queue"></a>queue</h2><h3 id="1-about-1"><a href="#1-about-1" class="headerlink" title="1.about"></a>1.about</h3><p>头文件queue主要包括循环队列queue和优先队列priority_queue两个容器。</p>
+<h3 id="2-声明-1"><a href="#2-声明-1" class="headerlink" title="2.声明"></a>2.声明</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span>						<span class="comment">//头文件</span></span></span><br><span class="line">queue&lt;<span class="type">int</span>&gt; q1;							<span class="comment">//存储int的队列</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">rec</span>&#123;...&#125;;</span><br><span class="line">queue&lt;rec&gt; q2;</span><br><span class="line"></span><br><span class="line">priority_queue&lt;<span class="type">int</span>&gt; q3;</span><br><span class="line">priority_queue&lt;pair&lt;<span class="type">int</span>,<span class="type">int</span>&gt;&gt; q4;</span><br><span class="line">priority_queue&lt;<span class="type">int</span>,vector,less&gt; q5;			<span class="comment">//最大堆（默认为最大堆）</span></span><br><span class="line">priority_queue&lt;<span class="type">int</span>,vector,greater&gt; q6;		<span class="comment">//最小堆</span></span><br></pre></td></tr></table></figure></div>
+
+<p>注：pair&lt;&gt;: C++内置的二元组，尖括号分别指定二元组的第一元、第二元的类型。可以用make_pair函数创建二元组，用成员变量first访问第一元、second访问第二元。在比较大小时，以第一元为第一关键字、第二元为第二关键字。</p>
+<h3 id="3-循环队列queue"><a href="#3-循环队列queue" class="headerlink" title="3.循环队列queue"></a>3.循环队列queue</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>实例</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>push</td>
+<td>入队（从队尾)</td>
+<td>q.push(element);</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>pop</td>
+<td>出队（从队头）</td>
+<td>q.pop();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>front</td>
+<td>队头元素</td>
+<td>int x &#x3D; q.front();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>back</td>
+<td>队尾元素</td>
+<td>int y &#x3D; q.back();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>size</td>
+<td>实际长度（包含的元素个数）</td>
+<td>int z &#x3D; q.size();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>是否为空</td>
+<td>bool a&#x3D;q.empty();</td>
+<td>O(1)</td>
+</tr>
+</tbody></table>
+<h3 id="4-优先队列priority-queue"><a href="#4-优先队列priority-queue" class="headerlink" title="4.优先队列priority_queue"></a>4.优先队列priority_queue</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>实例</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>size</td>
+<td>实际长度（包含的元素个数）</td>
+<td>int x &#x3D; q.size();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>是否为空</td>
+<td>bool y &#x3D; q.empty();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>push</td>
+<td>把元素插入堆</td>
+<td>q.push(x);</td>
+<td>O(logn)</td>
+</tr>
+<tr>
+<td>pop</td>
+<td>删除堆顶元素</td>
+<td>q.pop();</td>
+<td>O(logn)</td>
+</tr>
+<tr>
+<td>top</td>
+<td>查询栈顶元素（最大值）</td>
+<td>int z &#x3D; q.top();</td>
+<td>O(1)</td>
+</tr>
+</tbody></table>
+<h2 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h2><h3 id="1-about-2"><a href="#1-about-2" class="headerlink" title="1.about"></a>1.about</h3><p>双端队列deque是一个支持在两端高效插入或删除元素的连续线性存储空间。</p>
+<p>它就像是vector和queue的结合。</p>
+<p>与vector相比，deque在头部增删元素仅需要 O(1)；</p>
+<p>与queue相比，deque像数组一样支持随机访问。</p>
+<h3 id="2-声明-2"><a href="#2-声明-2" class="headerlink" title="2.声明"></a>2.声明</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;deque&gt;</span>								<span class="comment">//头文件</span></span></span><br><span class="line">deque&lt;<span class="type">int</span>&gt; d1;    								<span class="comment">//创建一个empty的int型队列</span></span><br><span class="line"><span class="function">deque&lt;<span class="type">int</span>&gt; <span class="title">d2</span><span class="params">(<span class="number">8</span>)</span></span>;  								<span class="comment">//创建一个有8个元素的int型队列，默认初始化值(value)为0</span></span><br><span class="line"><span class="function">deque&lt;<span class="type">int</span>&gt; <span class="title">d3</span><span class="params">(<span class="number">8</span>, <span class="number">50</span>)</span></span>;  							<span class="comment">//创建一个有8个元素的int型队列，默认初始化值(value)都设为50</span></span><br><span class="line"><span class="function">deque&lt;<span class="type">int</span>&gt; <span class="title">d4</span><span class="params">(d<span class="number">1.</span>begin(), d<span class="number">1.</span>end())</span></span>; 			<span class="comment">//通过迭代器创建队列</span></span><br><span class="line"><span class="function">deque&lt;<span class="type">int</span>&gt; <span class="title">d5</span><span class="params">(d1)</span></span>;    							<span class="comment">//通过拷贝构造创建队列</span></span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="3-method"><a href="#3-method" class="headerlink" title="3.method"></a>3.method</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>示例</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>size</td>
+<td>实际长度（包含的元素个数）</td>
+<td>int x &#x3D; d.size();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>d是否为空</td>
+<td>bool y &#x3D; d.empty();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>[]</td>
+<td>随机访问</td>
+<td>int z &#x3D; d[0];</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>begin</td>
+<td>deque的头迭代器</td>
+<td>deque<int>::iterator it1 &#x3D; d.begin();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>end</td>
+<td>deque的尾迭代器</td>
+<td>deque<int>::iterator it2 &#x3D; d.end();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>front</td>
+<td>队头元素</td>
+<td>int a &#x3D; d.front();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>back</td>
+<td>队尾元素</td>
+<td>int b &#x3D; d.back();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>push_back</td>
+<td>从队尾入队</td>
+<td>d.push_back(x);</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>push_front</td>
+<td>从队头入队</td>
+<td>d.push_front(y);</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>pop_front</td>
+<td>从队头出队</td>
+<td>d.pop_front();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>pop_back</td>
+<td>从队尾出队</td>
+<td>d.pop_back();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>clear</td>
+<td>清空队列</td>
+<td>d.clear();</td>
+<td>O(n)</td>
+</tr>
+</tbody></table>
+<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><h3 id="1-about-3"><a href="#1-about-3" class="headerlink" title="1.about"></a>1.about</h3><p>stack<T> 容器适配器中的数据是以 LIFO 的方式组织的，即先进后出，当想访问栈内某一元素时，必须将其顶部的元素都弹出出栈后，才能访问该元素。</p>
+<h3 id="2-声明-3"><a href="#2-声明-3" class="headerlink" title="2.声明"></a>2.声明</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span>						<span class="comment">//头文件</span></span></span><br><span class="line">stack&lt;<span class="type">int</span>&gt; s1;							<span class="comment">//存储int的栈</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">rec</span>&#123;...&#125;;</span><br><span class="line">stack&lt;rec&gt; s2;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="3-method-1"><a href="#3-method-1" class="headerlink" title="3.method"></a>3.method</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>实例</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>size</td>
+<td>实际长度（包含的元素个数）</td>
+<td>int x &#x3D; s.size();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>是否为空</td>
+<td>bool y &#x3D; s.empty();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>top</td>
+<td>栈顶元素</td>
+<td>int z &#x3D; s.top();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>push</td>
+<td>入栈（从栈顶）</td>
+<td>s.push(a);</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>pop</td>
+<td>出栈（从栈顶）</td>
+<td>s.pop();</td>
+<td>O(1)</td>
+</tr>
+</tbody></table>
+<h2 id="set"><a href="#set" class="headerlink" title="set"></a>set</h2><h3 id="1-about-4"><a href="#1-about-4" class="headerlink" title="1.about"></a>1.about</h3><p>头文件set主要包括set和multiset两个容器，分别是“有序集合”和“有序多重集”，即前者的元素不能重复，而后者可以包含若干个相等的元素。set和multiset的内部实现是一颗红黑树（平衡树的一种），它们支持的函数基本相同。</p>
+<h3 id="2-声明-4"><a href="#2-声明-4" class="headerlink" title="2.声明"></a>2.声明</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;set&gt;</span>							<span class="comment">//头文件</span></span></span><br><span class="line">set&lt;<span class="type">int</span>&gt; s1;							<span class="comment">//存储int的有序集合set</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">rec</span>&#123;...&#125;;</span><br><span class="line">set&lt;rec&gt; s2;</span><br><span class="line"></span><br><span class="line">multiset&lt;<span class="type">double</span>&gt; s3;</span><br><span class="line"></span><br><span class="line">set&lt;Type&gt; s						      	<span class="comment">//定义一个set容器</span></span><br><span class="line"><span class="function">set&lt;Type&gt; <span class="title">s</span><span class="params">(s1)</span>			              	<span class="comment">//定义一个set容器，并用容器s1来初始化</span></span></span><br><span class="line"><span class="function">set&lt;Type&gt; <span class="title">s</span><span class="params">(b, e)</span>					  	<span class="comment">//b和e分别为迭代器的开始和结束的标记</span></span></span><br><span class="line"><span class="function">set&lt;Type&gt; <span class="title">s</span><span class="params">(s<span class="number">1.</span>begin(), s<span class="number">1.</span>begin()<span class="number">+3</span>)</span> 	<span class="comment">//用容器s1的第0个到第2个值初始化s</span></span></span><br><span class="line"><span class="function">set&lt;Type&gt; <span class="title">s</span><span class="params">(a, a + <span class="number">5</span>)</span>      		      	<span class="comment">//将a数组的元素初始化vec向量，不包括a[4]</span></span></span><br><span class="line"><span class="function">set&lt;Type&gt; <span class="title">s</span><span class="params">(&amp;a[<span class="number">1</span>], &amp;a[<span class="number">4</span>])</span> 			  	<span class="comment">//将a[1]~a[4]范围内的元素作为s的初始值</span></span></span><br></pre></td></tr></table></figure></div>
+
+<p>set和multiset存储的元素必须定义“小于号”运算符。</p>
+<h3 id="3-迭代器"><a href="#3-迭代器" class="headerlink" title="3.迭代器"></a>3.迭代器</h3><p>set和multiset的迭代器称为“双向访问迭代器”。不支持“随机访问”，支持星号 (*) 解除引用，仅支持“++”和“–”两个与算术相关的操作。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">set&lt;<span class="type">int</span>&gt;::iterator it;</span><br><span class="line"></span><br><span class="line">it = s.<span class="built_in">begin</span>();</span><br><span class="line">it++;</span><br><span class="line"><span class="comment">//it将指向“下一个”元素。这里的“下一个”是指在元素从小到大排序的结果中，排在it下一名的元素。</span></span><br><span class="line">it--;</span><br><span class="line"><span class="comment">//同理，it将会指向排在“上一个”的元素。</span></span><br><span class="line"><span class="comment">//执行“++”和“--”操作的时间复杂度都是O(logn)。</span></span><br><span class="line"><span class="comment">//执行操作前后，务必仔细检查，避免迭代器指向的位置超出首、尾迭代器之间的范围。</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="4-method"><a href="#4-method" class="headerlink" title="4.method"></a>4.method</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>实例</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>size</td>
+<td>实际长度（包含的元素个数）</td>
+<td>int x &#x3D; s.size();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>是否为空</td>
+<td>bool y &#x3D; s.empty();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>clear</td>
+<td>清空</td>
+<td>s.clear();</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>begin</td>
+<td>返回集合的首迭代器</td>
+<td>set<int>::iterator it1 &#x3D; s.begin();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>end</td>
+<td>返回集合的尾迭代器</td>
+<td>set<int>::iterator it2 &#x3D; s.end();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>insert</td>
+<td>将一个元素插入到集合</td>
+<td>s.insert(x);</td>
+<td>O(logn)</td>
+</tr>
+<tr>
+<td>find</td>
+<td>在集合中查找等于x的元素，并返回指向该元素的迭代器。如不存在，返回s.end()</td>
+<td>set<int>::iterator it &#x3D; s.find(x);</td>
+<td>O(logn)</td>
+</tr>
+<tr>
+<td>lower_bound</td>
+<td>查找&gt;&#x3D;x的元素中最小的一个，并返回指向该元素的迭代器</td>
+<td>set<int>::iterator it &#x3D; s.lower_bound(x);</td>
+<td>O(logn)</td>
+</tr>
+<tr>
+<td>upper_bound</td>
+<td>查找&gt;x的元素中最小的一个，并返回指向该元素的迭代器</td>
+<td>set<int>::iterator it &#x3D; s.upper_bound(x);</td>
+<td>O(logn)</td>
+</tr>
+<tr>
+<td>erase</td>
+<td>从集合中删除迭代器 it 指向的元素                                                              从集合中删除所有等于x的元素</td>
+<td>s.erase(it);                           s.erase(x);</td>
+<td>O(logn)           O(k+logn)，k为被删除元素个数</td>
+</tr>
+<tr>
+<td>count</td>
+<td>返回集合中等于x的元素个数</td>
+<td>int y &#x3D; s.count(x);</td>
+<td>O(k+logn)，k为元素x个数</td>
+</tr>
+</tbody></table>
+<h2 id="bitset"><a href="#bitset" class="headerlink" title="bitset"></a>bitset</h2><h3 id="1-about-5"><a href="#1-about-5" class="headerlink" title="1.about"></a>1.about</h3><p>bitset可看作一个多位二进制数，每8位占用1个字节，相当于采用了状态压缩的二进制数组，并支持基本的位运算。</p>
+<p>在估算程序运行的时间时，一般以32位整数的运算次数为基准，因此n位 bitset 执行一次位运算的复杂度可视为n&#x2F;32，效率较高。</p>
+<h3 id="2-声明和初始化"><a href="#2-声明和初始化" class="headerlink" title="2.声明和初始化"></a>2.声明和初始化</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bitset&gt;</span>				<span class="comment">//头文件</span></span></span><br><span class="line">bitset&lt;10000&gt; b;				<span class="comment">//表示一个10000位二进制数，&lt;&gt;中填写位数。</span></span><br><span class="line"></span><br><span class="line">bitset&lt;n&gt; b;	          		<span class="comment">//b有n位，每位都为0</span></span><br><span class="line"><span class="function">bitset&lt;n&gt; <span class="title">b</span><span class="params">(u)</span></span>;	          		<span class="comment">//b是unsigned long型u的一个副本</span></span><br><span class="line"><span class="function">bitset&lt;n&gt; <span class="title">b</span><span class="params">(s)</span></span>;	          		<span class="comment">//b是string对象s中含有的位串的副本</span></span><br><span class="line"><span class="function">bitset&lt;n&gt; <span class="title">b</span><span class="params">(s, pos, n)</span></span>;	  		<span class="comment">//b是s中从位置pos开始的n个位的副本</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="3-位运算操作符"><a href="#3-位运算操作符" class="headerlink" title="3.位运算操作符"></a>3.位运算操作符</h3><p><strong>~b</strong>：返回对bitset b按位取反的结果。</p>
+<p><strong>&amp;</strong>, <strong>|,</strong> <strong>^</strong>：返回对两个位数相同的bitset执行按位与、或、异或运算的结果。</p>
+<p><strong>&gt;&gt;</strong>, <strong>&lt;&lt;</strong>：返回把一个bitset右移、左移若干位的结果。</p>
+<p><strong>&#x3D;&#x3D;</strong>, <strong>!&#x3D;</strong>：比较两个bitset代表的二进制数是否相等。</p>
+<h3 id="4-操作符"><a href="#4-操作符" class="headerlink" title="4.[ ]操作符"></a>4.[ ]操作符</h3><p>**b[k]**表示b的第k位，既可以取值，也可以赋值。</p>
+<p>在10000位二进制数中，最低位为 b[0] ，最高位为 b[9999] 。</p>
+<h3 id="5-method"><a href="#5-method" class="headerlink" title="5.method"></a>5.method</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>实例</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>size</td>
+<td>bitset 的长度</td>
+<td>int x &#x3D; b.size();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>count</td>
+<td>返回有多少位为1</td>
+<td>int y &#x3D; b.count();</td>
+<td>O(n&#x2F;w)，w一般为64注</td>
+</tr>
+<tr>
+<td>any</td>
+<td>若所有位都为0，返回false；   若s至少一位为1，返回true</td>
+<td>bool a &#x3D; b.any();</td>
+<td>O(n&#x2F;w)，w一般为64</td>
+</tr>
+<tr>
+<td>none</td>
+<td>若所有位都为0，返回true；   若s至少一位为1，返回falseb</td>
+<td>bool c &#x3D; b.none();</td>
+<td>O(n&#x2F;w)，w一般为64</td>
+</tr>
+<tr>
+<td>set</td>
+<td>把所有位变为1；                   把第k位改为v，即 b[k] &#x3D; v</td>
+<td>b.set();        b.set(k,v);</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>把所有位变为0；                   把第k位改为0，即 b[k] &#x3D; 0</td>
+<td>b.reset();     b.reset(k);</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>flip</td>
+<td>把所有位取反，即 s &#x3D; ~s；   把第k位取反，即 b[k]^&#x3D;1</td>
+<td>b.flip();         b.flip(k);</td>
+<td>O(1)</td>
+</tr>
+</tbody></table>
+<p>注：bitset的count操作的复杂度未在C++ Reference 中标注。一般来说，其复杂度为关于bitset位数的线性复杂度，但实际效率可能稍快一些。</p>
+<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><h3 id="1-about-6"><a href="#1-about-6" class="headerlink" title="1.about"></a>1.about</h3><p>map容器是一个键值对 key-value 的映射。其内部实现是一棵以 key 为关键码的红黑树。map的 key 和 value 可以是任意类型，其中 key 必须定义“小于号”运算符。</p>
+<p>在很多时候， map容器被当作Hash表使用，建立从复杂信息 key （如字符串）到简单信息 value （如一定范围内的整数）的映射。</p>
+<p>因为map基于平衡树实现，所以它的大部分操作的时间复杂度都在 O(logn) 级别，略慢于使用Hash函数实现的传统Hash表。从C++11开始，STL中新增了unordered_map等基于Hash函数实现的传统Hash表。</p>
+<h3 id="2-声明和初始化-1"><a href="#2-声明和初始化-1" class="headerlink" title="2.声明和初始化"></a>2.声明和初始化</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;map&gt;</span>							<span class="comment">//头文件</span></span></span><br><span class="line">map&lt;key_type, value_type&gt; name;</span><br><span class="line"></span><br><span class="line">map&lt;<span class="type">long</span> <span class="type">long</span>, <span class="type">bool</span>&gt; vis;</span><br><span class="line">map&lt;string, <span class="type">int</span>&gt; hash;</span><br><span class="line">map&lt; pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt;, vector&lt;<span class="type">int</span>&gt; &gt; test;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化构造</span></span><br><span class="line">map&lt;<span class="type">int</span>, string&gt; map_test1;		<span class="comment">// 默认构造</span></span><br><span class="line"><span class="function">map&lt;<span class="type">int</span>, string&gt; <span class="title">map_test2</span><span class="params">(map_test<span class="number">1.</span>begin(), map_test<span class="number">1.</span>end())</span></span>;	<span class="comment">// 范围构造</span></span><br><span class="line"></span><br><span class="line">map&lt;<span class="type">int</span>, string&gt; map_test3 = map_test2;			<span class="comment">// 赋值构造 </span></span><br><span class="line"><span class="function">map&lt;<span class="type">int</span>, string&gt; <span class="title">map_test4</span><span class="params">(map_test2)</span></span>;			<span class="comment">// 复制构造 </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 内部是一个pair对象</span></span><br><span class="line">map&lt;<span class="type">int</span>, string&gt; map_test5&#123; <span class="built_in">pair</span>&lt;<span class="type">int</span>, string&gt;(<span class="number">1</span>, <span class="string">&quot;aaa&quot;</span>),<span class="built_in">pair</span>&lt;<span class="type">int</span>, string&gt;(<span class="number">2</span>, <span class="string">&quot;bbb&quot;</span>) &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用make_pair 构造 pair</span></span><br><span class="line">map&lt;<span class="type">int</span>, string&gt; map_test6&#123; <span class="built_in">make_pair</span>(<span class="number">1</span>, <span class="string">&quot;abc&quot;</span>), <span class="built_in">make_pair</span>(<span class="number">2</span>, <span class="string">&quot;xyz&quot;</span>) &#125;;</span><br></pre></td></tr></table></figure></div>
+
+<p>注：pair&lt;&gt;: C++内置的二元组，尖括号分别指定二元组的第一元、第二元的类型。可以用make_pair函数创建二元组，用成员变量first访问第一元、second访问第二元。在比较大小时，以第一元为第一关键字、第二元为第二关键字。</p>
+<h3 id="3-迭代器-1"><a href="#3-迭代器-1" class="headerlink" title="3.迭代器"></a>3.迭代器</h3><p>map的迭代器与set一样，也是“双向访问迭代器”。对map的迭代器解除引用后，将得到一个二元组 pair&lt;key_type, value_type&gt;。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">map&lt;key_type, value_type&gt;::iterator it;</span><br><span class="line">map&lt;string,<span class="type">int</span>&gt;::iterator it;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="4-操作符-1"><a href="#4-操作符-1" class="headerlink" title="4.[ ]操作符"></a>4.[ ]操作符</h3><p>**h[key]**返回key映射到的value的引用，时间复杂度为O(logn)。</p>
+<p>可以通过 h[key] 来得到 key 对应的 value，还可以对 h[key] 进行赋值操作，改变 key 对应的 value。</p>
+<p>若查找的 key 不存在，则执行 h[key] 后，h会自动新建一个二元组 (key, zero)，并返回 zero 的引用。这里 zero 表示一个广义“零值”，如整数 0、空字符串等。如果查找之后不对 h[key] 进行赋值，那么时间一长， h会包含很多无用的“零值二元值”，白白地占用了空间，降低了程序运行效率。强烈建议在用 [ ] 操作符查询之前，先用 find 方法检查 key 的存在性。</p>
+<h3 id="5-method-1"><a href="#5-method-1" class="headerlink" title="5.method"></a>5.method</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>实例</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>size</td>
+<td>实际长度（包含的元素个数）</td>
+<td>int x &#x3D; m.size();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>是否为空</td>
+<td>bool y &#x3D; m.empty();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>clear</td>
+<td>清空</td>
+<td>m.clear();</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>begin</td>
+<td>首迭代器</td>
+<td>map&lt;key_type, value_type&gt;::iterator it &#x3D; m.begin();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>end</td>
+<td>尾迭代器</td>
+<td>map&lt;key_type, value_type&gt;::iterator it &#x3D; m.end();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>insert</td>
+<td>插入，参数为pair&lt;key_type,value_type&gt;</td>
+<td>m.insert(make_pair(1,2));</td>
+<td>O(logn)</td>
+</tr>
+<tr>
+<td>erase</td>
+<td>删除，参数可以是key或者迭代器</td>
+<td>m.erase(2);            m.erase(it);</td>
+<td>O(logn)</td>
+</tr>
+<tr>
+<td>find</td>
+<td>查找，查找key为x的二元组，返回指向该二元组的迭代器。若不存在，返回h.end()</td>
+<td>map&lt;key_type, value_type&gt;::iterator it &#x3D;  m.find(x)</td>
+<td>O(logn)</td>
+</tr>
+</tbody></table>
+<h2 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h2><h3 id="1-about-7"><a href="#1-about-7" class="headerlink" title="1.about"></a>1.about</h3><p>unordered_map 容器，直译过来就是”无序 map 容器”的意思。所谓“无序”，指的是 unordered_map 容器不会像 map 容器那样对存储的数据进行排序。换句话说，unordered_map 容器和 map 容器仅有一点不同，即 map 容器中存储的数据是有序的，而 unordered_map 容器中是无序的。</p>
+<p>具体来讲，unordered_map 容器和 map 容器一样，以键值对（pair类型）的形式存储数据，存储的各个键值对的键互不相同且不允许被修改。但由于 unordered_map 容器底层采用的是哈希表存储结构，该结构本身不具有对数据的排序功能，所以此容器内部不会自行对存储的键值对进行排序。</p>
+<h3 id="2-定义和初始化"><a href="#2-定义和初始化" class="headerlink" title="2.定义和初始化"></a>2.定义和初始化</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_map&gt;</span>							<span class="comment">//头文件</span></span></span><br><span class="line">unordered_map&lt;key_type, value_type&gt; name;</span><br><span class="line"></span><br><span class="line">unordered_map&lt;<span class="type">long</span> <span class="type">long</span>, <span class="type">bool</span>&gt; vis;</span><br><span class="line">unordered_map&lt;string, <span class="type">int</span>&gt; hash;</span><br><span class="line">unordered_map&lt; pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt;, vector&lt;<span class="type">int</span>&gt; &gt; test;</span><br></pre></td></tr></table></figure></div>
+
+<p>注：pair&lt;&gt;: C++内置的二元组，尖括号分别指定二元组的第一元、第二元的类型。可以用make_pair函数创建二元组，用成员变量first访问第一元、second访问第二元。在比较大小时，以第一元为第一关键字、第二元为第二关键字。</p>
+<h3 id="3-迭代器-2"><a href="#3-迭代器-2" class="headerlink" title="3.迭代器"></a>3.迭代器</h3><p>对unordered_map的迭代器解除引用后，将得到一个二元组 pair&lt;key_type, value_type&gt;。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unordered_map&lt;key_type, value_type&gt;::iterator it;</span><br><span class="line">unordered_map&lt;string,<span class="type">int</span>&gt;::iterator it;</span><br></pre></td></tr></table></figure></div>
+
+<p>遍历unordered_map：</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(unordered_map&lt;string,<span class="type">int</span>&gt;::iterator it = hash.<span class="built_in">begin</span>(); it != hash.<span class="built_in">end</span>(); it++)</span><br><span class="line">&#123;</span><br><span class="line">    cout&lt;&lt;(*it).first&lt;&lt;<span class="string">&#x27; &#x27;</span>&lt;&lt;(*it).second&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="4-操作符-2"><a href="#4-操作符-2" class="headerlink" title="4.[ ]操作符"></a>4.[ ]操作符</h3><p>**h[key]**返回key映射到的value的引用，时间复杂度为O(logn)。</p>
+<p>可以通过 h[key] 来得到 key 对应的 value，还可以对 h[key] 进行赋值操作，改变 key 对应的 value。</p>
+<p>若查找的 key 不存在，则执行 h[key] 后，h会自动新建一个二元组 (key, zero)，并返回 zero 的引用。这里 zero 表示一个广义“零值”，如整数 0、空字符串等。如果查找之后不对 h[key] 进行赋值，那么时间一长， h会包含很多无用的“零值二元值”，白白地占用了空间，降低了程序运行效率。强烈建议在用 [ ] 操作符查询之前，先用 find 方法检查 key 的存在性。</p>
+<h3 id="5-method-2"><a href="#5-method-2" class="headerlink" title="5.method"></a>5.method</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+<th>实例</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>size</td>
+<td>实际长度（包含的元素个数）</td>
+<td>int x &#x3D; m.size();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>是否为空</td>
+<td>bool y &#x3D; m.empty();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>clear</td>
+<td>清空</td>
+<td>m.clear();</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>begin</td>
+<td>首迭代器</td>
+<td>map&lt;key_type, value_type&gt;::iterator it &#x3D; m.begin();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>end</td>
+<td>尾迭代器</td>
+<td>map&lt;key_type, value_type&gt;::iterator it &#x3D; m.end();</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>insert</td>
+<td>插入，参数为pair&lt;key_type,value_type&gt;</td>
+<td>m.insert(make_pair(1,2));</td>
+<td>O(logn)</td>
+</tr>
+<tr>
+<td>erase</td>
+<td>删除，参数可以是key或者迭代器</td>
+<td>m.erase(2);            m.erase(it);</td>
+<td>O(logn)</td>
+</tr>
+<tr>
+<td>find</td>
+<td>查找，查找key为x的二元组，返回指向该二元组的迭代器。若不存在，返回h.end()</td>
+<td>map&lt;key_type, value_type&gt;::iterator it &#x3D;  m.find(x)</td>
+<td>O(logn)</td>
+</tr>
+</tbody></table>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Título:</strong> 常用STL容器</li>
+        <li><strong>Autor:</strong> tiny_star</li>
+        <li><strong>Creado el
+                :</strong> 2025-07-31 17:25:59</li>
+        
+            <li>
+                <strong>Actualizado el
+                    :</strong> 2025-08-01 13:52:24
+            </li>
+        
+        <li>
+            <strong>Enlace:</strong> https://tiny-star3.github.io/2025/07/31/Algorithm/常用STL容器/
+        </li>
+        <li>
+            <strong>
+                Licencia:
+            </strong>
+            
+
+            
+                Este trabajo está licenciado bajo <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/algorithm/">#algorithm</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2025/07/31/Life/blm-Agricultural-University-Summer-Camp/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">伯乐码-农大夏令营</span>
+						<span class="post-nav-item">Publicaciones anteriores</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/07/22/Life/My-New-Post/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">My New Post</span>
+						<span class="post-nav-item">Publicaciones siguientes</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comentarios
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">En esta página</div>
+		<div class="page-title">常用STL容器</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#vector"><span class="nav-text">vector</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-about"><span class="nav-text">1.about</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A3%B0%E6%98%8E"><span class="nav-text">2.声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-size-empty"><span class="nav-text">3.size&#x2F;empty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-clear"><span class="nav-text">4.clear</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-front-back"><span class="nav-text">7.front&#x2F;back</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-push-back-pop-back"><span class="nav-text">8.push_back&#x2F;pop_back</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-resize"><span class="nav-text">9.resize</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-emplace-back%EF%BC%88C-11%EF%BC%89"><span class="nav-text">10.emplace_back（C++ 11）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-insert"><span class="nav-text">11.insert</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-erase"><span class="nav-text">12.erase</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#queue"><span class="nav-text">queue</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-about-1"><span class="nav-text">1.about</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A3%B0%E6%98%8E-1"><span class="nav-text">2.声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%97queue"><span class="nav-text">3.循环队列queue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97priority-queue"><span class="nav-text">4.优先队列priority_queue</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deque"><span class="nav-text">deque</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-about-2"><span class="nav-text">1.about</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A3%B0%E6%98%8E-2"><span class="nav-text">2.声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-method"><span class="nav-text">3.method</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stack"><span class="nav-text">stack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-about-3"><span class="nav-text">1.about</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A3%B0%E6%98%8E-3"><span class="nav-text">2.声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-method-1"><span class="nav-text">3.method</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set"><span class="nav-text">set</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-about-4"><span class="nav-text">1.about</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A3%B0%E6%98%8E-4"><span class="nav-text">2.声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="nav-text">3.迭代器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-method"><span class="nav-text">4.method</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bitset"><span class="nav-text">bitset</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-about-5"><span class="nav-text">1.about</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A3%B0%E6%98%8E%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">2.声明和初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%8D%E8%BF%90%E7%AE%97%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-text">3.位运算操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-text">4.[ ]操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-method"><span class="nav-text">5.method</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#map"><span class="nav-text">map</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-about-6"><span class="nav-text">1.about</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A3%B0%E6%98%8E%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96-1"><span class="nav-text">2.声明和初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%BF%AD%E4%BB%A3%E5%99%A8-1"><span class="nav-text">3.迭代器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%93%8D%E4%BD%9C%E7%AC%A6-1"><span class="nav-text">4.[ ]操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-method-1"><span class="nav-text">5.method</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unordered-map"><span class="nav-text">unordered_map</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-about-7"><span class="nav-text">1.about</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%9A%E4%B9%89%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">2.定义和初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%BF%AD%E4%BB%A3%E5%99%A8-2"><span class="nav-text">3.迭代器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%93%8D%E4%BD%9C%E7%AC%A6-2"><span class="nav-text">4.[ ]操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-method-2"><span class="nav-text">5.method</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2025</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">tiny_star</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        5 publicaciones en total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">CONTADOR DE VISITANTES</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL DE VISITAS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">DESARROLLADO POR <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">TEMA&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                Blog en línea por <span class="odometer" id="runtime_days" ></span> días <span class="odometer" id="runtime_hours"></span> horas <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Seg
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Buscar..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>

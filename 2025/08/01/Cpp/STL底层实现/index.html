@@ -123,7 +123,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://tiny-star3.github.io/2025/07/31/algorithm/常用stl/"/>
+    <link rel="canonical" href="http://tiny-star3.github.io/2025/08/01/cpp/stl底层实现/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -133,16 +133,15 @@
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="常用STL">
-<meta property="og:url" content="http://tiny-star3.github.io/2025/07/31/Algorithm/%E5%B8%B8%E7%94%A8STL/index.html">
+<meta property="og:title" content="STL底层实现">
+<meta property="og:url" content="http://tiny-star3.github.io/2025/08/01/Cpp/STL%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0/index.html">
 <meta property="og:site_name" content="tiny_star_blog">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale">
 <meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
-<meta property="article:published_time" content="2025-07-31T09:25:59.000Z">
-<meta property="article:modified_time" content="2025-08-01T04:19:37.236Z">
+<meta property="article:published_time" content="2025-08-01T05:45:08.000Z">
+<meta property="article:modified_time" content="2025-08-01T05:45:08.939Z">
 <meta property="article:author" content="tiny_star">
-<meta property="article:tag" content="algorithm">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
     
@@ -156,7 +155,7 @@
     
     <title>
         
-            常用STL | tiny_star_blog
+            STL底层实现 | tiny_star_blog
         
     </title>
 
@@ -555,7 +554,7 @@
         <div class="label text-third-text-color text-sm">Categorías</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
         <div class="label text-third-text-color text-sm">Publicaciones</div>
     </a>
 </div>
@@ -578,7 +577,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">常用STL</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">STL底层实现</h1>
 			</div>
 			
 		</div>
@@ -599,47 +598,20 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2025-07-31 17:25:59</span>
-        <span class="mobile">2025-07-31 17:25:59</span>
+        <span class="desktop">2025-08-01 13:45:08</span>
+        <span class="mobile">2025-08-01 13:45:08</span>
         <span class="hover-info">Creado</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-08-01 12:19:37</span>
-            <span class="mobile">2025-08-01 12:19:37</span>
+            <span class="desktop">2025-08-01 13:45:08</span>
+            <span class="mobile">2025-08-01 13:45:08</span>
             <span class="hover-info">Actualizado</span>
         </span>
     
 
     
-        <span class="article-categories article-meta-item">
-            <i class="fa-regular fa-folders"></i>&nbsp;
-            <ul>
-                
-                
-                    
-                        
-                        <li>
-                            <a href="/categories/Algorithm/">Algorithm</a>&nbsp;
-                        </li>
-                    
-                    
-                
-            </ul>
-        </span>
-    
-    
-        <span class="article-tags article-meta-item">
-            <i class="fa-regular fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/algorithm/">algorithm</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
     
 
     
@@ -661,81 +633,25 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<p><strong>无情的搬运工！（从CSDN往回搬）</strong></p>
-<p><strong>STL底层实现，移步Cpp    链接先欠着，还没开始写</strong></p>
-<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><h3 id="1-about"><a href="#1-about" class="headerlink" title="1.about"></a>1.about</h3><p>vector可理解为变长数组，内部实现基于倍增思想。</p>
-<p>vector支持随机访问，即对于任意的下标0&lt;&#x3D;i&lt;n，可以像数组一样用 [i] 取值。</p>
-<h3 id="2-声明"><a href="#2-声明" class="headerlink" title="2.声明"></a>2.声明</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span>			<span class="comment">//头文件</span></span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; a;				<span class="comment">//相当于一个长度动态变化的int数组</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; b[<span class="number">233</span>];			<span class="comment">//相当于第一维长233，第二维长度动态变化的int数组</span></span><br><span class="line">vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; c;		<span class="comment">//相当于一个第一维和第二维的长度动态变化的二维int数组</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">rec</span>&#123;...&#125;;</span><br><span class="line">vector&lt;rec&gt; d;				<span class="comment">//自定义的结构体类型也可以保存在vector中</span></span><br><span class="line"></span><br><span class="line">vector&lt;T&gt; v1;				<span class="comment">//v1 是一个元素类型为 T 的空 vector</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v2</span><span class="params">(v1)</span></span>;			<span class="comment">//使 v1 中所有元素初始化 v2</span></span><br><span class="line">vector&lt;T&gt; v2 = v1;			<span class="comment">//使 v1 中所有元素初始化 v2</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v3</span><span class="params">(n, val)</span></span>;		<span class="comment">//v3 中包含了 n 个值为 val 的元素</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v4</span><span class="params">(n)</span></span>;			<span class="comment">//v4 中包含了 n 个默认值初始化的元素</span></span><br><span class="line">vector&lt;T&gt; v5&#123;a, b, c...&#125;;	<span class="comment">//使用 a, b, c... 初始化 v5</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v6</span><span class="params">(*p, *q)</span></span>;		<span class="comment">//使用另外一个数组的指针来初始化v6，这里即可以使用vector的指针，也可以使用普通数组的指针。 </span></span><br></pre></td></tr></table></figure></div>
-
-<h3 id="3-size-empty"><a href="#3-size-empty" class="headerlink" title="3.size&#x2F;empty"></a>3.size&#x2F;empty</h3><p>size函数返回vector的实际长度（包含的元素个数）。</p>
-<p>empty函数返回一个bool类型，表明vector是否为空。</p>
-<p>注：所有的STL容易都支持这两个方法，含义也都相同。</p>
-<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="built_in">size</span>();			<span class="comment">//返回数组vector a的长度</span></span><br><span class="line">a.<span class="built_in">empty</span>();			<span class="comment">//返回一个bool值，true为vector为空，false为vector不为空</span></span><br></pre></td></tr></table></figure></div>
-
-<p>时间复杂度：常数，即 O(1)</p>
-<h3 id="4-clear"><a href="#4-clear" class="headerlink" title="4.clear"></a>4.clear</h3><p>clear函数把vector清空。</p>
-<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="built_in">clear</span>();			<span class="comment">//清空数组vector a</span></span><br></pre></td></tr></table></figure></div>
-
-<p>时间复杂度：线性，即 O(n)</p>
-<p>5.迭代器<br>迭代器就像STL容器的”指针“，可以用星号”*“操作符解除引用。</p>
-<p>vector的迭代器是”随机访问迭代器“，可以把vector的迭代器与一个整数相加减，其行为和指针的移动类似。可以把vector的两个迭代器相减，其结果也和指针相减类似，得到两个迭代器对应下标之间的距离。</p>
-<p>一个保存int的vector的迭代器声明方法为：</p>
-<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;<span class="type">int</span>&gt;::iterator it;			</span><br></pre></td></tr></table></figure></div>
-
-<p>6.begin&#x2F;end<br>begin函数返回指向vector中第一个元素的迭代器。例如a是一个非空的vector，则 *a.begin() 与 a[0] 的作用相同。</p>
-<p>所有容器都可以视作一个”前闭后开“的结构，end函数返回vector的尾部，即第n个元素再往后的”边界“。 *a.end() 与 a[n] 都是越界访问，其中 n&#x3D;a.size()。</p>
-<p>下标遍历vector数组</p>
-<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;a.<span class="built_in">size</span>();i++)</span><br><span class="line">&#123;</span><br><span class="line">    cout&lt;&lt;a[i]&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<p>迭代器遍历vector数组</p>
-<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(vector&lt;<span class="type">int</span>&gt;::iterator it=a.<span class="built_in">begin</span>();it!=a.<span class="built_in">end</span>();it++)</span><br><span class="line">&#123;</span><br><span class="line">    cout&lt;&lt;*it&lt;&lt;endl;			<span class="comment">//遍历输出数组vector a的值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<p>时间复杂度：常数，即 O(1)</p>
-<h3 id="7-front-back"><a href="#7-front-back" class="headerlink" title="7.front&#x2F;back"></a>7.front&#x2F;back</h3><p>front函数返回vector的第一个元素，等价于 *a.begin() 和 a[0]。</p>
-<p>back函数返回vector的最后一个元素，等价于 *–a.end() 和 a[a.size()-1]。</p>
-<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="built_in">front</span>()			<span class="comment">//返回数组vector a的第一个元素</span></span><br><span class="line">a.<span class="built_in">back</span>()			<span class="comment">//返回数组vector a的最后一个元素</span></span><br></pre></td></tr></table></figure></div>
-
-<p>时间复杂度：常数，即 O(1)</p>
-<h3 id="8-push-back-pop-back"><a href="#8-push-back-pop-back" class="headerlink" title="8.push_back&#x2F;pop_back"></a>8.push_back&#x2F;pop_back</h3><p>push_back(x)函数将元素x插入到vector的尾部。</p>
-<p>pop_back()函数删除vector的最后一个元素。</p>
-<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="built_in">push_back</span>(x)			<span class="comment">//把元素x插入到vector a的尾部</span></span><br><span class="line">a.<span class="built_in">pop_back</span>()			<span class="comment">//删除vector a的最后一个元素</span></span><br></pre></td></tr></table></figure></div>
-
-<p>时间复杂度：常数，即 O(1)</p>
-<h3 id="9-resize"><a href="#9-resize" class="headerlink" title="9.resize"></a>9.resize</h3><p>resize() 改变vector的大小。如果 <code>n</code> 小于当前大小，则销毁额外的元素。如果 <code>n</code> 大于当前容器大小，则在向量末尾插入新元素。</p>
-<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">resize</span> <span class="params">(size_type n)</span></span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">resize</span> <span class="params">(size_type n, <span class="type">const</span> value_type&amp; val)</span></span>;			<span class="comment">//n为新容器的大小，val为容器元素的初始值</span></span><br></pre></td></tr></table></figure></div>
-
-<p>时间复杂度：线性，即 O(n)</p>
-<h3 id="10-emplace-back（C-11）"><a href="#10-emplace-back（C-11）" class="headerlink" title="10.emplace_back（C++ 11）"></a>10.emplace_back（C++ 11）</h3><p>emplace_back()在向量的末尾插入新元素。如果需要更多空间，则会发生重新分配。此方法将容器大小增加一倍。</p>
-<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">emplace_back</span> <span class="params">(Args&amp;&amp;... args)</span></span>;			<span class="comment">//转发参数以构造新元素。</span></span><br><span class="line"></span><br><span class="line">a.<span class="built_in">emplace_back</span>(b);			<span class="comment">//在a的末尾插入b</span></span><br></pre></td></tr></table></figure></div>
-
-<p>时间复杂度：常数，即 O(1)</p>
-<h3 id="11-insert"><a href="#11-insert" class="headerlink" title="11.insert"></a>11.insert</h3><p>insert()在容器中的 <code>position</code> 插入新元素来扩展向量。如果需要更多空间，则会发生重新分配。此函数将容器大小增加一。</p>
-<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">iterator <span class="title">insert</span> <span class="params">(const_iterator position, <span class="type">const</span> value_type&amp; val)</span></span>;	</span><br><span class="line"><span class="comment">//position为向量中要插入新元素的索引。val为要分配给新插入元素的值。返回一个指向新插入元素的迭代器。</span></span><br></pre></td></tr></table></figure></div>
-
-<p>时间复杂度：线性，即 O(n)</p>
-<h3 id="12-erase"><a href="#12-erase" class="headerlink" title="12.erase"></a>12.erase</h3><p>erase() 从vector中删除单个元素，从vector中删除元素范围。</p>
-<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">iterator <span class="title">erase</span> <span class="params">(const_iterator position)</span></span>;	</span><br><span class="line"><span class="comment">//position为迭代器指向向量元素。返回一个被删除元素后面的元素的迭代器。</span></span><br><span class="line"><span class="function">iterator <span class="title">erase</span> <span class="params">(const_iterator first, const_iterator last)</span></span>;</span><br><span class="line"><span class="comment">//first为输入迭代器到范围内的初始位置。last为输入迭代器到范围内的最终位置。返回一个被删除元素后面的元素迭代器。</span></span><br></pre></td></tr></table></figure></div>
-
-<p>时间复杂度：线性，即 O(n)</p>
-
+			
 		</div>
 
 		
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Título:</strong> 常用STL</li>
+        <li><strong>Título:</strong> STL底层实现</li>
         <li><strong>Autor:</strong> tiny_star</li>
         <li><strong>Creado el
-                :</strong> 2025-07-31 17:25:59</li>
+                :</strong> 2025-08-01 13:45:08</li>
         
             <li>
                 <strong>Actualizado el
-                    :</strong> 2025-08-01 12:19:37
+                    :</strong> 2025-08-01 13:45:08
             </li>
         
         <li>
-            <strong>Enlace:</strong> https://tiny-star3.github.io/2025/07/31/Algorithm/常用STL/
+            <strong>Enlace:</strong> https://tiny-star3.github.io/2025/08/01/Cpp/STL底层实现/
         </li>
         <li>
             <strong>
@@ -754,37 +670,17 @@
 		
 
 		
-		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
-			
-			<li class="tag-item mx-0.5">
-				<a href="/tags/algorithm/">#algorithm</a>&nbsp;
-			</li>
-			
-		</ul>
-		
 
 		
 
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2025/07/31/Life/blm-Agricultural-University-Summer-Camp/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">伯乐码-农大夏令营</span>
-						<span class="post-nav-item">Publicaciones anteriores</span>
-					</span>
-				</a>
-			</div>
-			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2025/07/22/Life/My-New-Post/">
+				<a class="next" rel="next" href="/2025/07/31/Life/blm-Agricultural-University-Summer-Camp/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">My New Post</span>
+						<span class="post-nav-title-item truncate max-w-48">伯乐码-农大夏令营</span>
 						<span class="post-nav-item">Publicaciones siguientes</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -846,8 +742,8 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">En esta página</div>
-		<div class="page-title">常用STL</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#vector"><span class="nav-text">vector</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-about"><span class="nav-text">1.about</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A3%B0%E6%98%8E"><span class="nav-text">2.声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-size-empty"><span class="nav-text">3.size&#x2F;empty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-clear"><span class="nav-text">4.clear</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-front-back"><span class="nav-text">7.front&#x2F;back</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-push-back-pop-back"><span class="nav-text">8.push_back&#x2F;pop_back</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-resize"><span class="nav-text">9.resize</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-emplace-back%EF%BC%88C-11%EF%BC%89"><span class="nav-text">10.emplace_back（C++ 11）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-insert"><span class="nav-text">11.insert</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-erase"><span class="nav-text">12.erase</span></a></li></ol></li></ol>
+		<div class="page-title">STL底层实现</div>
+		
 
 	</div>
 </div>
@@ -874,7 +770,7 @@
                 
                 <p class="post-count space-x-0.5">
                     <span>
-                        4 publicaciones en total
+                        5 publicaciones en total
                     </span>
                     
                 </p>
