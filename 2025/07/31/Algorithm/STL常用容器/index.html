@@ -140,7 +140,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-07-31T09:25:59.000Z">
-<meta property="article:modified_time" content="2025-08-01T14:27:40.157Z">
+<meta property="article:modified_time" content="2025-08-02T11:56:36.711Z">
 <meta property="article:author" content="tiny_star">
 <meta property="article:tag" content="algorithm">
 <meta name="twitter:card" content="summary">
@@ -606,8 +606,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-08-01 22:27:40</span>
-            <span class="mobile">2025-08-01 22:27:40</span>
+            <span class="desktop">2025-08-02 19:56:36</span>
+            <span class="mobile">2025-08-02 19:56:36</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -663,12 +663,10 @@
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
 			<p><strong>无情的搬运工！（从CSDN往回搬）</strong></p>
 <p><strong>STL容器底层实现，移步Cpp    链接先欠着，还没开始写&#x2F;(ㄒoㄒ)&#x2F;~~</strong></p>
-<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><h3 id="1-about"><a href="#1-about" class="headerlink" title="1.about"></a>1.about</h3><p>vector可理解为变长数组，内部实现基于倍增思想。</p>
-<p>vector支持随机访问，即对于任意的下标0&lt;&#x3D;i&lt;n，可以像数组一样用 [i] 取值。</p>
+<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><h3 id="1-about"><a href="#1-about" class="headerlink" title="1.about"></a>1.about</h3><p>vector可理解为变长数组，内部实现基于倍增思想。<br>vector支持随机访问，即对于任意的下标0&lt;&#x3D;i&lt;n，可以像数组一样用 [i] 取值。</p>
 <h3 id="2-声明"><a href="#2-声明" class="headerlink" title="2.声明"></a>2.声明</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span>			<span class="comment">//头文件</span></span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; a;				<span class="comment">//相当于一个长度动态变化的int数组</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; b[<span class="number">233</span>];			<span class="comment">//相当于第一维长233，第二维长度动态变化的int数组</span></span><br><span class="line">vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; c;		<span class="comment">//相当于一个第一维和第二维的长度动态变化的二维int数组</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">rec</span>&#123;...&#125;;</span><br><span class="line">vector&lt;rec&gt; d;				<span class="comment">//自定义的结构体类型也可以保存在vector中</span></span><br><span class="line"></span><br><span class="line">vector&lt;T&gt; v1;				<span class="comment">//v1 是一个元素类型为 T 的空 vector</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v2</span><span class="params">(v1)</span></span>;			<span class="comment">//使 v1 中所有元素初始化 v2</span></span><br><span class="line">vector&lt;T&gt; v2 = v1;			<span class="comment">//使 v1 中所有元素初始化 v2</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v3</span><span class="params">(n, val)</span></span>;		<span class="comment">//v3 中包含了 n 个值为 val 的元素</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v4</span><span class="params">(n)</span></span>;			<span class="comment">//v4 中包含了 n 个默认值初始化的元素</span></span><br><span class="line">vector&lt;T&gt; v5&#123;a, b, c...&#125;;	<span class="comment">//使用 a, b, c... 初始化 v5</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v6</span><span class="params">(*p, *q)</span></span>;		<span class="comment">//使用另外一个数组的指针来初始化v6，这里即可以使用vector的指针，也可以使用普通数组的指针。 </span></span><br></pre></td></tr></table></figure></div>
 
-<h3 id="3-size-empty"><a href="#3-size-empty" class="headerlink" title="3.size&#x2F;empty"></a>3.size&#x2F;empty</h3><p>size函数返回vector的实际长度（包含的元素个数）。</p>
-<p>empty函数返回一个bool类型，表明vector是否为空。</p>
+<h3 id="3-size-empty"><a href="#3-size-empty" class="headerlink" title="3.size&#x2F;empty"></a>3.size&#x2F;empty</h3><p>size函数返回vector的实际长度（包含的元素个数）。<br>empty函数返回一个bool类型，表明vector是否为空。</p>
 <p>注：所有的STL容易都支持这两个方法，含义也都相同。</p>
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="built_in">size</span>();			<span class="comment">//返回数组vector a的长度</span></span><br><span class="line">a.<span class="built_in">empty</span>();			<span class="comment">//返回一个bool值，true为vector为空，false为vector不为空</span></span><br></pre></td></tr></table></figure></div>
 
@@ -677,13 +675,11 @@
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="built_in">clear</span>();			<span class="comment">//清空数组vector a</span></span><br></pre></td></tr></table></figure></div>
 
 <p>时间复杂度：线性，即 O(n)</p>
-<p>5.迭代器<br>迭代器就像STL容器的”指针“，可以用星号”*“操作符解除引用。</p>
-<p>vector的迭代器是”随机访问迭代器“，可以把vector的迭代器与一个整数相加减，其行为和指针的移动类似。可以把vector的两个迭代器相减，其结果也和指针相减类似，得到两个迭代器对应下标之间的距离。</p>
+<p>5.迭代器<br>迭代器就像STL容器的”指针“，可以用星号”*“操作符解除引用。<br>vector的迭代器是”随机访问迭代器“，可以把vector的迭代器与一个整数相加减，其行为和指针的移动类似。可以把vector的两个迭代器相减，其结果也和指针相减类似，得到两个迭代器对应下标之间的距离。</p>
 <p>一个保存int的vector的迭代器声明方法为：</p>
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;<span class="type">int</span>&gt;::iterator it;			</span><br></pre></td></tr></table></figure></div>
 
-<p>6.begin&#x2F;end<br>begin函数返回指向vector中第一个元素的迭代器。例如a是一个非空的vector，则 *a.begin() 与 a[0] 的作用相同。</p>
-<p>所有容器都可以视作一个”前闭后开“的结构，end函数返回vector的尾部，即第n个元素再往后的”边界“。 *a.end() 与 a[n] 都是越界访问，其中 n&#x3D;a.size()。</p>
+<p>6.begin&#x2F;end<br>begin函数返回指向vector中第一个元素的迭代器。例如a是一个非空的vector，则 *a.begin() 与 a[0] 的作用相同。<br>所有容器都可以视作一个”前闭后开“的结构，end函数返回vector的尾部，即第n个元素再往后的”边界“。 *a.end() 与 a[n] 都是越界访问，其中 n&#x3D;a.size()。</p>
 <p>下标遍历vector数组</p>
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;a.<span class="built_in">size</span>();i++)</span><br><span class="line">&#123;</span><br><span class="line">    cout&lt;&lt;a[i]&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
@@ -691,13 +687,11 @@
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(vector&lt;<span class="type">int</span>&gt;::iterator it=a.<span class="built_in">begin</span>();it!=a.<span class="built_in">end</span>();it++)</span><br><span class="line">&#123;</span><br><span class="line">    cout&lt;&lt;*it&lt;&lt;endl;			<span class="comment">//遍历输出数组vector a的值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>时间复杂度：常数，即 O(1)</p>
-<h3 id="7-front-back"><a href="#7-front-back" class="headerlink" title="7.front&#x2F;back"></a>7.front&#x2F;back</h3><p>front函数返回vector的第一个元素，等价于 *a.begin() 和 a[0]。</p>
-<p>back函数返回vector的最后一个元素，等价于 *–a.end() 和 a[a.size()-1]。</p>
+<h3 id="7-front-back"><a href="#7-front-back" class="headerlink" title="7.front&#x2F;back"></a>7.front&#x2F;back</h3><p>front函数返回vector的第一个元素，等价于 *a.begin() 和 a[0]。<br>back函数返回vector的最后一个元素，等价于 *–a.end() 和 a[a.size()-1]。</p>
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="built_in">front</span>()			<span class="comment">//返回数组vector a的第一个元素</span></span><br><span class="line">a.<span class="built_in">back</span>()			<span class="comment">//返回数组vector a的最后一个元素</span></span><br></pre></td></tr></table></figure></div>
 
 <p>时间复杂度：常数，即 O(1)</p>
-<h3 id="8-push-back-pop-back"><a href="#8-push-back-pop-back" class="headerlink" title="8.push_back&#x2F;pop_back"></a>8.push_back&#x2F;pop_back</h3><p>push_back(x)函数将元素x插入到vector的尾部。</p>
-<p>pop_back()函数删除vector的最后一个元素。</p>
+<h3 id="8-push-back-pop-back"><a href="#8-push-back-pop-back" class="headerlink" title="8.push_back&#x2F;pop_back"></a>8.push_back&#x2F;pop_back</h3><p>push_back(x)函数将元素x插入到vector的尾部。<br>pop_back()函数删除vector的最后一个元素。</p>
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="built_in">push_back</span>(x)			<span class="comment">//把元素x插入到vector a的尾部</span></span><br><span class="line">a.<span class="built_in">pop_back</span>()			<span class="comment">//删除vector a的最后一个元素</span></span><br></pre></td></tr></table></figure></div>
 
 <p>时间复杂度：常数，即 O(1)</p>
@@ -807,10 +801,7 @@
 <td>O(1)</td>
 </tr>
 </tbody></table>
-<h2 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h2><h3 id="1-about-2"><a href="#1-about-2" class="headerlink" title="1.about"></a>1.about</h3><p>双端队列deque是一个支持在两端高效插入或删除元素的连续线性存储空间。</p>
-<p>它就像是vector和queue的结合。</p>
-<p>与vector相比，deque在头部增删元素仅需要 O(1)；</p>
-<p>与queue相比，deque像数组一样支持随机访问。</p>
+<h2 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h2><h3 id="1-about-2"><a href="#1-about-2" class="headerlink" title="1.about"></a>1.about</h3><p>双端队列deque是一个支持在两端高效插入或删除元素的连续线性存储空间。<br>它就像是vector和queue的结合。<br>与vector相比，deque在头部增删元素仅需要 O(1)；<br>与queue相比，deque像数组一样支持随机访问。</p>
 <h3 id="2-声明-2"><a href="#2-声明-2" class="headerlink" title="2.声明"></a>2.声明</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;deque&gt;</span>								<span class="comment">//头文件</span></span></span><br><span class="line">deque&lt;<span class="type">int</span>&gt; d1;    								<span class="comment">//创建一个empty的int型队列</span></span><br><span class="line"><span class="function">deque&lt;<span class="type">int</span>&gt; <span class="title">d2</span><span class="params">(<span class="number">8</span>)</span></span>;  								<span class="comment">//创建一个有8个元素的int型队列，默认初始化值(value)为0</span></span><br><span class="line"><span class="function">deque&lt;<span class="type">int</span>&gt; <span class="title">d3</span><span class="params">(<span class="number">8</span>, <span class="number">50</span>)</span></span>;  							<span class="comment">//创建一个有8个元素的int型队列，默认初始化值(value)都设为50</span></span><br><span class="line"><span class="function">deque&lt;<span class="type">int</span>&gt; <span class="title">d4</span><span class="params">(d<span class="number">1.</span>begin(), d<span class="number">1.</span>end())</span></span>; 			<span class="comment">//通过迭代器创建队列</span></span><br><span class="line"><span class="function">deque&lt;<span class="type">int</span>&gt; <span class="title">d5</span><span class="params">(d1)</span></span>;    							<span class="comment">//通过拷贝构造创建队列</span></span><br></pre></td></tr></table></figure></div>
 
 
@@ -1023,16 +1014,11 @@
 <td>O(k+logn)，k为元素x个数</td>
 </tr>
 </tbody></table>
-<h2 id="bitset"><a href="#bitset" class="headerlink" title="bitset"></a>bitset</h2><h3 id="1-about-5"><a href="#1-about-5" class="headerlink" title="1.about"></a>1.about</h3><p>bitset可看作一个多位二进制数，每8位占用1个字节，相当于采用了状态压缩的二进制数组，并支持基本的位运算。</p>
-<p>在估算程序运行的时间时，一般以32位整数的运算次数为基准，因此n位 bitset 执行一次位运算的复杂度可视为n&#x2F;32，效率较高。</p>
+<h2 id="bitset"><a href="#bitset" class="headerlink" title="bitset"></a>bitset</h2><h3 id="1-about-5"><a href="#1-about-5" class="headerlink" title="1.about"></a>1.about</h3><p>bitset可看作一个多位二进制数，每8位占用1个字节，相当于采用了状态压缩的二进制数组，并支持基本的位运算。<br>在估算程序运行的时间时，一般以32位整数的运算次数为基准，因此n位 bitset 执行一次位运算的复杂度可视为n&#x2F;32，效率较高。</p>
 <h3 id="2-声明和初始化"><a href="#2-声明和初始化" class="headerlink" title="2.声明和初始化"></a>2.声明和初始化</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bitset&gt;</span>				<span class="comment">//头文件</span></span></span><br><span class="line">bitset&lt;10000&gt; b;				<span class="comment">//表示一个10000位二进制数，&lt;&gt;中填写位数。</span></span><br><span class="line"></span><br><span class="line">bitset&lt;n&gt; b;	          		<span class="comment">//b有n位，每位都为0</span></span><br><span class="line"><span class="function">bitset&lt;n&gt; <span class="title">b</span><span class="params">(u)</span></span>;	          		<span class="comment">//b是unsigned long型u的一个副本</span></span><br><span class="line"><span class="function">bitset&lt;n&gt; <span class="title">b</span><span class="params">(s)</span></span>;	          		<span class="comment">//b是string对象s中含有的位串的副本</span></span><br><span class="line"><span class="function">bitset&lt;n&gt; <span class="title">b</span><span class="params">(s, pos, n)</span></span>;	  		<span class="comment">//b是s中从位置pos开始的n个位的副本</span></span><br></pre></td></tr></table></figure></div>
 
-<h3 id="3-位运算操作符"><a href="#3-位运算操作符" class="headerlink" title="3.位运算操作符"></a>3.位运算操作符</h3><p><strong>~b</strong>：返回对bitset b按位取反的结果。</p>
-<p><strong>&amp;</strong>, <strong>|,</strong> <strong>^</strong>：返回对两个位数相同的bitset执行按位与、或、异或运算的结果。</p>
-<p><strong>&gt;&gt;</strong>, <strong>&lt;&lt;</strong>：返回把一个bitset右移、左移若干位的结果。</p>
-<p><strong>&#x3D;&#x3D;</strong>, <strong>!&#x3D;</strong>：比较两个bitset代表的二进制数是否相等。</p>
-<h3 id="4-操作符"><a href="#4-操作符" class="headerlink" title="4.[ ]操作符"></a>4.[ ]操作符</h3><p>**b[k]**表示b的第k位，既可以取值，也可以赋值。</p>
-<p>在10000位二进制数中，最低位为 b[0] ，最高位为 b[9999] 。</p>
+<h3 id="3-位运算操作符"><a href="#3-位运算操作符" class="headerlink" title="3.位运算操作符"></a>3.位运算操作符</h3><p><strong>~b</strong>：返回对bitset b按位取反的结果。<br><strong>&amp;</strong>, <strong>|,</strong> <strong>^</strong>：返回对两个位数相同的bitset执行按位与、或、异或运算的结果。<br><strong>&gt;&gt;</strong>, <strong>&lt;&lt;</strong>：返回把一个bitset右移、左移若干位的结果。<br><strong>&#x3D;&#x3D;</strong>, <strong>!&#x3D;</strong>：比较两个bitset代表的二进制数是否相等。</p>
+<h3 id="4-操作符"><a href="#4-操作符" class="headerlink" title="4.[ ]操作符"></a>4.[ ]操作符</h3><p>**b[k]**表示b的第k位，既可以取值，也可以赋值。<br>在10000位二进制数中，最低位为 b[0] ，最高位为 b[9999] 。</p>
 <h3 id="5-method"><a href="#5-method" class="headerlink" title="5.method"></a>5.method</h3><table>
 <thead>
 <tr>
@@ -1086,18 +1072,14 @@
 </tr>
 </tbody></table>
 <p>注：bitset的count操作的复杂度未在C++ Reference 中标注。一般来说，其复杂度为关于bitset位数的线性复杂度，但实际效率可能稍快一些。</p>
-<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><h3 id="1-about-6"><a href="#1-about-6" class="headerlink" title="1.about"></a>1.about</h3><p>map容器是一个键值对 key-value 的映射。其内部实现是一棵以 key 为关键码的红黑树。map的 key 和 value 可以是任意类型，其中 key 必须定义“小于号”运算符。</p>
-<p>在很多时候， map容器被当作Hash表使用，建立从复杂信息 key （如字符串）到简单信息 value （如一定范围内的整数）的映射。</p>
-<p>因为map基于平衡树实现，所以它的大部分操作的时间复杂度都在 O(logn) 级别，略慢于使用Hash函数实现的传统Hash表。从C++11开始，STL中新增了unordered_map等基于Hash函数实现的传统Hash表。</p>
+<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><h3 id="1-about-6"><a href="#1-about-6" class="headerlink" title="1.about"></a>1.about</h3><p>map容器是一个键值对 key-value 的映射。其内部实现是一棵以 key 为关键码的红黑树。map的 key 和 value 可以是任意类型，其中 key 必须定义“小于号”运算符。<br>在很多时候， map容器被当作Hash表使用，建立从复杂信息 key （如字符串）到简单信息 value （如一定范围内的整数）的映射。<br>因为map基于平衡树实现，所以它的大部分操作的时间复杂度都在 O(logn) 级别，略慢于使用Hash函数实现的传统Hash表。从C++11开始，STL中新增了unordered_map等基于Hash函数实现的传统Hash表。</p>
 <h3 id="2-声明和初始化-1"><a href="#2-声明和初始化-1" class="headerlink" title="2.声明和初始化"></a>2.声明和初始化</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;map&gt;</span>							<span class="comment">//头文件</span></span></span><br><span class="line">map&lt;key_type, value_type&gt; name;</span><br><span class="line"></span><br><span class="line">map&lt;<span class="type">long</span> <span class="type">long</span>, <span class="type">bool</span>&gt; vis;</span><br><span class="line">map&lt;string, <span class="type">int</span>&gt; hash;</span><br><span class="line">map&lt; pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt;, vector&lt;<span class="type">int</span>&gt; &gt; test;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化构造</span></span><br><span class="line">map&lt;<span class="type">int</span>, string&gt; map_test1;		<span class="comment">// 默认构造</span></span><br><span class="line"><span class="function">map&lt;<span class="type">int</span>, string&gt; <span class="title">map_test2</span><span class="params">(map_test<span class="number">1.</span>begin(), map_test<span class="number">1.</span>end())</span></span>;	<span class="comment">// 范围构造</span></span><br><span class="line"></span><br><span class="line">map&lt;<span class="type">int</span>, string&gt; map_test3 = map_test2;			<span class="comment">// 赋值构造 </span></span><br><span class="line"><span class="function">map&lt;<span class="type">int</span>, string&gt; <span class="title">map_test4</span><span class="params">(map_test2)</span></span>;			<span class="comment">// 复制构造 </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 内部是一个pair对象</span></span><br><span class="line">map&lt;<span class="type">int</span>, string&gt; map_test5&#123; <span class="built_in">pair</span>&lt;<span class="type">int</span>, string&gt;(<span class="number">1</span>, <span class="string">&quot;aaa&quot;</span>),<span class="built_in">pair</span>&lt;<span class="type">int</span>, string&gt;(<span class="number">2</span>, <span class="string">&quot;bbb&quot;</span>) &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用make_pair 构造 pair</span></span><br><span class="line">map&lt;<span class="type">int</span>, string&gt; map_test6&#123; <span class="built_in">make_pair</span>(<span class="number">1</span>, <span class="string">&quot;abc&quot;</span>), <span class="built_in">make_pair</span>(<span class="number">2</span>, <span class="string">&quot;xyz&quot;</span>) &#125;;</span><br></pre></td></tr></table></figure></div>
 
 <p>注：pair&lt;&gt;: C++内置的二元组，尖括号分别指定二元组的第一元、第二元的类型。可以用make_pair函数创建二元组，用成员变量first访问第一元、second访问第二元。在比较大小时，以第一元为第一关键字、第二元为第二关键字。</p>
 <h3 id="3-迭代器-1"><a href="#3-迭代器-1" class="headerlink" title="3.迭代器"></a>3.迭代器</h3><p>map的迭代器与set一样，也是“双向访问迭代器”。对map的迭代器解除引用后，将得到一个二元组 pair&lt;key_type, value_type&gt;。</p>
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">map&lt;key_type, value_type&gt;::iterator it;</span><br><span class="line">map&lt;string,<span class="type">int</span>&gt;::iterator it;</span><br></pre></td></tr></table></figure></div>
 
-<h3 id="4-操作符-1"><a href="#4-操作符-1" class="headerlink" title="4.[ ]操作符"></a>4.[ ]操作符</h3><p>**h[key]**返回key映射到的value的引用，时间复杂度为O(logn)。</p>
-<p>可以通过 h[key] 来得到 key 对应的 value，还可以对 h[key] 进行赋值操作，改变 key 对应的 value。</p>
-<p>若查找的 key 不存在，则执行 h[key] 后，h会自动新建一个二元组 (key, zero)，并返回 zero 的引用。这里 zero 表示一个广义“零值”，如整数 0、空字符串等。如果查找之后不对 h[key] 进行赋值，那么时间一长， h会包含很多无用的“零值二元值”，白白地占用了空间，降低了程序运行效率。强烈建议在用 [ ] 操作符查询之前，先用 find 方法检查 key 的存在性。</p>
+<h3 id="4-操作符-1"><a href="#4-操作符-1" class="headerlink" title="4.[ ]操作符"></a>4.[ ]操作符</h3><p>**h[key]**返回key映射到的value的引用，时间复杂度为O(logn)。<br>可以通过 h[key] 来得到 key 对应的 value，还可以对 h[key] 进行赋值操作，改变 key 对应的 value。<br>若查找的 key 不存在，则执行 h[key] 后，h会自动新建一个二元组 (key, zero)，并返回 zero 的引用。这里 zero 表示一个广义“零值”，如整数 0、空字符串等。如果查找之后不对 h[key] 进行赋值，那么时间一长， h会包含很多无用的“零值二元值”，白白地占用了空间，降低了程序运行效率。强烈建议在用 [ ] 操作符查询之前，先用 find 方法检查 key 的存在性。</p>
 <h3 id="5-method-1"><a href="#5-method-1" class="headerlink" title="5.method"></a>5.method</h3><table>
 <thead>
 <tr>
@@ -1156,8 +1138,7 @@
 <td>O(logn)</td>
 </tr>
 </tbody></table>
-<h2 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h2><h3 id="1-about-7"><a href="#1-about-7" class="headerlink" title="1.about"></a>1.about</h3><p>unordered_map 容器，直译过来就是”无序 map 容器”的意思。所谓“无序”，指的是 unordered_map 容器不会像 map 容器那样对存储的数据进行排序。换句话说，unordered_map 容器和 map 容器仅有一点不同，即 map 容器中存储的数据是有序的，而 unordered_map 容器中是无序的。</p>
-<p>具体来讲，unordered_map 容器和 map 容器一样，以键值对（pair类型）的形式存储数据，存储的各个键值对的键互不相同且不允许被修改。但由于 unordered_map 容器底层采用的是哈希表存储结构，该结构本身不具有对数据的排序功能，所以此容器内部不会自行对存储的键值对进行排序。</p>
+<h2 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h2><h3 id="1-about-7"><a href="#1-about-7" class="headerlink" title="1.about"></a>1.about</h3><p>unordered_map 容器，直译过来就是”无序 map 容器”的意思。所谓“无序”，指的是 unordered_map 容器不会像 map 容器那样对存储的数据进行排序。换句话说，unordered_map 容器和 map 容器仅有一点不同，即 map 容器中存储的数据是有序的，而 unordered_map 容器中是无序的。<br>具体来讲，unordered_map 容器和 map 容器一样，以键值对（pair类型）的形式存储数据，存储的各个键值对的键互不相同且不允许被修改。但由于 unordered_map 容器底层采用的是哈希表存储结构，该结构本身不具有对数据的排序功能，所以此容器内部不会自行对存储的键值对进行排序。</p>
 <h3 id="2-定义和初始化"><a href="#2-定义和初始化" class="headerlink" title="2.定义和初始化"></a>2.定义和初始化</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_map&gt;</span>							<span class="comment">//头文件</span></span></span><br><span class="line">unordered_map&lt;key_type, value_type&gt; name;</span><br><span class="line"></span><br><span class="line">unordered_map&lt;<span class="type">long</span> <span class="type">long</span>, <span class="type">bool</span>&gt; vis;</span><br><span class="line">unordered_map&lt;string, <span class="type">int</span>&gt; hash;</span><br><span class="line">unordered_map&lt; pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt;, vector&lt;<span class="type">int</span>&gt; &gt; test;</span><br></pre></td></tr></table></figure></div>
 
 <p>注：pair&lt;&gt;: C++内置的二元组，尖括号分别指定二元组的第一元、第二元的类型。可以用make_pair函数创建二元组，用成员变量first访问第一元、second访问第二元。在比较大小时，以第一元为第一关键字、第二元为第二关键字。</p>
@@ -1167,9 +1148,7 @@
 <p>遍历unordered_map：</p>
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(unordered_map&lt;string,<span class="type">int</span>&gt;::iterator it = hash.<span class="built_in">begin</span>(); it != hash.<span class="built_in">end</span>(); it++)</span><br><span class="line">&#123;</span><br><span class="line">    cout&lt;&lt;(*it).first&lt;&lt;<span class="string">&#x27; &#x27;</span>&lt;&lt;(*it).second&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
-<h3 id="4-操作符-2"><a href="#4-操作符-2" class="headerlink" title="4.[ ]操作符"></a>4.[ ]操作符</h3><p>**h[key]**返回key映射到的value的引用，时间复杂度为O(logn)。</p>
-<p>可以通过 h[key] 来得到 key 对应的 value，还可以对 h[key] 进行赋值操作，改变 key 对应的 value。</p>
-<p>若查找的 key 不存在，则执行 h[key] 后，h会自动新建一个二元组 (key, zero)，并返回 zero 的引用。这里 zero 表示一个广义“零值”，如整数 0、空字符串等。如果查找之后不对 h[key] 进行赋值，那么时间一长， h会包含很多无用的“零值二元值”，白白地占用了空间，降低了程序运行效率。强烈建议在用 [ ] 操作符查询之前，先用 find 方法检查 key 的存在性。</p>
+<h3 id="4-操作符-2"><a href="#4-操作符-2" class="headerlink" title="4.[ ]操作符"></a>4.[ ]操作符</h3><p>**h[key]**返回key映射到的value的引用，时间复杂度为O(logn)。<br>可以通过 h[key] 来得到 key 对应的 value，还可以对 h[key] 进行赋值操作，改变 key 对应的 value。<br>若查找的 key 不存在，则执行 h[key] 后，h会自动新建一个二元组 (key, zero)，并返回 zero 的引用。这里 zero 表示一个广义“零值”，如整数 0、空字符串等。如果查找之后不对 h[key] 进行赋值，那么时间一长， h会包含很多无用的“零值二元值”，白白地占用了空间，降低了程序运行效率。强烈建议在用 [ ] 操作符查询之前，先用 find 方法检查 key 的存在性。</p>
 <h3 id="5-method-2"><a href="#5-method-2" class="headerlink" title="5.method"></a>5.method</h3><table>
 <thead>
 <tr>
@@ -1242,7 +1221,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-08-01 22:27:40
+                    :</strong> 2025-08-02 19:56:36
             </li>
         
         <li>

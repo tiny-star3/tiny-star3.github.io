@@ -140,7 +140,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-08-01T06:01:54.000Z">
-<meta property="article:modified_time" content="2025-08-02T06:49:32.582Z">
+<meta property="article:modified_time" content="2025-08-02T11:57:39.900Z">
 <meta property="article:author" content="tiny_star">
 <meta property="article:tag" content="C++2.0">
 <meta name="twitter:card" content="summary">
@@ -606,8 +606,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-08-02 14:49:32</span>
-            <span class="mobile">2025-08-02 14:49:32</span>
+            <span class="desktop">2025-08-02 19:57:39</span>
+            <span class="mobile">2025-08-02 19:57:39</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -661,10 +661,7 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h2 id="C-2-0新特性包括语言和标准库两个层面。"><a href="#C-2-0新特性包括语言和标准库两个层面。" class="headerlink" title="C++2.0新特性包括语言和标准库两个层面。"></a>C++2.0新特性包括语言和标准库两个层面。</h2><h3 id="标准库层面以header-files（头文件）形式体现"><a href="#标准库层面以header-files（头文件）形式体现" class="headerlink" title="标准库层面以header files（头文件）形式体现"></a>标准库层面以header files（头文件）形式体现</h3><p>C++标准库的header files不带副档名（.h），例如#include<vector></p>
-<p>新式C header files不带副名称.h，例如#include<cstdio></p>
-<p>旧式C header files（带有副名称.h）仍可用，例如#include&lt;stdio.h&gt;</p>
-<p>标准库都放在命名空间std里面 ，使用标准库要么使用using namespace std或者std::</p>
+			<h2 id="C-2-0新特性包括语言和标准库两个层面。"><a href="#C-2-0新特性包括语言和标准库两个层面。" class="headerlink" title="C++2.0新特性包括语言和标准库两个层面。"></a>C++2.0新特性包括语言和标准库两个层面。</h2><h3 id="标准库层面以header-files（头文件）形式体现"><a href="#标准库层面以header-files（头文件）形式体现" class="headerlink" title="标准库层面以header files（头文件）形式体现"></a>标准库层面以header files（头文件）形式体现</h3><p>C++标准库的header files不带副档名（.h），例如#include&lt;vector&gt;<br>新式C header files不带副名称.h，例如#include&lt;cstdio&gt;<br>旧式C header files（带有副名称.h）仍可用，例如#include&lt;stdio.h&gt;<br>标准库都放在命名空间std里面 ，使用标准库要么使用using namespace std或者std::</p>
 <h3 id="DevC-上的-ISO-C-11-开关"><a href="#DevC-上的-ISO-C-11-开关" class="headerlink" title="DevC++ 上的 ISO C++11 开关"></a>DevC++ 上的 ISO C++11 开关</h3><p>Project -&gt; Project Options -&gt; Compiler -&gt; Code Generation -&gt; Language standard（-std）-&gt;选择 ISO C++11</p>
 <h3 id="资源网站"><a href="#资源网站" class="headerlink" title="资源网站"></a>资源网站</h3><p><a href="www.stroustrup.com/C++11FAQ.html">C++11 FAQ，from Stroustrup</a></p>
 <p><a href="www.cplusplus.com">CPlusPlus.com</a></p>
@@ -676,9 +673,7 @@
 <h3 id="Variadic-Templates（数量不定的模板参数）"><a href="#Variadic-Templates（数量不定的模板参数）" class="headerlink" title="Variadic Templates（数量不定的模板参数）"></a>Variadic Templates（数量不定的模板参数）</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span> <span class="comment">// 无参数时调用，必须有</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... Types&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">const</span> T&amp; firstArg, <span class="type">const</span> Type&amp;... args)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cout&lt;&lt;firstArg&lt;&lt;endl;	<span class="comment">//print first argument</span></span><br><span class="line">	<span class="built_in">print</span>(args...);			<span class="comment">//call print() for remaining arguments</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
 <p>**…**就是一个所谓的pack（包）</p>
-<p>用于 template parameters，就是 template parameters pack（模板参数包）</p>
-<p>用于 function parameter types，就是 function parameter types pack（函数参数类型包）</p>
-<p>用于 function parameters，就是 function parameters pack（函数参数包）</p>
+<p>用于 template parameters，就是 template parameters pack（模板参数包）<br>用于 function parameter types，就是 function parameter types pack（函数参数类型包）<br>用于 function parameters，就是 function parameters pack（函数参数包）</p>
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="number">7.5</span>, <span class="string">&quot;hello&quot;</span>, <span class="built_in">bitset</span>&lt;<span class="number">16</span>&gt;(<span class="number">377</span>), <span class="number">42</span>);</span><br><span class="line"><span class="comment">// 输出结果为：</span></span><br><span class="line"><span class="comment">// 7.5</span></span><br><span class="line"><span class="comment">// hello</span></span><br><span class="line"><span class="comment">// 0000000101111001</span></span><br><span class="line"><span class="comment">// 42</span></span><br></pre></td></tr></table></figure></div>
 
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 与上面那个可以并存</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Types&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">const</span> Types&amp;... args)</span></span></span><br><span class="line"><span class="function"></span>&#123;&#125;</span><br></pre></td></tr></table></figure></div>
@@ -707,7 +702,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-08-02 14:49:32
+                    :</strong> 2025-08-02 19:57:39
             </li>
         
         <li>
