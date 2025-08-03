@@ -140,7 +140,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-08-01T06:01:54.000Z">
-<meta property="article:modified_time" content="2025-08-03T06:46:39.435Z">
+<meta property="article:modified_time" content="2025-08-03T09:22:38.438Z">
 <meta property="article:author" content="tiny_star">
 <meta property="article:tag" content="C++2.0">
 <meta name="twitter:card" content="summary">
@@ -606,8 +606,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-08-03 14:46:39</span>
-            <span class="mobile">2025-08-03 14:46:39</span>
+            <span class="desktop">2025-08-03 17:22:38</span>
+            <span class="mobile">2025-08-03 17:22:38</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -698,6 +698,9 @@
 <h3 id="initializer-list"><a href="#initializer-list" class="headerlink" title="initializer_list&lt;&gt;"></a>initializer_list&lt;&gt;</h3><p><strong>std::initializer_list&lt;&gt;</strong> can be used to support initializations <u>by a list of values</u> or in any other place <u>where you want to process just a list of values</u></p>
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(std::initializer_list&lt;<span class="type">int</span>&gt; vals)</span>		<span class="comment">// 传给initializer_list者，一定是个initializer_list( or&#123;...&#125;形式)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> p = vals.<span class="built_in">begin</span>(); p != vals.<span class="built_in">end</span>(); ++p)	<span class="comment">// a list of values</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; *p &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(&#123;<span class="number">12</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">11</span>,<span class="number">13</span>,<span class="number">17</span>&#125;);		<span class="comment">// pass a list of values to print()</span></span><br></pre></td></tr></table></figure></div>
 
+<p><strong>initializer_list</strong>类源代码中，编译器会准备好<strong>array</strong>来调用私有的构造函数<br>The <strong>initializer_list</strong> object <u>refers to</u> the elements of this <strong>array</strong> <u>without containing them</u><br>Copying an <strong>initializer_list</strong> object produces another object <u>referring to</u> the same underlying elements, not to new copies of them (<u>reference semantics</u>&#x2F;引用语义).<br>如今所有容器都接受指定任意数量的值用于<strong>建构</strong>或<strong>赋值</strong>或 <strong>insert()</strong> 或 <strong>assign()</strong> ； <strong>max()</strong> 和 <strong>min()</strong> 也愿意接受任意参数</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cout &lt;&lt; <span class="built_in">max</span>( &#123;<span class="built_in">string</span>(<span class="string">&quot;Ace&quot;</span>), <span class="built_in">string</span>(<span class="string">&quot;Stacy&quot;</span>), <span class="built_in">string</span>(<span class="string">&quot;Sabrina&quot;</span>), <span class="built_in">string</span>(<span class="string">&quot;Barkley&quot;</span>)&#125; );	<span class="comment">// Stacy</span></span><br><span class="line">cout &lt;&lt; <span class="built_in">min</span>( &#123;<span class="built_in">string</span>(<span class="string">&quot;Ace&quot;</span>), <span class="built_in">string</span>(<span class="string">&quot;Stacy&quot;</span>), <span class="built_in">string</span>(<span class="string">&quot;Sabrina&quot;</span>), <span class="built_in">string</span>(<span class="string">&quot;Barkley&quot;</span>)&#125; );	<span class="comment">// Ace</span></span><br><span class="line">cout &lt;&lt; <span class="built_in">max</span>( &#123;<span class="number">54</span>, <span class="number">16</span>, <span class="number">48</span>, <span class="number">5</span>&#125;);	<span class="comment">// 54</span></span><br><span class="line">cout &lt;&lt; <span class="built_in">min</span>( &#123;<span class="number">54</span>, <span class="number">16</span>, <span class="number">48</span>, <span class="number">5</span>&#125;);	<span class="comment">// 5</span></span><br></pre></td></tr></table></figure></div>
+
 
 		</div>
 
@@ -712,7 +715,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-08-03 14:46:39
+                    :</strong> 2025-08-03 17:22:38
             </li>
         
         <li>
