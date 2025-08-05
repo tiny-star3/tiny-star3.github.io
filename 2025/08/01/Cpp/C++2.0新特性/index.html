@@ -140,7 +140,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-08-01T06:01:54.000Z">
-<meta property="article:modified_time" content="2025-08-04T09:45:30.679Z">
+<meta property="article:modified_time" content="2025-08-05T09:15:50.300Z">
 <meta property="article:author" content="tiny_star">
 <meta property="article:tag" content="C++2.0">
 <meta name="twitter:card" content="summary">
@@ -266,7 +266,7 @@
                                    href="/"
                                         >
                                     <i class="fa-regular fa-house fa-fw"></i>
-                                    トップページ
+                                    INICIO
                                     
                                 </a>
 
@@ -409,7 +409,7 @@
                            href="/"
                         >
                             <span>
-                                トップページ
+                                INICIO
                             </span>
                             
                                 <i class="fa-regular fa-house fa-sm fa-fw"></i>
@@ -548,15 +548,15 @@
         <div class="statistics flex justify-around my-2.5">
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
         <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
-        <div class="label text-third-text-color text-sm">タグ</div>
+        <div class="label text-third-text-color text-sm">Etiquetas</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
         <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
-        <div class="label text-third-text-color text-sm">分類</div>
+        <div class="label text-third-text-color text-sm">Categorías</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
         <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">7</div>
-        <div class="label text-third-text-color text-sm">記事</div>
+        <div class="label text-third-text-color text-sm">Publicaciones</div>
     </a>
 </div>
     </div>
@@ -601,14 +601,14 @@
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
         <span class="desktop">2025-08-01 14:01:54</span>
         <span class="mobile">2025-08-01 14:01:54</span>
-        <span class="hover-info">作成</span>
+        <span class="hover-info">Creado</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-08-04 17:45:30</span>
-            <span class="mobile">2025-08-04 17:45:30</span>
-            <span class="hover-info">更新</span>
+            <span class="desktop">2025-08-05 17:15:50</span>
+            <span class="mobile">2025-08-05 17:15:50</span>
+            <span class="hover-info">Actualizado</span>
         </span>
     
 
@@ -711,34 +711,40 @@
 <p>no explicit type conversions are possible when elements are initialized as decl inside the for loop.(允许隐式转换)</p>
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">C</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="function"><span class="keyword">explicit</span> <span class="title">C</span><span class="params">(<span class="type">const</span> string&amp; s)</span></span>;	<span class="comment">// explicit(!) type conversion from strings</span></span><br><span class="line">    	...</span><br><span class="line">&#125;;</span><br><span class="line">vector&lt;string&gt; vs;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">const</span> C&amp; elem : vs) &#123;	<span class="comment">// ERROR, no conversion from string to C defined</span></span><br><span class="line">    cout&lt;&lt;elem&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
-<h2 id="视频学习：侯捷老师-C-2-0课程"><a href="#视频学习：侯捷老师-C-2-0课程" class="headerlink" title="视频学习：侯捷老师 C++2.0课程"></a>视频学习：侯捷老师 C++2.0课程</h2>
+<h2 id="default-delete"><a href="#default-delete" class="headerlink" title="&#x3D;default, &#x3D;delete"></a>&#x3D;default, &#x3D;delete</h2><p>如果你自行定义了一个<strong>ctor</strong>，那么编译器就不会再给你一个 <strong>default ctor</strong><br>如果你强制加上 <strong>&#x3D;default</strong>，就可以重新获得并使用 <strong>default ctor</strong></p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Zoo</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Zoo</span>(<span class="type">int</span> i1,<span class="type">int</span> i2):<span class="built_in">d1</span>(i1),<span class="built_in">d2</span>(i2)&#123; &#125;</span><br><span class="line">    <span class="built_in">Zoo</span>(<span class="type">const</span> Zoo&amp;)=<span class="keyword">delete</span>;						<span class="comment">// 拷贝构造函数（用一个对象来初始化另一个对象）(按字节拷贝)</span></span><br><span class="line">    <span class="built_in">Zoo</span>(Zoo&amp;&amp;)=<span class="keyword">default</span>;							<span class="comment">// 移动构造函数</span></span><br><span class="line">    Zoo&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Zoo&amp;)=<span class="keyword">default</span>;			<span class="comment">// 赋值构造函数(operator=)（按字节拷贝）</span></span><br><span class="line">    Zoo&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Zoo&amp;&amp;)=<span class="keyword">delete</span>;			<span class="comment">// 移动赋值函数</span></span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Zoo</span>()&#123; &#125;							<span class="comment">// 析构函数</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> d1,d2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Big-Three</strong>：拷贝构造函数，赋值构造函数，析构函数<br><strong>Big-Five</strong>：拷贝构造函数，赋值构造函数，析构函数，移动构造函数，移动赋值函数<br><strong>&#x3D;default;</strong> 用于<strong>Big-Five</strong>之外无意义，编译报错<br><strong>&#x3D;delete;</strong> 可用于任何函数身上（<strong>&#x3D;0</strong>只能用于 <strong>virtual</strong> 函数）</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Foo</span>(<span class="type">int</span> i):_i(i)&#123;&#125;</span><br><span class="line">    <span class="built_in">Foo</span>()=<span class="keyword">default</span>;	<span class="comment">// 和上一个并存（ctor可以多个并存），默认构造函数</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">Foo</span>(<span class="type">const</span> Foo&amp; x):_i(x._i)&#123; &#125;</span><br><span class="line">    <span class="built_in">Foo</span>(<span class="type">const</span> Foo&amp;)=<span class="keyword">default</span>;	<span class="comment">// [Error] &#x27;Foo::Foo(const Foo&amp;)&#x27; cannot be overloaded</span></span><br><span class="line">    <span class="built_in">Foo</span>(<span class="type">const</span> Foo&amp;)=<span class="keyword">delete</span>;		<span class="comment">// [Error] &#x27;Foo::Foo(const Foo&amp;)&#x27; cannot be overloaded</span></span><br><span class="line">    </span><br><span class="line">    Foo&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Foo&amp; x) &#123;_i=x._i; <span class="keyword">return</span> *<span class="keyword">this</span>;&#125;</span><br><span class="line">    Foo&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Foo&amp; x)=<span class="keyword">default</span>;	<span class="comment">// [Error] &#x27;Foo&amp; Foo::operator=(const Foo&amp;)&#x27; cannot be overloaded</span></span><br><span class="line">    Foo&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Foo&amp; x)=<span class="keyword">delete</span>;	<span class="comment">// [Error] &#x27;Foo&amp; Foo::operator=(const Foo&amp;)&#x27; cannot be overloaded</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">func1</span><span class="params">()</span></span>=<span class="keyword">default</span>;	<span class="comment">// [Error] &#x27;void Foo:func1()&#x27; cannot be defaulted，非Big-Five无默认函数</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">func2</span><span class="params">()</span></span>=<span class="keyword">delete</span>;	<span class="comment">// ok，编译通过，但是意义不大</span></span><br><span class="line">    </span><br><span class="line">    ~<span class="built_in">Foo</span>()=<span class="keyword">delete</span>;	<span class="comment">// 这会造成使用Foo object时出错 =&gt; [Error] use of deleted function &#x27;Foo::~Foo()&#x27;，出生命周期范围无法析构</span></span><br><span class="line">    ~<span class="built_in">Foo</span>()=<span class="keyword">default</span>;</span><br><span class="line">   </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> _i;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Foo <span class="title">f1</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line">Foo f2;		<span class="comment">// 如果没有写出默认构造函数=default;版本 =&gt; [Error] no matching function for call to &#x27;Foo::Foo()&#x27;</span></span><br><span class="line"><span class="function">Foo <span class="title">f3</span><span class="params">(f1)</span></span>;	<span class="comment">// 如果 copy ctor(拷贝构造函数)=delete; =&gt; [Error] use of deleted function &#x27;Foo::Foo(const Foo&amp;)&#x27;</span></span><br><span class="line">f3=f2;		<span class="comment">// 如果 copy assign(赋值构造函数)=delete; =&gt; [Error] use of deleted function &#x27;Foo&amp; Foo::operator=(const Foo&amp;)&#x27;</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="No-Copy-and-Private-Copy"><a href="#No-Copy-and-Private-Copy" class="headerlink" title="No-Copy and Private-Copy"></a>No-Copy and Private-Copy</h3><h2 id="视频学习：侯捷老师-C-2-0课程"><a href="#视频学习：侯捷老师-C-2-0课程" class="headerlink" title="视频学习：侯捷老师 C++2.0课程"></a>视频学习：侯捷老师 C++2.0课程</h2>
 		</div>
 
 		
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>タイトル:</strong> C++2.0新特性</li>
-        <li><strong>作者:</strong> tiny_star</li>
-        <li><strong>で作成されました
+        <li><strong>Título:</strong> C++2.0新特性</li>
+        <li><strong>Autor:</strong> tiny_star</li>
+        <li><strong>Creado el
                 :</strong> 2025-08-01 14:01:54</li>
         
             <li>
-                <strong>で更新されました
-                    :</strong> 2025-08-04 17:45:30
+                <strong>Actualizado el
+                    :</strong> 2025-08-05 17:15:50
             </li>
         
         <li>
-            <strong>リンク:</strong> https://tiny-star3.github.io/2025/08/01/Cpp/C++2.0新特性/
+            <strong>Enlace:</strong> https://tiny-star3.github.io/2025/08/01/Cpp/C++2.0新特性/
         </li>
         <li>
             <strong>
-                著作権宣言:
+                Licencia:
             </strong>
             
 
             
-                この文章は <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> を使用して許可します。
+                Este trabajo está licenciado bajo <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
             
         </li>
     </ul>
@@ -769,7 +775,7 @@
 					</span>
 					<span class="title flex justify-center items-center">
 						<span class="post-nav-title-item truncate max-w-48">STL常用算法</span>
-						<span class="post-nav-item">前一篇</span>
+						<span class="post-nav-item">Publicaciones anteriores</span>
 					</span>
 				</a>
 			</div>
@@ -779,7 +785,7 @@
 				<a class="next" rel="next" href="/2025/07/31/Life/blm-Agricultural-University-Summer-Camp/">
 					<span class="title flex justify-center items-center">
 						<span class="post-nav-title-item truncate max-w-48">伯乐码-农大夏令营</span>
-						<span class="post-nav-item">次一篇</span>
+						<span class="post-nav-item">Publicaciones siguientes</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
 						<i class="fa-solid fa-chevron-right"></i>
@@ -796,7 +802,7 @@
 			<div class="comments-container mt-10 w-full ">
     <div id="comment-anchor" class="w-full h-2.5"></div>
     <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
-        コメント
+        Comentarios
     </div>
     
 
@@ -839,9 +845,9 @@
 	<div class="toc-content-container">
 		<div class="post-toc-wrap">
 	<div class="post-toc">
-		<div class="toc-title">目次</div>
+		<div class="toc-title">En esta página</div>
 		<div class="page-title">C++2.0新特性</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E5%BA%93%E5%B1%82%E9%9D%A2%E4%BB%A5header-files%EF%BC%88%E5%A4%B4%E6%96%87%E4%BB%B6%EF%BC%89%E5%BD%A2%E5%BC%8F%E4%BD%93%E7%8E%B0"><span class="nav-text">标准库层面以header files（头文件）形式体现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DevC-%E4%B8%8A%E7%9A%84-ISO-C-11-%E5%BC%80%E5%85%B3"><span class="nav-text">DevC++ 上的 ISO C++11 开关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E7%BD%91%E7%AB%99"><span class="nav-text">资源网站</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4%E6%94%AF%E6%8C%81C-11%EF%BC%9Amacro-cplusplus"><span class="nav-text">确认支持C++11：macro __cplusplus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Variadic-Templates%EF%BC%88%E6%95%B0%E9%87%8F%E4%B8%8D%E5%AE%9A%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%8F%82%E6%95%B0%EF%BC%89"><span class="nav-text">Variadic Templates（数量不定的模板参数）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nullptr-and-std-nullptr-t%EF%BC%88%E7%A9%BA%E6%8C%87%E9%92%88%EF%BC%89"><span class="nav-text">nullptr and std::nullptr_t（空指针）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Automatic-Type-Deduction-with-auto%EF%BC%88%E8%87%AA%E5%8A%A8%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC%EF%BC%89"><span class="nav-text">Automatic Type Deduction with auto（自动类型推导）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Uniform-Initialization%EF%BC%88%E7%BB%9F%E4%B8%80%E5%88%9D%E5%A7%8B%E5%8C%96-%E4%B8%80%E8%87%B4%E6%80%A7%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%89"><span class="nav-text">Uniform Initialization（统一初始化&#x2F;一致性初始化）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Initializer-Lists%EF%BC%88%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%97%E8%A1%A8%EF%BC%89"><span class="nav-text">Initializer Lists（初始化列表）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#initializer-list"><span class="nav-text">initializer_list&lt;&gt;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#explicit-for-ctors-taking-more-than-one-argument"><span class="nav-text">explicit for ctors taking more than one argument</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#range-based-for-statement"><span class="nav-text">range-based for statement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E5%AD%A6%E4%B9%A0%EF%BC%9A%E4%BE%AF%E6%8D%B7%E8%80%81%E5%B8%88-C-2-0%E8%AF%BE%E7%A8%8B"><span class="nav-text">视频学习：侯捷老师 C++2.0课程</span></a></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E5%BA%93%E5%B1%82%E9%9D%A2%E4%BB%A5header-files%EF%BC%88%E5%A4%B4%E6%96%87%E4%BB%B6%EF%BC%89%E5%BD%A2%E5%BC%8F%E4%BD%93%E7%8E%B0"><span class="nav-text">标准库层面以header files（头文件）形式体现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DevC-%E4%B8%8A%E7%9A%84-ISO-C-11-%E5%BC%80%E5%85%B3"><span class="nav-text">DevC++ 上的 ISO C++11 开关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E7%BD%91%E7%AB%99"><span class="nav-text">资源网站</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4%E6%94%AF%E6%8C%81C-11%EF%BC%9Amacro-cplusplus"><span class="nav-text">确认支持C++11：macro __cplusplus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Variadic-Templates%EF%BC%88%E6%95%B0%E9%87%8F%E4%B8%8D%E5%AE%9A%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%8F%82%E6%95%B0%EF%BC%89"><span class="nav-text">Variadic Templates（数量不定的模板参数）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nullptr-and-std-nullptr-t%EF%BC%88%E7%A9%BA%E6%8C%87%E9%92%88%EF%BC%89"><span class="nav-text">nullptr and std::nullptr_t（空指针）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Automatic-Type-Deduction-with-auto%EF%BC%88%E8%87%AA%E5%8A%A8%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC%EF%BC%89"><span class="nav-text">Automatic Type Deduction with auto（自动类型推导）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Uniform-Initialization%EF%BC%88%E7%BB%9F%E4%B8%80%E5%88%9D%E5%A7%8B%E5%8C%96-%E4%B8%80%E8%87%B4%E6%80%A7%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%89"><span class="nav-text">Uniform Initialization（统一初始化&#x2F;一致性初始化）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Initializer-Lists%EF%BC%88%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%97%E8%A1%A8%EF%BC%89"><span class="nav-text">Initializer Lists（初始化列表）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#initializer-list"><span class="nav-text">initializer_list&lt;&gt;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#explicit-for-ctors-taking-more-than-one-argument"><span class="nav-text">explicit for ctors taking more than one argument</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#range-based-for-statement"><span class="nav-text">range-based for statement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#default-delete"><span class="nav-text">&#x3D;default, &#x3D;delete</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#No-Copy-and-Private-Copy"><span class="nav-text">No-Copy and Private-Copy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E5%AD%A6%E4%B9%A0%EF%BC%9A%E4%BE%AF%E6%8D%B7%E8%80%81%E5%B8%88-C-2-0%E8%AF%BE%E7%A8%8B"><span class="nav-text">视频学习：侯捷老师 C++2.0课程</span></a></li></ol>
 
 	</div>
 </div>
@@ -868,7 +874,7 @@
                 
                 <p class="post-count space-x-0.5">
                     <span>
-                        共 7 記事
+                        7 publicaciones en total
                     </span>
                     
                 </p>
@@ -879,26 +885,26 @@
             <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
                 
                     <span id="busuanzi_container_site_uv" class="lg:!block">
-                        <span class="text-sm">訪問者数</span>
+                        <span class="text-sm">CONTADOR DE VISITANTES</span>
                         <span id="busuanzi_value_site_uv"></span>
                     </span>
                 
                 
                     <span id="busuanzi_container_site_pv" class="lg:!block">
-                        <span class="text-sm">総アクセス数</span>
+                        <span class="text-sm">TOTAL DE VISITAS</span>
                         <span id="busuanzi_value_site_pv"></span>
                     </span>
                 
             </div>
         
         <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
-            <span class="lg:block text-sm"><?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> で駆動する</span>
-            <span class="text-sm lg:block">テーマ&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+            <span class="lg:block text-sm">DESARROLLADO POR <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">TEMA&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
         </div>
         
         
             <div>
-                ブログが稼働する <span class="odometer" id="runtime_days" ></span> 日 <span class="odometer" id="runtime_hours"></span> 時間 <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> 秒
+                Blog en línea por <span class="odometer" id="runtime_days" ></span> días <span class="odometer" id="runtime_hours"></span> horas <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Seg
             </div>
         
         
@@ -999,7 +1005,7 @@
 				<i class="fa-solid fa-keyboard"></i>
 			</span>
 			<div class="search-input-container">
-				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="検索..." spellcheck="false" type="search" class="search-input">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Buscar..." spellcheck="false" type="search" class="search-input">
 			</div>
 			<span class="popup-btn-close">
 				<i class="fa-solid fa-times"></i>
