@@ -140,7 +140,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-12-24T17:04:13.000Z">
-<meta property="article:modified_time" content="2025-12-24T17:15:17.206Z">
+<meta property="article:modified_time" content="2025-12-25T15:12:52.700Z">
 <meta property="article:author" content="tiny_star">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
@@ -605,8 +605,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-12-25 01:15:17</span>
-            <span class="mobile">2025-12-25 01:15:17</span>
+            <span class="desktop">2025-12-25 23:12:52</span>
+            <span class="mobile">2025-12-25 23:12:52</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -652,9 +652,98 @@
 			<p>学习一下“金字塔尖”课程，全英文不知道能不能看懂😭（自己的课程倒头就睡，别人的课程逐帧学习😜） The goal of this course is to provide a deep understanding of the fundamental principles and engineering trade-offs involved in designing modern parallel computing systems as well as to teach parallel programming techniques necessary to effectively utilize these machines. Because writing good parallel programs requires an understanding of key machine performance characteristics, this course will cover both parallel hardware and software design</p>
 <span id="more"></span>
 
+<p><a class="link"   target="_blank" rel="noopener" href="https://csdiy.wiki/" >CS自学指南<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>跟着大佬学第一门</p>
 <h2 id="课程"><a href="#课程" class="headerlink" title="课程"></a>课程</h2><h3 id="课程视频"><a href="#课程视频" class="headerlink" title="课程视频"></a>课程视频</h3><p><a class="link"   target="_blank" rel="noopener" href="https://www.youtube.com/playlist?list=PLoROMvodv4rMp7MTFr4hQsDEcX7Bx6Odp" >Stanford CS149 I Parallel Computing I 2023 I Kayvon Fatahalian and Kunle Olukotun - YouTube<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
 <h3 id="课程信息"><a href="#课程信息" class="headerlink" title="课程信息"></a>课程信息</h3><p><a class="link"   target="_blank" rel="noopener" href="https://gfxcourses.stanford.edu/cs149/fall21" >gfxcourses.stanford.edu&#x2F;cs149&#x2F;fall21<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<h3 id="Programming-Assignments"><a href="#Programming-Assignments" class="headerlink" title="Programming Assignments"></a>Programming Assignments</h3><style>.uljlvvxleigp{zoom:67%;}</style>
 
+<style>.hhuwekmucfib{zoom: 80%;}</style>
+
+<h3 id="Written-Assignments"><a href="#Written-Assignments" class="headerlink" title="Written Assignments"></a>Written Assignments</h3><style>.rrryshrfktxx{zoom:80%;}</style>
+
+<h2 id="Lecture-1-Why-Parallelism-Why-Efficiency"><a href="#Lecture-1-Why-Parallelism-Why-Efficiency" class="headerlink" title="Lecture 1 - Why Parallelism? Why Efficiency?"></a>Lecture 1 - Why Parallelism? Why Efficiency?</h2><p>A parallel computer is a collection of processing elements that cooperate to solve problems quickly<br>collection of processing elements: We’re going to use multiple processing elements to get it<br>quickly: We care about performance, and we care about efficiency</p>
+<h3 id="Speedup"><a href="#Speedup" class="headerlink" title="Speedup"></a>Speedup</h3><p>One major motivation of using parallel processing: achieve a speedup<br>For a given problem:</p>
+<style>.lgodqoxwdjbn{zoom:67%;}</style>
+
+<p>Communication limited the maximum speedup achieved<br>Minimizing the cost of communication improved speedup</p>
+<p>Imbalance in work assignment limited speedup<br>Improving the distribution of work improved speedup</p>
+<p>Communication costs can dominate a parallel computation, severely limiting speedup</p>
+<h3 id="Course-theme"><a href="#Course-theme" class="headerlink" title="Course theme"></a>Course theme</h3><p><strong>Course theme 1</strong><br><strong>Designing and writing parallel programs … that scale!</strong><br>Parallel thinking<br>	1.Decomposing(分解) work into pieces that can safely be performed in parallel<br>	2.Assigning work to processors<br>	3.Managing communication &#x2F; synchronization(同步) between the processors so that it does not limit speedup<br>Abstractions(抽象) &#x2F; mechanisms(机制) for performing the above tasks<br>	Writing code in popular parallel programming languages</p>
+<p><strong>Course theme 2</strong><br><strong>Parallel computer hardware implementation: how parallel computers work</strong><br>Mechanisms used to implement abstractions efficiently<br>	1.Performance(性能) characteristics of implementations<br>	2.Design trade-offs(权衡): performance vs. convenience vs. cost<br>Why do I need to know about hardware?<br>	1.Because the characteristics of the machine really matter<br>	2.Because you care about efficiency and performance</p>
+<p><strong>Course theme 3</strong><br><strong>Thinking about efficiency</strong><br>FAST !&#x3D; EFFICIENT<br>Just because your program runs faster on a parallel computer, it does not mean it is using the hardware efficiently<br>Programmer’s perspective: make use of provided machine capabilities<br>HW(HardWare) designer’s perspective: choosing the right capabilities(功能) to put in system (performance &#x2F; cost, cost &#x3D; silicon area?, power?, etc.) </p>
+<p><strong>Until ~ 20 years ago: two significant reasons for processor performance improvement</strong><br>1.Exploiting(利用) instruction-level(指令级) parallelism(superscalar(超标量) execution)<br>2.Increasing CPU clock frequency</p>
+<h3 id="What-is-a-program-from-a-processor’s-perspective"><a href="#What-is-a-program-from-a-processor’s-perspective" class="headerlink" title="What is a program?(from a processor’s perspective)"></a>What is a program?(from a processor’s perspective)</h3><p>A program is just a list of processor instructions</p>
+<h3 id="What-is-an-instruction"><a href="#What-is-an-instruction" class="headerlink" title="What is an instruction?"></a>What is an instruction?</h3><p>It describes an operation for a processor to perform<br>Executing an instruction typically modifies the computer’s state<br>computer’s state: the values of program data, which are stored in a processor’s registers or in memory</p>
+<h3 id="What-does-a-processor-do"><a href="#What-does-a-processor-do" class="headerlink" title="What does a processor do?"></a>What does a processor do?</h3><p>A processor executes instructions<style>.lqxkieidocbw{zoom:80%;}</style><br>executes one instruction per clock</p>
+<p>Idea #1:<br>Superscalar execution: processor automatically finds (Or the compiler finds independent instructions at compile time and explicitly encodes dependencies in the compiled binary(二进制文件)) independent instructions in an instruction sequence and executes them in parallel on multiple execution units<br><strong>Superscalar processor</strong><br>This processor can decode and execute up to two instructions per clock</p>
+<style>.hjiiklfqielq{zoom:80%;}</style>
+
+<p><strong>Diminishing(递减) returns(收益) of superscalar execution</strong><br>Most available ILP(instruction-level parallelism) is exploited by a processor capable of issuing(发出) four instructions per clock(Little performance benefit from building a processor that can issue more)</p>
+<p><strong>ILP tapped out(已达极限) + end of frequency scaling(扩展)</strong></p>
+<style>.najqdomgairx{zoom: 80%;}</style>
+
+<p><strong>The “power wall”</strong><br>Power consumed by a transistor:</p>
+<style>.dpblvesnehki{zoom:80%;}</style>
+<p>Static power: transistors burn power even when inactive due to leakage<br>High power &#x3D; high heat<br>Power is a critical design constrant in modern processors<br>Maximum allowed frequency determined by processor’s core voltage</p>
+<p><strong>Single-core performance scaling</strong><br>The rate of single-instruction stream performance scaling has decreased(almost to zero)<br>	1.Frequency scaling limited by power<br>	2.ILP scaling tapped out<br>Architects are now building faster processors by adding more execution units that run in parallel(Or units that are specialized for a specific task: like graphics, or audio &#x2F; video playback)<br>Software must be written to be parallel to see performance gains. No more free lunch for software developers!</p>
+<table>
+<thead>
+<tr>
+<th align="center">特性</th>
+<th align="center">指令级并行(ILP)</th>
+<th align="center">手动编写的并行(TLP&#x2F;DLP)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">负责人</td>
+<td align="center">硬件(CPU)</td>
+<td align="center">程序员(软件)</td>
+</tr>
+<tr>
+<td align="center">代码形式</td>
+<td align="center">普通的顺序代码</td>
+<td align="center">特殊的多线程&#x2F;向量化代码</td>
+</tr>
+<tr>
+<td align="center">程序员负担</td>
+<td align="center">零负担 (自动提升)</td>
+<td align="center">负担沉重 (需设计架构、调试并发 BUG)</td>
+</tr>
+<tr>
+<td align="center">并行规模</td>
+<td align="center">很小 (通常每个时钟周期几条指令)</td>
+<td align="center">很大 (可以扩展到成千上万个核心)</td>
+</tr>
+<tr>
+<td align="center">限制因素</td>
+<td align="center">指令间的依赖关系、电路复杂度</td>
+<td align="center">算法的可拆分性、同步开销 (阿姆达尔定律)</td>
+</tr>
+<tr>
+<td align="center">粒度</td>
+<td align="center"><strong>极细(指令级)</strong>。处理的是加法、乘法、访存等最基本的指令</td>
+<td align="center"><strong>较粗(线程级或任务级)</strong>。程序员将一个大任务拆分成多个子任务(例如：处理图像时，把图像分成四块，交给四个核心处理)</td>
+</tr>
+<tr>
+<td align="center">实现方式</td>
+<td align="center">通过流水线（Pipelining）、乱序执行（Out-of-Order Execution）、多发射（Multiple Issue）和分支预测等技术</td>
+<td align="center">程序员需要考虑如何拆分任务、如何处理线程间的同步（锁、信号量）、如何避免死锁以及如何进行数据交换</td>
+</tr>
+</tbody></table>
+<p><strong>Mobile parallel processing</strong><br>Power constraints also heavily influence the design of mobile systems</p>
+<p>What is a big concern in all computing?<br><strong>Power</strong><br>Two reasons to save power<br>Run at <strong>higher performance</strong> for a <strong>fixed</strong>(固定的) amount of time<br>	Power &#x3D; heat	If a chip gets too hot, it must be clocked down(减低频率) to cool off(Another reason: hotter systems cost more to cool)<br>Run at <strong>sufficient performance</strong> for a <strong>longer</strong> amount of time<br>	Power &#x3D; battery	Long battery life(续航时间) is a desirable feature in mobile devices</p>
+<p><strong>Specialized processing is ubiquitous in mobile systems</strong></p>
+<style>.jfstxpgskgsk{zoom: 80%;}</style>Motion(sensor)(运动(传感器))
+
+<p><strong>Parallel + specialized HW</strong><br>Modern systems not noly use many processing units, but also utilize specialized processing units to achieve high levels of power efficiency</p>
+<p><strong>Achieving efficient processing almost always comes down to(归结为) accessing data efficiently</strong></p>
+<h3 id="What-is-memory"><a href="#What-is-memory" class="headerlink" title="What is memory?"></a>What is memory?</h3><p>A program’s memory address space<br>	A computer’s memory is organized as an array of bytes<br>	Each byte is identified by its “address” in memory(its position in this array)(We’ll assume memory is byte-addressable)<br>Load: an instruction for accessing the contents of memory<br><strong>Memory access latency(延迟)</strong><br>	The amount of time it takes the memory system to provide data to the processor<br><strong>Stalls</strong>(停顿)<br>	A processor “stalls” (can’t make progress) when it cannot run the next instruction in an instruction stream because future instructions depend on a previous instruction that is not yet complete<br>	Accessing memory is a major source of stalls<br>	Memory access times ~ 100’s of cycles, is a measure of latency</p>
+<h3 id="What-are-caches"><a href="#What-are-caches" class="headerlink" title="What are caches?"></a>What are caches?</h3><p>A cache is a hardware implementation detail that does not impact the output of a program, only its performance<br>Cache is on-chip storage that maintains a copy of a subset(子集) of the values in memory<br>If an address is stored “in the cache” the processor can load&#x2F;store to this address more quickly than if the data resides(驻留) only in DRAM<br>Caches operate at the granularity(粒度) of “cache lines”</p>
+<p><strong>Caches reduce length of stalls(reduce memory access latency)</strong><br>	Processors run efficiency when they access data that is resident(驻留) in caches<br>	Caches reduce memory access latency when processors accesses data that they have recently accessed!(Caches also provide high bandwidth(带宽) data transfer(传输))</p>
+<p><strong>Data movement has high energy cost</strong><br>Rule of thumb(经验法则) in modern system design: always seek to reduce amount of data movement in a computer</p>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><p><strong>Single-thread-of-control performance is improving very slowly</strong><br>	To run programs significantly faster, programs must utilize multiple processing elements or specialized processing hardware<br>	Which means you need to know how to reason about(推理) and write parallel and efficient code</p>
+<p><strong>Writing parallel programs can be challenging</strong><br>	Requires problems partitioning(划分), communication, synchronization<br>	Knowledge of machine characteristics(特性) is important<br>	In particular, understanding data movement!</p>
+<h2 id="Lecture-2-A-Modern-Multi-Core-Processor-Part-I"><a href="#Lecture-2-A-Modern-Multi-Core-Processor-Part-I" class="headerlink" title="Lecture 2: A Modern Multi-Core Processor (Part I)"></a>Lecture 2: A Modern Multi-Core Processor (Part I)</h2>
 		</div>
 
 		
@@ -668,7 +757,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-12-25 01:15:17
+                    :</strong> 2025-12-25 23:12:52
             </li>
         
         <li>
@@ -764,7 +853,7 @@
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">【Class】Stanford CS149 Parallel Computing</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B"><span class="nav-text">课程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E8%A7%86%E9%A2%91"><span class="nav-text">课程视频</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E4%BF%A1%E6%81%AF"><span class="nav-text">课程信息</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B"><span class="nav-text">课程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E8%A7%86%E9%A2%91"><span class="nav-text">课程视频</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E4%BF%A1%E6%81%AF"><span class="nav-text">课程信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Programming-Assignments"><span class="nav-text">Programming Assignments</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Written-Assignments"><span class="nav-text">Written Assignments</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-1-Why-Parallelism-Why-Efficiency"><span class="nav-text">Lecture 1 - Why Parallelism? Why Efficiency?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Speedup"><span class="nav-text">Speedup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Course-theme"><span class="nav-text">Course theme</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-is-a-program-from-a-processor%E2%80%99s-perspective"><span class="nav-text">What is a program?(from a processor’s perspective)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-is-an-instruction"><span class="nav-text">What is an instruction?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-does-a-processor-do"><span class="nav-text">What does a processor do?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-is-memory"><span class="nav-text">What is memory?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-are-caches"><span class="nav-text">What are caches?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary"><span class="nav-text">Summary</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-2-A-Modern-Multi-Core-Processor-Part-I"><span class="nav-text">Lecture 2: A Modern Multi-Core Processor (Part I)</span></a></li></ol>
 
 	</div>
 </div>
