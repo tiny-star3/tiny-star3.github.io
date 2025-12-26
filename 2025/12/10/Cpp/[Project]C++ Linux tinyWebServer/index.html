@@ -936,43 +936,43 @@
 <p>最开始内存：1G 处理器：1个，处理器内核：2个	<br>报错：fork failed.: Resource temporarily unavailable				内存耗尽，无法运行<br>然后改为内存：2G 	处理器：1个，处理器内核：2个<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251223150207896.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251223150207896.png"
                       alt="image-20251223150207896"
                 ><br>改为内存：8G	处理器：1个，处理器内核：2个<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251223145402852.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251223145402852.png"
                       alt="image-20251223145402852"
                 ></p>
 <p>改为内存：2G	处理器：2个，处理器内核：2个<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251223150926975.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251223150926975.png"
                       alt="image-20251223150926975"
                 ></p>
 <p>改为内存：2G	处理器：1个，处理器内核：4个<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251223151628266.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251223151628266.png"
                       alt="image-20251223151628266"
                 ></p>
 <p>改为内存：2G	处理器：2个，处理器内核：4个<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251223152433826.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251223152433826.png"
                       alt="image-20251223152433826"
                 ></p>
 <p>改为内存：8G	处理器：2个，处理器内核：4个，感觉差别不是很大，这个测了五六次有个高的，其他的都只测一次，但是还是远小于项目介绍里面的<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251223153901734.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251223153901734.png"
                       alt="image-20251223153901734"
                 ></p>
 <p><strong>QPS</strong>（全称是 <strong>Queries Per Second</strong>，<strong>“每秒查询率”</strong>） 3000+</p>
 <p><strong>关日志后</strong><br>之前忘记关日志了😭<br>内存：8G	处理器：2个，处理器内核：4个<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251223172533349.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251223172533349.png"
                       alt="image-20251223172533349"
                 ><br><strong>QPS</strong>（全称是 <strong>Queries Per Second</strong>，<strong>“每秒查询率”</strong>） 250+</p>
 <h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>父进程fork若干个子进程，每个子进程在用户要求时间或默认的时间内对目标web循环发出实际访问请求，父子进程通过管道进行通信，子进程通过管道写端向父进程传递在若干次请求访问完毕后记录到的总信息，父进程通过管道读端读取子进程发来的相关信息，子进程在时间到后结束，父进程在所有子进程退出后统计并给用户显示最后的测试结果，然后退出</p>
@@ -1004,26 +1004,26 @@
 <h4 id="测试环境-1"><a href="#测试环境-1" class="headerlink" title="测试环境"></a>测试环境</h4><p>Linux CentOS 7 64位 	cpu: i5-10300H 	内存: 8G	处理器：2个，处理器内核：4个<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251223161559180.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251223161559180.png"
                       alt="image-20251223161559180"
                 ></p>
 <p><strong>QPS</strong>（全称是 <strong>Queries Per Second</strong>，<strong>“每秒查询率”</strong>） 3000+</p>
 <p><strong>关日志后</strong><br>之前忘记关日志了😭<br>内存：8G	处理器：2个，处理器内核：4个<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251223172935762.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251223172935762.png"
                       alt="image-20251223172935762"
                 ><br><strong>QPS</strong>（全称是 <strong>Queries Per Second</strong>，<strong>“每秒查询率”</strong>） 3500+</p>
 <p><strong>大部分connect 失败，解决加 ulimit -n 20000</strong><br><strong>短连接，同一个fd反复断开再连接，解决测试指令加 -H “Connection: keep-alive”</strong>，减少 TCP 握手带来的开销<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251224173805588.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251224173805588.png"
                       alt="image-20251224173805588"
                 ></p>
 <p>在第一种情况下，10,000 个连接在竞争，CPU 像疯了一样在内核态处理三次握手失败、处理重传、处理队列溢出。你的服务器主线程被这些“杂活”淹没了。<br>在第二种情况下，你只给了 1,000 个并发，这恰好是机器（8核）和系统参数（somaxconn 等）处理起来最舒服的规模。没有了报错干扰，CPU 能够全力跑业务逻辑，QPS 增大<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251224201846016.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251224201846016.png"
                       alt="image-20251224201846016"
                 ></p>
 <p>修改半连接队列长度</p>
@@ -1033,7 +1033,7 @@
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251224221132203.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251224221132203.png"
                       alt="image-20251224221132203"
                 ></p>
 <p>TCP 连接虽然建立了，但服务器在处理请求的过程中，或者发送响应的过程中，由于压力过大，直接把连接给断开了（Connection Reset）</p>
@@ -1153,7 +1153,7 @@
 <h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/2025/07/31/Algorithm/STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/inux%20tinyWebServer/image-20251224002127096.png"
+                     data-src="/2025/12/10/Cpp/%5BProject%5DC++%20Linux%20tinyWebServer/image-20251224002127096.png"
                       alt="image-20251224002127096"
                 ></p>
 <h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><h3 id="1-补充-Config-类"><a href="#1-补充-Config-类" class="headerlink" title="1.补充 Config 类"></a>1.补充 Config 类</h3><p>Mysql 配置暂定不可修改</p>
