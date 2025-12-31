@@ -6169,7 +6169,7 @@ html.is-animating .transition-fade-down {
   text-align: center;
 }
 p {
-  white-space: pre !important;
+  white-space: pre-wrap !important;
   tab-size: 4 !important;
   -moz-tab-size: 4 !important;
   -o-tab-size: 4 !important;
