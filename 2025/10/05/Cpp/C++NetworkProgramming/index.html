@@ -652,11 +652,11 @@
 			<p>本文介绍网络编程的基础知识，socket 的库函数，网络通讯的原理，TCP缓存，I&#x2F;O 复用的模型（select、poll、epoll），非阻塞的I&#x2F;O</p>
 <span id="more"></span>
 
-<h2 id="第一个网络通讯程序"><a href="#第一个网络通讯程序" class="headerlink" title="第一个网络通讯程序"></a>第一个网络通讯程序</h2><style>.vljscmsvqqqo{zoom:67%;}</style><img  
+<h2 id="第一个网络通讯程序"><a href="#第一个网络通讯程序" class="headerlink" title="第一个网络通讯程序"></a>第一个网络通讯程序</h2><style>.mpemiqtpiglc{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/image-20251005172050573.png"
-                      class="vljscmsvqqqo" alt="image-20251005172050573"
+                      class="mpemiqtpiglc" alt="image-20251005172050573"
                 >
 
 <h3 id="客户-服务器"><a href="#客户-服务器" class="headerlink" title="客户&#x2F;服务器"></a>客户&#x2F;服务器</h3><ul>
@@ -759,11 +759,11 @@
 
 <h2 id="三次握手与四次挥手"><a href="#三次握手与四次挥手" class="headerlink" title="三次握手与四次挥手"></a>三次握手与四次挥手</h2><p>TCP 是面向连接的、可靠的协议，建立 TCP 连接需要三次对话（三次握手），拆除 TCP 连接需要四次对话（四次握&#x2F;挥手）</p>
 <h3 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h3><p>服务端调用 listen() 函数后进入监听（等待连接）状态，这时候，客户端就可以调用 connect() 函数发起 TCP 连接请求<br>客户端调用 connect() 函数的时候会触发三次握手<br>三次握手完成后，客户端与服务端将建立一个双向的传输通道</p>
-<style>.senlcijepysu{zoom:67%;}</style><img  
+<style>.vaxceevhzpgn{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/image-20251008102303003.png"
-                      class="senlcijepysu" alt="image-20251008102303003"
+                      class="vaxceevhzpgn" alt="image-20251008102303003"
                 >
 
 <ol>
@@ -774,11 +774,11 @@
 <li>CLOSED 是假想状态，实际上不存在</li>
 </ol>
 <h3 id="四次挥手（握手）"><a href="#四次挥手（握手）" class="headerlink" title="四次挥手（握手）"></a>四次挥手（握手）</h3><p>断开一个 TCP 连接时，需要客户端和服务端相互总共发送四个包以确认连接的断开<br>在 socket 编程中，这一过程由客户端或服务端任一方执行 close() 函数触发</p>
-<style>.upaxxqnljxhn{zoom:67%;}</style><img  
+<style>.rkbwxglirwih{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/image-20251008102943495.png"
-                      class="upaxxqnljxhn" alt="image-20251008102943495"
+                      class="rkbwxglirwih" alt="image-20251008102943495"
                 >
 
 <ol>
@@ -790,11 +790,11 @@
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> opt = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">setsockopt</span>(m_listenfd, SOL_SOCKET, SO_REUSEADDR, &amp;opt, <span class="built_in">sizeof</span>(opt));</span><br></pre></td></tr></table></figure></div></li>
 </ol>
 <h2 id="TCP-缓存"><a href="#TCP-缓存" class="headerlink" title="TCP 缓存"></a>TCP 缓存</h2><p>系统为每个 socket 创建了发送缓冲区和接收缓冲区<br>应用程序调用 send()&#x2F;write() 函数发送数据的时候，内核把数据从应用进程拷贝到 socket 的发送缓冲区中<br>应用程序调用 recv()&#x2F;read() 函数接收数据的时候，内核把数据从 socket 的接收缓冲区拷贝到应用进程中<br>发送数据即把数据放入发送缓冲区<br>接收数据即从接收缓冲区中去数据</p>
-<style>.tpvfwnrjvjmf{zoom:67%;}</style><img  
+<style>.dvtifbutwgjv{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/image-20251008103943419.png"
-                      class="tpvfwnrjvjmf" alt="image-20251008103943419"
+                      class="dvtifbutwgjv" alt="image-20251008103943419"
                 >
 
 <p>查看 socket 缓存的大小</p>
@@ -923,11 +923,11 @@
 <p>文章会从网卡接收数据的流程讲起，串联起 CPU 中断、操作系统进程调度等知识; 再一步步分析阻塞接收数据、Select 到 Epoll 的进化过程; 最后探究 Epoll 的实现细节</p>
 <p><strong>从网卡接收数据说起</strong></p>
 <p>下边是一个典型的计算机结构图，计算机由 CPU、存储器(内存)与网络接口等部件组成，了解 Epoll 本质的第一步，要从硬件的角度看计算机怎样接收网络数据</p>
-<style>.yepcpdumubkb{zoom:67%;}</style><img  
+<style>.qxrnusuxolnp{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/image-20251014235838708.png"
-                      class="yepcpdumubkb" alt="image-20251014235838708"
+                      class="qxrnusuxolnp" alt="image-20251014235838708"
                 >
 
 <p>计算机结构图(图片来源：Linux 内核完全注释之微型计算机组成结构)</p>
@@ -938,11 +938,11 @@
 <li>最终 3 阶段将数据写入到内存中的某个地址上</li>
 </ul>
 <p>这个过程涉及到 DMA 传输、IO 通路选择等硬件有关的知识，但我们只需知道：网卡会把接收到的数据写入内存</p>
-<style>.fqjlhfouvczo{zoom:67%;}</style><img  
+<style>.dywmmrhhifir{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/d52181c2837d4c43fe51e6ff8b2cfb52.png"
-                      class="fqjlhfouvczo" alt="d52181c2837d4c43fe51e6ff8b2cfb52"
+                      class="dywmmrhhifir" alt="d52181c2837d4c43fe51e6ff8b2cfb52"
                 >
 
 <p>网卡接收数据的过程</p>
@@ -953,21 +953,21 @@
 <p>一般而言，由硬件产生的信号需要 CPU 立马做出回应，不然数据可能就丢失了，所以它的优先级很高</p>
 <p>CPU 理应中断掉正在执行的程序，去做出响应; 当 CPU 完成对硬件的响应后，再重新执行用户程序</p>
 <p>中断的过程如下图，它和函数调用差不多，只不过函数调用是事先定好位置，而中断的位置由“信号”决定</p>
-<style>.jiicijfnoddm{zoom:67%;}</style><img  
+<style>.epvblkcruima{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/94e82f16adad681484af8e84aed4ab6b.png"
-                      class="jiicijfnoddm" alt="94e82f16adad681484af8e84aed4ab6b"
+                      class="epvblkcruima" alt="94e82f16adad681484af8e84aed4ab6b"
                 >
 
 <p>中断程序调用</p>
 <p>以键盘为例，当用户按下键盘某个按键时，键盘会给 CPU 的中断引脚发出一个高电平，CPU 能够捕获这个信号，然后执行键盘中断程序</p>
 <p>下图展示了各种硬件通过中断与 CPU 交互的过程：</p>
-<style>.tissqxcwxpib{zoom:67%;}</style><img  
+<style>.cftkgmimmtgm{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/7e137cb47ecd89c1b631e22b9be1b5f7.png"
-                      class="tissqxcwxpib" alt="7e137cb47ecd89c1b631e22b9be1b5f7"
+                      class="cftkgmimmtgm" alt="7e137cb47ecd89c1b631e22b9be1b5f7"
                 >
 
 <p>CPU 中断(图片来源：net.pku.edu.cn)</p>
@@ -984,31 +984,31 @@
 <p>运行状态是进程获得 CPU 使用权，正在执行代码的状态; 等待状态是阻塞状态，比如上述程序运行到 Recv 时，程序会从运行状态变为等待状态，接收到数据后又变回运行状态</p>
 <p>操作系统会分时执行各个运行状态的进程，由于速度很快，看上去就像是同时执行多个任务</p>
 <p>下图的计算机中运行着 A、B 与 C 三个进程，其中进程 A 执行着上述基础网络程序，一开始，这 3 个进程都被操作系统的工作队列所引用，处于运行状态，会分时执行</p>
-<style>.veolnhxvyvgh{zoom:67%;}</style><img  
+<style>.hcgevijwzgov{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/ef33418b177812c54197c3511a1aed45.png"
-                      class="veolnhxvyvgh" alt="ef33418b177812c54197c3511a1aed45"
+                      class="hcgevijwzgov" alt="ef33418b177812c54197c3511a1aed45"
                 >
 
 <p>工作队列中有 A、B 和 C 三个进程</p>
 <p><strong>等待队列</strong></p>
 <p>当进程 A 执行到创建 Socket 的语句时，操作系统会创建一个由文件系统管理的 Socket 对象(如下图)</p>
-<style>.lvccvshfcwyv{zoom:67%;}</style><img  
+<style>.rxjdamturqhj{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/d482555c4c90fea9e6be214406a9f034-1760458079771.png"
-                      class="lvccvshfcwyv" alt="d482555c4c90fea9e6be214406a9f034"
+                      class="rxjdamturqhj" alt="d482555c4c90fea9e6be214406a9f034"
                 >
 
 <p>创建 Socket</p>
 <p>这个 Socket 对象包含了发送缓冲区、接收缓冲区与等待队列等成员。等待队列是个非常重要的结构，它指向所有需要等待该 Socket 事件的进程</p>
 <p>当程序执行到 Recv 时，操作系统会将进程 A 从工作队列移动到该 Socket 的等待队列中(如下图)</p>
-<style>.sdnhmmlgspqk{zoom:67%;}</style><img  
+<style>.bhmmebpyncll{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/e4f34f40d76dc4f6097b7f29529f542d.png"
-                      class="sdnhmmlgspqk" alt="e4f34f40d76dc4f6097b7f29529f542d"
+                      class="bhmmebpyncll" alt="e4f34f40d76dc4f6097b7f29529f542d"
                 >
 
 <p>Socket 的等待队列</p>
@@ -1019,11 +1019,11 @@
 <p>同时由于 Socket 的接收缓冲区已经有了数据，Recv 可以返回接收到的数据</p>
 <p><strong>内核接收网络数据全过程</strong></p>
 <p>这一步，贯穿网卡、中断与进程调度的知识，叙述阻塞 Recv 下，内核接收数据的全过程</p>
-<style>.tdlfeiqypgtu{zoom:67%;}</style><img  
+<style>.eloqkbdtbpuk{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/275f8f9b7ecf09c808d3ff452bbc2756.png"
-                      class="tdlfeiqypgtu" alt="275f8f9b7ecf09c808d3ff452bbc2756"
+                      class="eloqkbdtbpuk" alt="275f8f9b7ecf09c808d3ff452bbc2756"
                 >
 
 <p>内核接收数据全过程</p>
@@ -1035,11 +1035,11 @@
 </ul>
 <p>此处的中断程序主要有两项功能，先将网络数据写入到对应 Socket 的接收缓冲区里面(步骤 ④)，再唤醒进程 A(步骤 ⑤)，重新将进程 A 放入工作队列中</p>
 <p>唤醒进程的过程如下图所示：</p>
-<style>.sfuidsqitdwe{zoom:67%;}</style><img  
+<style>.guqsynidmmjt{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/8c3d864413f81be6c62cf42e761b9979.png"
-                      class="sfuidsqitdwe" alt="8c3d864413f81be6c62cf42e761b9979"
+                      class="guqsynidmmjt" alt="8c3d864413f81be6c62cf42e761b9979"
                 >
 
 <p>唤醒进程</p>
@@ -1063,21 +1063,21 @@
 <p><strong>Select 的流程</strong></p>
 <p>Select 的实现思路很直接，假如程序同时监视如下图的 Sock1、Sock2 和 Sock3 三个 Socket，那么在调用 Select 之后，操作系统把进程 A 分别加入这三个 Socket 的等待队列中</p>
 <p>当任何一个 Socket 收到数据后，中断程序将唤起进程。下图展示了 Sock2 接收到了数据的处理流程：</p>
-<style>.cezfkhxcduow{zoom:67%;}</style><img  
+<style>.beknycomizmx{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/bba9d63c280f4d06f77cdda4b0fdf6dc.png"
-                      class="cezfkhxcduow" alt="bba9d63c280f4d06f77cdda4b0fdf6dc"
+                      class="beknycomizmx" alt="bba9d63c280f4d06f77cdda4b0fdf6dc"
                 >
 
 <p>Sock2 接收到了数据，中断程序唤起进程 A</p>
 <p>注：Recv 和 Select 的中断回调可以设置成不同的内容</p>
 <p>所谓唤起进程，就是将进程从所有的等待队列中移除，加入到工作队列里面，如下图所示：</p>
-<style>.uhptjnicotdc{zoom:67%;}</style><img  
+<style>.nbsshwwrkpot{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/2fd13040f4cf2999e4580ce94824efba.png"
-                      class="uhptjnicotdc" alt="2fd13040f4cf2999e4580ce94824efba"
+                      class="nbsshwwrkpot" alt="2fd13040f4cf2999e4580ce94824efba"
                 >
 
 <p>将进程 A 从所有等待队列中移除，再加入到工作队列里面</p>
@@ -1097,11 +1097,11 @@
 <p>Epoll 是在 Select 出现 N 多年后才被发明的，是 Select 和 Poll (Poll 和 Select 基本一样，有少量改进)的增强版本。Epoll 通过以下一些措施来改进效率：</p>
 <p><strong>措施一：功能分离</strong></p>
 <p>Select 低效的原因之一是将“维护等待队列”和“阻塞进程”两个步骤合二为一</p>
-<style>.scidgtjubxvr{zoom:67%;}</style><img  
+<style>.jipvmlbueeoj{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/a38008a94da518d0413cc92ee63d6253.png"
-                      class="scidgtjubxvr" alt="a38008a94da518d0413cc92ee63d6253"
+                      class="jipvmlbueeoj" alt="a38008a94da518d0413cc92ee63d6253"
                 >
 
 <p>相比 Select，Epoll 拆分了功能</p>
@@ -1113,11 +1113,11 @@
 <p>功能分离，使得 Epoll 有了优化的可能</p>
 <p><strong>措施二：就绪列表</strong></p>
 <p>Select 低效的另一个原因在于程序不知道哪些 Socket 收到数据，只能一个个遍历。如果内核维护一个“就绪列表”，引用收到数据的 Socket，就能避免遍历</p>
-<style>.mtulyupyzrii{zoom:67%;}</style><img  
+<style>.lwgjdvkxniro{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/81db3d019771d374b080fc2709b7206d.png"
-                      class="mtulyupyzrii" alt="81db3d019771d374b080fc2709b7206d"
+                      class="lwgjdvkxniro" alt="81db3d019771d374b080fc2709b7206d"
                 >
 
 <p>就绪列表示意图</p>
@@ -1127,11 +1127,11 @@
 <p>本节会以示例和图表来讲解 Epoll 的原理和工作流程</p>
 <p><strong>创建 Epoll 对象</strong></p>
 <p>如下图所示，当某个进程调用 epoll_create 方法时，内核会创建一个 eventpoll 对象(也就是程序中 Epfd 所代表的对象)</p>
-<style>.tmlbvlvhmvxp{zoom:67%;}</style><img  
+<style>.rzwylrcoelho{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/adc7094b02e2e8373fbfb5f969f34be1.png"
-                      class="tmlbvlvhmvxp" alt="adc7094b02e2e8373fbfb5f969f34be1"
+                      class="rzwylrcoelho" alt="adc7094b02e2e8373fbfb5f969f34be1"
                 >
 
 <p>内核创建 eventpoll 对象</p>
@@ -1139,11 +1139,11 @@
 <p>创建一个代表该 Epoll 的 eventpoll 对象是必须的，因为内核要维护“就绪列表”等数据，“就绪列表”可以作为 eventpoll 的成员</p>
 <p><strong>维护监视列表</strong></p>
 <p>创建 Epoll 对象后，可以用 epoll_ctl 添加或删除所要监听的 Socket。以添加 Socket 为例</p>
-<style>.smpgwlmflyhx{zoom:67%;}</style><img  
+<style>.mpovthzjvdyt{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/b0e1ac15912f6274f7ac2165244e4909.png"
-                      class="smpgwlmflyhx" alt="b0e1ac15912f6274f7ac2165244e4909"
+                      class="mpovthzjvdyt" alt="b0e1ac15912f6274f7ac2165244e4909"
                 >
 
 <p>添加所要监听的 Socket</p>
@@ -1151,11 +1151,11 @@
 <p>当 Socket 收到数据后，中断程序会操作 eventpoll 对象，而不是直接操作进程</p>
 <p><strong>接收数据</strong></p>
 <p>当 Socket 收到数据后，中断程序会给 eventpoll 的 “就绪列表” 添加 Socket 引用</p>
-<style>.uhskgqerjfqz{zoom:67%;}</style><img  
+<style>.ilezwhiqyihp{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/69133c53039a54a3e2846db95fef158f.png"
-                      class="uhskgqerjfqz" alt="69133c53039a54a3e2846db95fef158f"
+                      class="ilezwhiqyihp" alt="69133c53039a54a3e2846db95fef158f"
                 >
 
 <p>给就绪列表添加引用</p>
@@ -1164,21 +1164,21 @@
 <p>当程序执行到 epoll_wait 时，如果 Rdlist 已经引用了 Socket，那么 epoll_wait 直接返回，如果 Rdlist 为空，阻塞进程</p>
 <p><strong>阻塞和唤醒进程</strong></p>
 <p>假设计算机中正在运行进程 A 和进程 B，在某时刻进程 A 运行到了 epoll_wait 语句</p>
-<style>.uwfuutjxhesg{zoom:67%;}</style><img  
+<style>.zsthbotgkpmu{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/45852193f950f5a1b4f3ccfba9a42855.png"
-                      class="uwfuutjxhesg" alt="45852193f950f5a1b4f3ccfba9a42855"
+                      class="zsthbotgkpmu" alt="45852193f950f5a1b4f3ccfba9a42855"
                 >
 
 <p>epoll_wait 阻塞进程</p>
 <p>如上图所示，内核会将进程 A 放入 eventpoll 的等待队列中，阻塞进程</p>
 <p>当 Socket 接收到数据，中断程序一方面修改 Rdlist，另一方面唤醒 eventpoll 等待队列中的进程，进程 A 再次进入运行状态(如下图)</p>
-<style>.sexgfcsqegmw{zoom:67%;}</style><img  
+<style>.qxxjjbqvnpmi{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/731ec624bafb3fa785c648d66d0dddf3.png"
-                      class="sexgfcsqegmw" alt="731ec624bafb3fa785c648d66d0dddf3"
+                      class="qxxjjbqvnpmi" alt="731ec624bafb3fa785c648d66d0dddf3"
                 >
 
 <p>Epoll 唤醒进程</p>
@@ -1186,11 +1186,11 @@
 <p><strong>Epoll 的实现细节</strong></p>
 <p>至此，相信读者对 Epoll 的本质已经有一定的了解。但我们还需要知道 eventpoll 的数据结构是什么样子</p>
 <p>此外，就绪队列应该使用什么数据结构?eventpoll 应使用什么数据结构来管理通过 epoll_ctl 添加或删除的 Socket</p>
-<style>.smkyshtviiow{zoom:67%;}</style><img  
+<style>.bglvqwzhglmd{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/155b5b2f11f89014e6d28997cfe5cf46.png"
-                      class="smkyshtviiow" alt="155b5b2f11f89014e6d28997cfe5cf46"
+                      class="bglvqwzhglmd" alt="155b5b2f11f89014e6d28997cfe5cf46"
                 >
 
 <p>Epoll 原理示意图，图片来源：《深入理解 Nginx：模块开发与架构解析(第二版)》，陶辉</p>
@@ -1207,11 +1207,11 @@
 <p><strong>总结</strong></p>
 <p>Epoll 在 Select 和 Poll 的基础上引入了 eventpoll 作为中间层，使用了先进的数据结构，是一种高效的多路复用技术</p>
 <p>这里也以表格形式简单对比一下 Select、Poll 与 Epoll，结束此文。希望读者能有所收获</p>
-<style>.tlcmbqjwyhti{zoom:67%;}</style><img  
+<style>.rwgotqxhrxzf{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/10/05/Cpp/C++NetworkProgramming/4edd9efb13b6b7ad3a4ed9e16ebeea3a.png"
-                      class="tlcmbqjwyhti" alt="4edd9efb13b6b7ad3a4ed9e16ebeea3a"
+                      class="rwgotqxhrxzf" alt="4edd9efb13b6b7ad3a4ed9e16ebeea3a"
                 >
 
 <p>图片来源《Linux 高性能服务器编程》</p>
