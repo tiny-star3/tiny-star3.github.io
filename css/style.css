@@ -6168,3 +6168,10 @@ html.is-animating .transition-fade-down {
   color: var(--second-text-color);
   text-align: center;
 }
+pre,
+code {
+  white-space: pre !important;
+  tab-size: 4 !important;
+  -moz-tab-size: 4 !important;
+  -o-tab-size: 4 !important;
+}
