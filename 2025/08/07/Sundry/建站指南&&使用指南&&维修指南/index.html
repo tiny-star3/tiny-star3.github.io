@@ -123,7 +123,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://tiny-star3.github.io/2025/08/07/sundry/建站指南&&使用指南/"/>
+    <link rel="canonical" href="http://tiny-star3.github.io/2025/08/07/sundry/建站指南&&使用指南&&维修指南/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -133,14 +133,14 @@
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="建站指南&amp;&amp;使用指南">
-<meta property="og:url" content="http://tiny-star3.github.io/2025/08/07/Sundry/%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97&&%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:title" content="建站指南&amp;&amp;使用指南&amp;&amp;维修指南">
+<meta property="og:url" content="http://tiny-star3.github.io/2025/08/07/Sundry/%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97&&%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97&&%E7%BB%B4%E4%BF%AE%E6%8C%87%E5%8D%97/index.html">
 <meta property="og:site_name" content="tiny_star_blog">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale">
 <meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-08-07T03:23:39.000Z">
-<meta property="article:modified_time" content="2025-12-31T17:01:02.065Z">
+<meta property="article:modified_time" content="2026-01-01T03:42:10.989Z">
 <meta property="article:author" content="tiny_star">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
@@ -155,7 +155,7 @@
     
     <title>
         
-            建站指南&amp;&amp;使用指南 | tiny_star_blog
+            建站指南&amp;&amp;使用指南&amp;&amp;维修指南 | tiny_star_blog
         
     </title>
 
@@ -577,7 +577,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">建站指南&amp;&amp;使用指南</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">建站指南&amp;&amp;使用指南&amp;&amp;维修指南</h1>
 			</div>
 			
 		</div>
@@ -605,8 +605,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-01-01 01:01:02</span>
-            <span class="mobile">2026-01-01 01:01:02</span>
+            <span class="desktop">2026-01-01 11:42:10</span>
+            <span class="mobile">2026-01-01 11:42:10</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -657,11 +657,18 @@
 
 <h2 id="Hexo-指令"><a href="#Hexo-指令" class="headerlink" title="Hexo 指令"></a>Hexo 指令</h2><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 新建一篇文章</span></span><br><span class="line">hexo <span class="keyword">new</span></span><br><span class="line"><span class="comment">// 生成静态文件</span></span><br><span class="line">hexo g</span><br><span class="line"><span class="comment">// 部署你的网站</span></span><br><span class="line">hexo d</span><br><span class="line"><span class="comment">// 清除缓存文件 (db.json) 和已生成的静态文件 (public)</span></span><br><span class="line">hexo clean</span><br></pre></td></tr></table></figure></div>
 
-<h2 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h2><h3 id="hexo-g"><a href="#hexo-g" class="headerlink" title="hexo g"></a>hexo g</h3><p> <strong>YAMLException: can not read a block mapping entry; a multiline key may not be an implicit key</strong></p>
-<p>通常发生在 Hexo 的 Markdown 文件 Front-matter（文章开头的配置区域）格式不正确时<br>YAML 解释器尝试解析你的文件头部，但由于格式错误，它把正文内容（如第 10 行的二级标题）也当成了配置信息来解析，从而导致报错<br>原因：缺少闭合的 Front-matter 标记</p>
 <h2 id="文本开始位置Tab不显示问题"><a href="#文本开始位置Tab不显示问题" class="headerlink" title="文本开始位置Tab不显示问题"></a>文本开始位置Tab不显示问题</h2><p>在S:\Hexo-Blog\themes\redefine\source\css\style.styl文件末尾加入</p>
 <div class="code-container" data-rel="Css"><figure class="iseeu highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 修复Tab显示问题</span><br><span class="line"><span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">white-space</span>: pre-wrap <span class="meta">!important</span></span><br><span class="line">  tab-size: <span class="number">4</span> <span class="meta">!important</span></span><br><span class="line">  -moz-tab-size: <span class="number">4</span> <span class="meta">!important</span></span><br><span class="line">  -o-tab-size: <span class="number">4</span> <span class="meta">!important</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 
+<h2 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h2><h3 id="hexo-g"><a href="#hexo-g" class="headerlink" title="hexo g"></a>hexo g</h3><p> 问题：<strong>YAMLException: can not read a block mapping entry; a multiline key may not be an implicit key</strong></p>
+<p>通常发生在 Hexo 的 Markdown 文件 Front-matter（文章开头的配置区域）格式不正确时<br>YAML 解释器尝试解析你的文件头部，但由于格式错误，它把正文内容（如第 10 行的二级标题）也当成了配置信息来解析，从而导致报错<br>原因：缺少闭合的 Front-matter 标记</p>
+<p>解决办法：<strong>补充闭合的 Front-matter 标记</strong></p>
+<h3 id="hexo-标题特殊符号引发错误（冒号、引号、大括号）"><a href="#hexo-标题特殊符号引发错误（冒号、引号、大括号）" class="headerlink" title="hexo 标题特殊符号引发错误（冒号、引号、大括号）"></a>hexo 标题特殊符号引发错误（冒号、引号、大括号）</h3><p>问题：<strong>YAMLException: bad indentation of a mapping entry (1:55)</strong></p>
+<p>解决方法1：<strong>使用单引号把标题引起来</strong></p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">title: &#x27;【Book】Programming Massively Parallel Processors: A Hands-on Approach, Fourth Edition(Wen-mei W. Hwu, David B. Kirk, Izzat El Hajj)&#x27;</span><br></pre></td></tr></table></figure></div>
+
+<p>解决放法2：<strong>使用HTML 字符实体</strong></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.w3school.com.cn/html/html_entities.asp" >HTML 字符实体<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
 
 		</div>
 
@@ -669,18 +676,18 @@
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> 建站指南&amp;&amp;使用指南</li>
+        <li><strong>Title:</strong> 建站指南&amp;&amp;使用指南&amp;&amp;维修指南</li>
         <li><strong>Author:</strong> tiny_star</li>
         <li><strong>Created at
                 :</strong> 2025-08-07 11:23:39</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-01-01 01:01:02
+                    :</strong> 2026-01-01 11:42:10
             </li>
         
         <li>
-            <strong>Link:</strong> https://tiny-star3.github.io/2025/08/07/Sundry/建站指南&amp;&amp;使用指南/
+            <strong>Link:</strong> https://tiny-star3.github.io/2025/08/07/Sundry/建站指南&amp;&amp;使用指南&amp;&amp;维修指南/
         </li>
         <li>
             <strong>
@@ -783,8 +790,8 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">建站指南&amp;&amp;使用指南</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A6%96%E9%A1%B5%E6%8C%89%E6%9B%B4%E6%96%B0%E6%97%B6%E9%97%B4%E6%8E%92%E5%BA%8F"><span class="nav-text">首页按更新时间排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo-%E6%8C%87%E4%BB%A4"><span class="nav-text">Hexo 指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%A5%E9%94%99"><span class="nav-text">报错</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo-g"><span class="nav-text">hexo g</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E5%BC%80%E5%A7%8B%E4%BD%8D%E7%BD%AETab%E4%B8%8D%E6%98%BE%E7%A4%BA%E9%97%AE%E9%A2%98"><span class="nav-text">文本开始位置Tab不显示问题</span></a></li></ol>
+		<div class="page-title">建站指南&amp;&amp;使用指南&amp;&amp;维修指南</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A6%96%E9%A1%B5%E6%8C%89%E6%9B%B4%E6%96%B0%E6%97%B6%E9%97%B4%E6%8E%92%E5%BA%8F"><span class="nav-text">首页按更新时间排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo-%E6%8C%87%E4%BB%A4"><span class="nav-text">Hexo 指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E5%BC%80%E5%A7%8B%E4%BD%8D%E7%BD%AETab%E4%B8%8D%E6%98%BE%E7%A4%BA%E9%97%AE%E9%A2%98"><span class="nav-text">文本开始位置Tab不显示问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%A5%E9%94%99"><span class="nav-text">报错</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo-g"><span class="nav-text">hexo g</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo-%E6%A0%87%E9%A2%98%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E5%BC%95%E5%8F%91%E9%94%99%E8%AF%AF%EF%BC%88%E5%86%92%E5%8F%B7%E3%80%81%E5%BC%95%E5%8F%B7%E3%80%81%E5%A4%A7%E6%8B%AC%E5%8F%B7%EF%BC%89"><span class="nav-text">hexo 标题特殊符号引发错误（冒号、引号、大括号）</span></a></li></ol></li></ol>
 
 	</div>
 </div>
