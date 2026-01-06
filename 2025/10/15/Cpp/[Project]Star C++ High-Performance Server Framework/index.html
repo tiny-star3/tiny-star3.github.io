@@ -140,7 +140,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-10-15T01:16:13.000Z">
-<meta property="article:modified_time" content="2026-01-02T15:26:39.118Z">
+<meta property="article:modified_time" content="2026-01-05T15:22:43.913Z">
 <meta property="article:author" content="tiny_star">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
@@ -265,7 +265,7 @@
                                    href="/"
                                         >
                                     <i class="fa-regular fa-house fa-fw"></i>
-                                    INICIO
+                                    HOME
                                     
                                 </a>
 
@@ -408,7 +408,7 @@
                            href="/"
                         >
                             <span>
-                                INICIO
+                                HOME
                             </span>
                             
                                 <i class="fa-regular fa-house fa-sm fa-fw"></i>
@@ -547,15 +547,15 @@
         <div class="statistics flex justify-around my-2.5">
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
         <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
-        <div class="label text-third-text-color text-sm">Etiquetas</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
         <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
-        <div class="label text-third-text-color text-sm">Categorías</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">23</div>
-        <div class="label text-third-text-color text-sm">Publicaciones</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">22</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
     </a>
 </div>
     </div>
@@ -600,14 +600,14 @@
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
         <span class="desktop">2025-10-15 09:16:13</span>
         <span class="mobile">2025-10-15 09:16:13</span>
-        <span class="hover-info">Creado</span>
+        <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-01-02 23:26:39</span>
-            <span class="mobile">2026-01-02 23:26:39</span>
-            <span class="hover-info">Actualizado</span>
+            <span class="desktop">2026-01-05 23:22:43</span>
+            <span class="mobile">2026-01-05 23:22:43</span>
+            <span class="hover-info">Updated</span>
         </span>
     
 
@@ -687,6 +687,9 @@
 
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @file singleton.h</span></span><br><span class="line"><span class="comment"> * @brief 单例模式封装</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> __SYLAR_SINGLETON_H__</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __SYLAR_SINGLETON_H__</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> sylar</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 单例模式封装类</span></span><br><span class="line"><span class="comment"> * @details T 类型</span></span><br><span class="line"><span class="comment"> *			X 为了创造多个实例对应的 Tag</span></span><br><span class="line"><span class="comment"> *			N 同一个 Tag 创造多个实例索引</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="title class_">T</span>, <span class="keyword">class</span> <span class="title class_">X</span> = <span class="type">void</span>, <span class="type">int</span> N = <span class="number">0</span>&gt;</span><br><span class="line"><span class="keyword">class</span> Singleton</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * @brief 返回单例裸指针</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="type">static</span> T* <span class="built_in">GetInstance</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">static</span> T v;</span><br><span class="line">        <span class="keyword">return</span> &amp;v;</span><br><span class="line">        <span class="comment">// return &amp;GetInstanceX&lt;T, X, N&gt;();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 单例模式智能指针封装类</span></span><br><span class="line"><span class="comment"> * @details T 类型</span></span><br><span class="line"><span class="comment"> *			X 为了创造多个实例对应的 Tag</span></span><br><span class="line"><span class="comment"> *			N 同一个 Tag 创造多个实例索引</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="title class_">T</span>, <span class="keyword">class</span> <span class="title class_">X</span> = <span class="type">void</span>, <span class="type">int</span> N = <span class="number">0</span>&gt;</span><br><span class="line"><span class="keyword">class</span> SingletonPtr</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * @brief 返回单例智能指针</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="type">static</span> std::shared_ptr&lt;T&gt; <span class="built_in">GetInstance</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">static</span> std::shared_ptr&lt;T&gt; <span class="built_in">v</span>(<span class="keyword">new</span> T);</span><br><span class="line">        <span class="keyword">return</span> v;</span><br><span class="line">        <span class="comment">// return GetInstancePtr&lt;T, X, N&gt;();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure></div>
 
+<p><strong>安装 Boost 库</strong></p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install libboost-all-dev</span><br></pre></td></tr></table></figure></div>
+
 
 
 <h2 id="协程库封装"><a href="#协程库封装" class="headerlink" title="协程库封装"></a>协程库封装</h2><p><a class="link"   target="_blank" rel="noopener" href="https://cppreference.cn/w/cpp/language/coroutines" >协程 (C++20) - cppreference.cn - C++参考手册<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
@@ -697,27 +700,27 @@
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Título:</strong> 【Project】sylar——C++高性能服务器框架</li>
-        <li><strong>Autor:</strong> tiny_star</li>
-        <li><strong>Creado el
+        <li><strong>Title:</strong> 【Project】sylar——C++高性能服务器框架</li>
+        <li><strong>Author:</strong> tiny_star</li>
+        <li><strong>Created at
                 :</strong> 2025-10-15 09:16:13</li>
         
             <li>
-                <strong>Actualizado el
-                    :</strong> 2026-01-02 23:26:39
+                <strong>Updated at
+                    :</strong> 2026-01-05 23:22:43
             </li>
         
         <li>
-            <strong>Enlace:</strong> https://tiny-star3.github.io/2025/10/15/Cpp/[Project]Star C++ High-Performance Server Framework/
+            <strong>Link:</strong> https://tiny-star3.github.io/2025/10/15/Cpp/[Project]Star C++ High-Performance Server Framework/
         </li>
         <li>
             <strong>
-                Licencia:
+                License:
             </strong>
             
 
             
-                Este trabajo está licenciado bajo <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
             
         </li>
     </ul>
@@ -740,7 +743,7 @@
 					</span>
 					<span class="title flex justify-center items-center">
 						<span class="post-nav-title-item truncate max-w-48">C++设计模式</span>
-						<span class="post-nav-item">Publicaciones anteriores</span>
+						<span class="post-nav-item">Prev posts</span>
 					</span>
 				</a>
 			</div>
@@ -750,7 +753,7 @@
 				<a class="next" rel="next" href="/2025/10/05/Cpp/C++NetworkProgramming/">
 					<span class="title flex justify-center items-center">
 						<span class="post-nav-title-item truncate max-w-48">C++网络编程</span>
-						<span class="post-nav-item">Publicaciones siguientes</span>
+						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
 						<i class="fa-solid fa-chevron-right"></i>
@@ -767,7 +770,7 @@
 			<div class="comments-container mt-10 w-full ">
     <div id="comment-anchor" class="w-full h-2.5"></div>
     <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
-        Comentarios
+        Comments
     </div>
     
 
@@ -810,7 +813,7 @@
 	<div class="toc-content-container">
 		<div class="post-toc-wrap">
 	<div class="post-toc">
-		<div class="toc-title">En esta página</div>
+		<div class="toc-title">On this page</div>
 		<div class="page-title">【Project】sylar——C++高性能服务器框架</div>
 		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D"><span class="nav-text">项目介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="nav-text">开发环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E8%B7%AF%E5%BE%84"><span class="nav-text">项目路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F"><span class="nav-text">日志系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D"><span class="nav-text">命名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%91%BD%E5%90%8D%EF%BC%9A%E8%9B%87%E5%BD%A2%E5%91%BD%E5%90%8D%E6%B3%95-snake-case"><span class="nav-text">文件命名：蛇形命名法(snake_case)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%90%8D"><span class="nav-text">文件扩展名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E5%91%BD%E5%90%8D%EF%BC%9A%E5%B8%95%E6%96%AF%E5%8D%A1%E5%91%BD%E5%90%8D%E6%B3%95-PascalCase"><span class="nav-text">类命名：帕斯卡命名法(PascalCase)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8CCMakeLists-txt-%E6%A0%B9%E7%9B%AE%E5%BD%95"><span class="nav-text">运行CMakeLists.txt(根目录)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Log4J"><span class="nav-text">Log4J</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E7%A8%8B%E5%BA%93%E5%B0%81%E8%A3%85"><span class="nav-text">协程库封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-%E5%87%BD%E6%95%B0%E5%BA%93"><span class="nav-text">socket 函数库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http-%E5%8D%8F%E8%AE%AE%E5%BC%80%E5%8F%91"><span class="nav-text">http 协议开发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%8D%8F%E8%AE%AE"><span class="nav-text">分布协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F"><span class="nav-text">推荐系统</span></a></li></ol>
 
@@ -839,7 +842,7 @@
                 
                 <p class="post-count space-x-0.5">
                     <span>
-                        23 publicaciones en total
+                        22 posts in total
                     </span>
                     
                 </p>
@@ -850,26 +853,26 @@
             <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
                 
                     <span id="busuanzi_container_site_uv" class="lg:!block">
-                        <span class="text-sm">CONTADOR DE VISITANTES</span>
+                        <span class="text-sm">VISITOR COUNT</span>
                         <span id="busuanzi_value_site_uv"></span>
                     </span>
                 
                 
                     <span id="busuanzi_container_site_pv" class="lg:!block">
-                        <span class="text-sm">TOTAL DE VISITAS</span>
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
                         <span id="busuanzi_value_site_pv"></span>
                     </span>
                 
             </div>
         
         <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
-            <span class="lg:block text-sm">DESARROLLADO POR <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
-            <span class="text-sm lg:block">TEMA&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
         </div>
         
         
             <div>
-                Blog en línea por <span class="odometer" id="runtime_days" ></span> días <span class="odometer" id="runtime_hours"></span> horas <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Seg
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
             </div>
         
         
@@ -970,7 +973,7 @@
 				<i class="fa-solid fa-keyboard"></i>
 			</span>
 			<div class="search-input-container">
-				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Buscar..." spellcheck="false" type="search" class="search-input">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Search..." spellcheck="false" type="search" class="search-input">
 			</div>
 			<span class="popup-btn-close">
 				<i class="fa-solid fa-times"></i>
