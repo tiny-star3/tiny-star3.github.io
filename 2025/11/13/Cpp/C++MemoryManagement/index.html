@@ -666,11 +666,11 @@
 <li>jemalloc</li>
 <li>tcmalloc</li>
 </ul>
-<h2 id="C-应用程序"><a href="#C-应用程序" class="headerlink" title="C++应用程序"></a>C++应用程序</h2><style>.lkwtjhgbqpnc{zoom:67%;}</style><img  
+<h2 id="C-应用程序"><a href="#C-应用程序" class="headerlink" title="C++应用程序"></a>C++应用程序</h2><style>.ezjhkasliybx{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/11/13/Cpp/C++MemoryManagement/image-20251202153533288.png"
-                      class="lkwtjhgbqpnc" alt="image-20251202153533288"
+                      class="ezjhkasliybx" alt="image-20251202153533288"
                 >
 
 <h2 id="C-memory-primitives（基础工具）"><a href="#C-memory-primitives（基础工具）" class="headerlink" title="C++ memory primitives（基础工具）"></a>C++ memory primitives（基础工具）</h2><table>
@@ -720,40 +720,40 @@
 <h3 id="array-new-array-delete"><a href="#array-new-array-delete" class="headerlink" title="array new, array delete"></a>array new, array delete</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Complex* pca = <span class="keyword">new</span> Complex[<span class="number">3</span>];</span><br><span class="line"><span class="comment">// 唤起三次 ctor</span></span><br><span class="line"><span class="comment">// 无法藉由参数给予初值</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">delete</span>[] pca;	<span class="comment">// 唤起3次 dtor，没有加 [] 只调用一次 dtor</span></span><br></pre></td></tr></table></figure></div>
 
 <p>cookie 记录整块长度，内存泄漏不发生在内存块回收，发生在 dtor（调用次数），因此对默认析构函数的类使用 delete pca，数组本身不会泄漏，泄漏的是指针指向的空间</p>
-<style>.cbqeonflovnv{zoom:67%;}</style><img  
+<style>.cvgbhhbvykxo{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/11/13/Cpp/C++MemoryManagement/image-20251202153416487.png"
-                      class="cbqeonflovnv" alt="image-20251202153416487"
+                      class="cvgbhhbvykxo" alt="image-20251202153416487"
                 >
 
 <p>没对每个 object 调用 dtor，有什么影响<br>对 class without ptr member 可能没影响<br>对 class with pointer member 通常有影响（内存泄漏）</p>
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string* psa = <span class="keyword">new</span> string[<span class="number">3</span>];</span><br><span class="line">...</span><br><span class="line"><span class="keyword">delete</span> psa;	<span class="comment">// 唤起1次 dtor，内存泄漏</span></span><br></pre></td></tr></table></figure></div>
 
-<style>.irzsqnfhukbc{zoom:67%;}</style><img  
+<style>.alymbvmbpogw{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/11/13/Cpp/C++MemoryManagement/image-20251202153306859.png"
-                      class="irzsqnfhukbc" alt="image-20251202153306859"
+                      class="alymbvmbpogw" alt="image-20251202153306859"
                 >
 
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">A</span>() : <span class="built_in">id</span>(<span class="number">0</span>) 	&#123; cout &lt;&lt; <span class="string">&quot;default ctor. this=&quot;</span> &lt;&lt; <span class="keyword">this</span> &lt;&lt; <span class="string">&quot;id=&quot;</span> &lt;&lt; id &lt;&lt; endl; &#125;</span><br><span class="line">    <span class="built_in">A</span>(<span class="type">int</span> i) : <span class="built_in">id</span>(i) &#123; cout &lt;&lt; <span class="string">&quot;ctor. this=&quot;</span> &lt;&lt; <span class="keyword">this</span> &lt;&lt; <span class="string">&quot;id=&quot;</span> &lt;&lt; id &lt;&lt; endl; &#125;</span><br><span class="line">    ~<span class="built_in">A</span>()			&#123; cout &lt;&lt; <span class="string">&quot;dtor. this=&quot;</span> &lt;&lt; <span class="keyword">this</span> &lt;&lt; <span class="string">&quot;id=&quot;</span> &lt;&lt; id &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">A* buf = <span class="keyword">new</span> A[size];	<span class="comment">// new 数组无法一一给定初值，调用 default ctor 3 次		[0]先于[1]先于[2])</span></span><br><span class="line">						<span class="comment">// A 必须有 default ctor，否则 [Error] no matching function for call to &#x27;A::A()&#x27;</span></span><br><span class="line">A* tmp = buf;</span><br><span class="line"></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;buf=&quot;</span> &lt;&lt; buf &lt;&lt; <span class="string">&quot;tmp=&quot;</span> &lt;&lt; tmp &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; ++i)</span><br><span class="line">    <span class="keyword">new</span>(tmp++)<span class="built_in">A</span>(i);		<span class="comment">// ctor 3次，placement new，在 tmp 位置调用 ctor 创建对象</span></span><br><span class="line"></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;buf=&quot;</span> &lt;&lt; buf &lt;&lt; <span class="string">&quot;tmp=&quot;</span> &lt;&lt; tmp &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> [] buff;		<span class="comment">// dtor 3次（次序逆反，[2]先于[1]先于[0]</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// print</span></span><br><span class="line"><span class="comment">// default ctor. this=0x3e398c id=0</span></span><br><span class="line"><span class="comment">// default ctor. this=0x3e3990 id=0</span></span><br><span class="line"><span class="comment">// default ctor. this=0x3e3994 id=0</span></span><br><span class="line"><span class="comment">// buf=0x3e398c	tmp=0x3e3998</span></span><br><span class="line"><span class="comment">// dtor. this=0x3e3994 id=2</span></span><br><span class="line"><span class="comment">// dtor. this=0x3e3990 id=1</span></span><br><span class="line"><span class="comment">// dtor. this=0x3e398c id=0</span></span><br><span class="line"><span class="comment">// gnuc 编译器构造的时候从上往下，析构的时候从下往上</span></span><br></pre></td></tr></table></figure></div>
 
-<style>.cncbbbvwjxvg{zoom:100%;}</style><img  
+<style>.ytvihiypyuqs{zoom:100%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/11/13/Cpp/C++MemoryManagement/image-20251201235134489.png"
-                      class="cncbbbvwjxvg" alt="image-20251201235134489"
+                      class="ytvihiypyuqs" alt="image-20251201235134489"
                 >
 
 <h3 id="array-size-in-memory-block"><a href="#array-size-in-memory-block" class="headerlink" title="array size, in memory block"></a>array size, in memory block</h3><div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* pi = <span class="keyword">new</span> <span class="type">int</span>[<span class="number">10</span>];	<span class="comment">// sizeof(pi)=4</span></span><br><span class="line"><span class="keyword">delete</span> pi;	<span class="comment">// 因为没有析构函数，对于 int 类型加不加 [] 是无所谓的</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> ia[<span class="number">10</span>];			<span class="comment">// from stack but not heap</span></span><br><span class="line">cout&lt;&lt;<span class="built_in">sizeof</span>(ia);	<span class="comment">// 40</span></span><br></pre></td></tr></table></figure></div>
 
 <p>橙色部分只有在 Debugger mode 下出现，大小确定（32个字节和4个字节）<br>pi 指向第一个 int 数据即 00441c30 位置<br>两个 cookie，上下各一个，记录整块大小，cookie 最后一个比特被借用来当一个 on&#x2F;off 的状态（是否给出去）<br>pad 用于边界对齐，VC6 要调整到16的边界</p>
-<style>.cijedlwrtplc{zoom:67%;}</style><img  
+<style>.uxlykawsjhjx{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/11/13/Cpp/C++MemoryManagement/image-20251202153123828.png"
-                      class="cijedlwrtplc" alt="image-20251202153123828"
+                      class="uxlykawsjhjx" alt="image-20251202153123828"
                 >
 
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Demo* p = <span class="keyword">new</span> Demo[<span class="number">3</span>];	<span class="comment">// p 指向 00481c34</span></span><br><span class="line"><span class="keyword">delete</span> [] p;	<span class="comment">// 若未写 []，debug mode 下出现 Assertion Failed</span></span><br><span class="line">				<span class="comment">// 注意，重载 operator delete[] 后观察到传入的 p 竟指向 004811c30</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Demo d[<span class="number">3</span>];			<span class="comment">// from stack but not heap</span></span><br><span class="line">cout &lt;&lt; <span class="built_in">sizeof</span>(d);	<span class="comment">// 36</span></span><br></pre></td></tr></table></figure></div>
@@ -772,25 +772,25 @@
 </ul>
 <div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;new&gt;</span></span></span><br><span class="line"><span class="type">char</span>* buf = <span class="keyword">new</span> <span class="type">char</span>[<span class="built_in">sizeof</span>(Complex)*<span class="number">3</span>];	<span class="comment">// new 分配内存</span></span><br><span class="line">Complex* pc = <span class="built_in">new</span>(buf)<span class="built_in">Complex</span>(<span class="number">1</span>, <span class="number">2</span>);	<span class="comment">// 这个 new 不会再分配内存</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">delete</span> [] buf;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 编译器转为（只有第3行 Complex* pc = new(buf)Complex(1, 2); 转换）</span></span><br><span class="line">Complex* pc;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="type">void</span>* mem = <span class="keyword">operator</span> <span class="built_in">new</span>(<span class="built_in">sizeof</span>(Complex), buf);		<span class="comment">// allocate，不做事，返回 buf</span></span><br><span class="line">    pc = <span class="built_in">static_cast</span>&lt;Complex*&gt;(mem);					<span class="comment">// cast，转型</span></span><br><span class="line">    pc-&gt;Complex::<span class="built_in">Complex</span>(<span class="number">1</span>, <span class="number">2</span>);							<span class="comment">// construct，调用构造函数</span></span><br><span class="line">&#125;<span class="built_in">catch</span>(std::bad_alloc)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 若 allocation 失败就不执行 constructor</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span>* <span class="keyword">operator</span> <span class="title">new</span><span class="params">(<span class="type">size_t</span>, <span class="type">void</span>* loc)</span>	<span class="comment">// 不做事，返回 loc</span></span></span><br><span class="line"><span class="function"></span>&#123; <span class="keyword">return</span> loc; &#125;</span><br></pre></td></tr></table></figure></div>
 
-<style>.cegcwxggpxab{zoom:67%;}</style><img  
+<style>.fqxrpthnhysx{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/11/13/Cpp/C++MemoryManagement/image-20251202153707384.png"
-                      class="cegcwxggpxab" alt="image-20251202153707384"
+                      class="fqxrpthnhysx" alt="image-20251202153707384"
                 >
 
-<h3 id="C-应用程序，分配内存的途径"><a href="#C-应用程序，分配内存的途径" class="headerlink" title="C++应用程序，分配内存的途径"></a>C++应用程序，分配内存的途径</h3><style>.qmgwmenbuqdj{zoom:67%;}</style><img  
+<h3 id="C-应用程序，分配内存的途径"><a href="#C-应用程序，分配内存的途径" class="headerlink" title="C++应用程序，分配内存的途径"></a>C++应用程序，分配内存的途径</h3><style>.mhkxbmhendgu{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/11/13/Cpp/C++MemoryManagement/image-20251202172024062.png"
-                      class="qmgwmenbuqdj" alt="image-20251202172024062"
+                      class="mhkxbmhendgu" alt="image-20251202172024062"
                 >
 
-<h3 id="C-容器，分配内存的途径"><a href="#C-容器，分配内存的途径" class="headerlink" title="C++容器，分配内存的途径"></a>C++容器，分配内存的途径</h3><style>.jkqojdlpesut{zoom:67%;}</style><img  
+<h3 id="C-容器，分配内存的途径"><a href="#C-容器，分配内存的途径" class="headerlink" title="C++容器，分配内存的途径"></a>C++容器，分配内存的途径</h3><style>.conplpggpndd{zoom:67%;}</style><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/2025/11/13/Cpp/C++MemoryManagement/image-20251202172109471.png"
-                      class="jkqojdlpesut" alt="image-20251202172109471"
+                      class="conplpggpndd" alt="image-20251202172109471"
                 >
 
 <h3 id="重载-operator-new-operator-delete"><a href="#重载-operator-new-operator-delete" class="headerlink" title="重载 ::operator new &#x2F; ::operator delete"></a>重载 ::operator new &#x2F; ::operator delete</h3><p>重载全局 operator new 和 operator delete，小心，这影响无远弗届（没有不能到达的地方）</p>
