@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="tiny_star">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://tiny-star3.github.io/2026/03/02/ai/[class]cmu-10-414-714-deep-learning-systems/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Class】CMU 10-414(714) Deep Learning Systems">
+<meta property="og:url" content="http://tiny-star3.github.io/2026/03/02/Ai/[Class]CMU-10-414-714-Deep-Learning-Systems/index.html">
+<meta property="og:site_name" content="tiny_star_blog">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale">
+<meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-03-02T14:38:27.000Z">
+<meta property="article:modified_time" content="2026-03-31T08:02:30.988Z">
+<meta property="article:author" content="tiny_star">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/mystar.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/mystar.png">
+    <meta name="theme-color" content="#6495ed">
+    <link rel="shortcut icon" href="/images/mystar.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            【Class】CMU 10-414(714) Deep Learning Systems | tiny_star_blog
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"tiny-star3.github.io","root":"/","language":"zh","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":4,"number":false,"expand":false,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#6495ed","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"tiny_star","subtitle":{"text":["渺如尘埃，灿若星辰！","You are more than what you have become. Remember who you are!"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#87CEFA","dark":"#6495ED"},"text_style":{"title_size":"3rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Life":{"path":"/categories/Life","icon":"fa-regular fa-face-awesome"},"Metaphysics":{"path":"/categories/Metaphysics","icon":"fa-regular fa-stars"},"Cpp":{"icon":"fa-regular fa-face-glasses","path":"/categories/Cpp"},"Algorithm":{"path":"/categories/Algorithm","icon":"fa-regular fa-face-explode"},"Ai":{"path":"/categories/Ai","icon":"fa-regular fa-alien-8bit"},"Sundry":{"path":"/categories/Sundry","icon":"fa-regular fa-earth-asia"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2025/7/22 22:28:54"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/images/mystar.png" class="w-full h-full rounded-xs">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                tiny_star_blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    ACCUEIL
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Life"
+                                        >
+                                    <i class="fa-regular fa-face-awesome fa-fw"></i>
+                                    LIFE
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Metaphysics"
+                                        >
+                                    <i class="fa-regular fa-stars fa-fw"></i>
+                                    METAPHYSICS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Cpp"
+                                        >
+                                    <i class="fa-regular fa-face-glasses fa-fw"></i>
+                                    CPP
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Algorithm"
+                                        >
+                                    <i class="fa-regular fa-face-explode fa-fw"></i>
+                                    ALGORITHM
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Ai"
+                                        >
+                                    <i class="fa-regular fa-alien-8bit fa-fw"></i>
+                                    AI
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Sundry"
+                                        >
+                                    <i class="fa-regular fa-earth-asia fa-fw"></i>
+                                    SUNDRY
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                ACCUEIL
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Life"
+                        >
+                            <span>
+                                LIFE
+                            </span>
+                            
+                                <i class="fa-regular fa-face-awesome fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Metaphysics"
+                        >
+                            <span>
+                                METAPHYSICS
+                            </span>
+                            
+                                <i class="fa-regular fa-stars fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Cpp"
+                        >
+                            <span>
+                                CPP
+                            </span>
+                            
+                                <i class="fa-regular fa-face-glasses fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Algorithm"
+                        >
+                            <span>
+                                ALGORITHM
+                            </span>
+                            
+                                <i class="fa-regular fa-face-explode fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Ai"
+                        >
+                            <span>
+                                AI
+                            </span>
+                            
+                                <i class="fa-regular fa-alien-8bit fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Sundry"
+                        >
+                            <span>
+                                SUNDRY
+                            </span>
+                            
+                                <i class="fa-regular fa-earth-asia fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Catégories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">24</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">【Class】CMU 10-414(714) Deep Learning Systems</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/staravatar.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">tiny_star</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-03-02 22:38:27</span>
+        <span class="mobile">2026-03-02 22:38:27</span>
+        <span class="hover-info">Créé</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-03-31 16:02:30</span>
+            <span class="mobile">2026-03-31 16:02:30</span>
+            <span class="hover-info">Mis à jour</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Ai/">Ai</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h2 id="课程"><a href="#课程" class="headerlink" title="课程"></a>课程</h2><p>2022年课程视频 + 2025年PPT</p>
+<h3 id="课程视频"><a href="#课程视频" class="headerlink" title="课程视频"></a>课程视频</h3><p><a class="link"   target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ftP5HeOvsI0" >Lecture 1 - Introduction and Logistics<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<h3 id="课程信息"><a href="#课程信息" class="headerlink" title="课程信息"></a>课程信息</h3><p><a class="link"   target="_blank" rel="noopener" href="https://dlsyscourse.org/" >Deep Learning Systems<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<h3 id="Assignments"><a href="#Assignments" class="headerlink" title="Assignments"></a>Assignments</h3><p><a class="link"   target="_blank" rel="noopener" href="https://dlsyscourse.org/assignments/" >Assignments<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<h2 id="Lecture-1-Introduction-and-Logistics"><a href="#Lecture-1-Introduction-and-Logistics" class="headerlink" title="Lecture 1: Introduction and Logistics"></a>Lecture 1: Introduction and Logistics</h2><p><strong>Elements of deep learning systems</strong><br>	<strong>Compose</strong> multiple tensor operations to build modern machine learning models<br>	<strong>Transform</strong> a sequence of operations (automatic differentiation (微分))<br>	<strong>Accelerate</strong> computation via specialized hardware<br>	<strong>Extend</strong> more hardware backends, more operators  </p>
+<h2 id="Lecture-2-ML-Refresher-Softmax-Regression"><a href="#Lecture-2-ML-Refresher-Softmax-Regression" class="headerlink" title="Lecture 2: ML Refresher &#x2F; Softmax Regression"></a>Lecture 2: ML Refresher &#x2F; Softmax Regression</h2><h3 id="Basics-of-machine-learning"><a href="#Basics-of-machine-learning" class="headerlink" title="Basics of machine learning"></a>Basics of machine learning</h3><p><strong>Machine learning as data-driven programming</strong><br>	Suppose you want to write a program that will classify handwritten drawing of digits into their appropriate category: 0,1,…,9<br>	<style>.mnxxkyzesoiz{zoom:80%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260304232213305.png"
+                      class="mnxxkyzesoiz" alt="image-20260304232213305"
+                ><br>										MNIST Dataset<br>	The (supervised) ML approach: collect a training set of images with known labels and feed these into a machine learning algorithm, which will (if done well), automatically produce a “program” that solves this task<br>	<style>.huyeumkxgqbc{zoom: 70%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260304232405994.png"
+                      class="huyeumkxgqbc" alt="image-20260304232405994"
+                ></p>
+<p><strong>Three ingredients of a machine learning algorithm</strong><br>	Every machine learning algorithm consists of three different elements:<br>		<strong>The hypothesis class</strong>: the “program structure”, parameterized via a set of parameters, that describes how we map inputs (e.g., images of digits) to outputs (e.g., class labels, or probabilities of different class labels)<br>		<strong>The loss function</strong>: a function that specifies how “well” a given hypothesis (i.e., a choice of parameters) performs on the task of interest<br>		<strong>An optimization method</strong>: a procedure for determining a set of parameters that (approximately) minimize the sum of losses over the training set  </p>
+<h3 id="Example-softmax-regression"><a href="#Example-softmax-regression" class="headerlink" title="Example: softmax regression"></a>Example: softmax regression</h3><p><strong>Multi-class classification setting</strong><br>	<style>.xladnlpqpjyk{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305123600751.png"
+                      class="xladnlpqpjyk" alt="image-20260305123600751"
+                ><br>	<style>.hsyftbenrrsr{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305123622939.png"
+                      class="hsyftbenrrsr" alt="image-20260305123622939"
+                ></p>
+<p><strong>Linear hypothesis function</strong><br>	<style>.cbppqgkxgzsg{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305123859391.png"
+                      class="cbppqgkxgzsg" alt="image-20260305123859391"
+                ><br>	<style>.mhyaxtxljxsl{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305124005290.png"
+                      class="mhyaxtxljxsl" alt="image-20260305124005290"
+                ></p>
+<p><strong>Matrix batch notation</strong><br>	<style>.sbvvneewysqz{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305124206274.png"
+                      class="sbvvneewysqz" alt="image-20260305124206274"
+                ><br>	<style>.tqsrhkglszym{zoom: 67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305124227975.png"
+                      class="tqsrhkglszym" alt="image-20260305124227975"
+                ></p>
+<p><strong>Loss function #1: classification error</strong><br>	<style>.ucewdpscgbtl{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305124714308.png"
+                      class="ucewdpscgbtl" alt="image-20260305124714308"
+                ><br>	<style>.bhqtyldaehsv{zoom: 67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305124727207.png"
+                      class="bhqtyldaehsv" alt="image-20260305124727207"
+                ><br>	<style>.wmjmjozujmme{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305124759323.png"
+                      class="wmjmjozujmme" alt="image-20260305124759323"
+                ></p>
+<p><strong>Loss function #2: softmax &#x2F; cross-entropy loss</strong><br>	<style>.goaqqyjpasxp{zoom: 67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305124951173.png"
+                      class="goaqqyjpasxp" alt="image-20260305124951173"
+                ><br>	<style>.ssmanjfbdavl{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305125055029.png"
+                      class="ssmanjfbdavl" alt="image-20260305125055029"
+                ></p>
+<p><strong>The softmax regression optimization problem</strong><br>	<style>.qjpynrrqzlrl{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305125249770.png"
+                      class="qjpynrrqzlrl" alt="image-20260305125249770"
+                ><br>	<style>.ydrjwvfsvwjd{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305125347908.png"
+                      class="ydrjwvfsvwjd" alt="image-20260305125347908"
+                ><br>	<style>.rfngwhngufxn{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305125408454.png"
+                      class="rfngwhngufxn" alt="image-20260305125408454"
+                ></p>
+<p><strong>Optimization: gradient descent</strong><br>	<style>.mlneiphprcez{zoom: 67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305125909123.png"
+                      class="mlneiphprcez" alt="image-20260305125909123"
+                ><br>	<style>.yrthgafrcmtd{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305125926657.png"
+                      class="yrthgafrcmtd" alt="image-20260305125926657"
+                ><br>	<style>.ycbxpluecvxn{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305130626416.png"
+                      class="ycbxpluecvxn" alt="image-20260305130626416"
+                ></p>
+<p><strong>Stochastic gradient descent</strong><br>	<style>.ollsodxwsrpp{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305130803570.png"
+                      class="ollsodxwsrpp" alt="image-20260305130803570"
+                ><br>	<style>.hqrnnxybqesp{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305130859309.png"
+                      class="hqrnnxybqesp" alt="image-20260305130859309"
+                ></p>
+<p><strong>The gradient of the softmax objective</strong><br>	<style>.yktttqdisjgf{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305131039394.png"
+                      class="yktttqdisjgf" alt="image-20260305131039394"
+                ><br>	<style>.tcpjhvzvtewb{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305131153308.png"
+                      class="tcpjhvzvtewb" alt="image-20260305131153308"
+                ><br>	<style>.hipostbfdmum{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305131333207.png"
+                      class="hipostbfdmum" alt="image-20260305131333207"
+                ><br>	<style>.hhwbmgqyqlou{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305131700089.png"
+                      class="hhwbmgqyqlou" alt="image-20260305131700089"
+                ><br>	<style>.mlxtbxxokvmp{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305131745069.png"
+                      class="mlxtbxxokvmp" alt="image-20260305131745069"
+                ><br>	<style>.difyarvphoef{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305131849700.png"
+                      class="difyarvphoef" alt="image-20260305131849700"
+                ></p>
+<p>​	<style>.kzpqkebmravp{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305201932387.png"
+                      class="kzpqkebmravp" alt="image-20260305201932387"
+                ><br>​	<style>.kqwbehlqnvmc{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305202021485.png"
+                      class="kqwbehlqnvmc" alt="image-20260305202021485"
+                ><br>​	<style>.johvkqgjoctx{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305202043062.png"
+                      class="johvkqgjoctx" alt="image-20260305202043062"
+                ></p>
+<p><strong>Putting it all together</strong><br>	<style>.btiefpjfcuoa{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305202612386.png"
+                      class="btiefpjfcuoa" alt="image-20260305202612386"
+                ><br>	<style>.cpkiokhjzont{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305202648061.png"
+                      class="cpkiokhjzont" alt="image-20260305202648061"
+                ><br>	<style>.cazhyiwaktqj{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305202728178.png"
+                      class="cazhyiwaktqj" alt="image-20260305202728178"
+                ><br>	<style>.atgblomqjahg{zoom: 67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260305202746502.png"
+                      class="atgblomqjahg" alt="image-20260305202746502"
+                ></p>
+<h2 id="Lecture-3-“Manual”-Neural-Networks"><a href="#Lecture-3-“Manual”-Neural-Networks" class="headerlink" title="Lecture 3: “Manual” Neural Networks"></a>Lecture 3: “Manual” Neural Networks</h2><h3 id="From-linear-to-nonlinear-hypothesis-classes"><a href="#From-linear-to-nonlinear-hypothesis-classes" class="headerlink" title="From linear to nonlinear hypothesis classes"></a>From linear to nonlinear hypothesis classes</h3><p><strong>The trouble with linear hypothesis classes</strong><br>	<style>.gmcpkorjscqc{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307183151130.png"
+                      class="gmcpkorjscqc" alt="image-20260307183151130"
+                ><br>	Recall that we needed a hypothesis function to map inputs in <strong>R<sup>n</sup></strong> to outputs (class logits) in <strong>R<sup>k</sup></strong>, so we initially used the linear hypothesis class<br>	<style>.hoaojnelzpwk{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307183536234.png"
+                      class="hoaojnelzpwk" alt="image-20260307183536234"
+                ><br>	This classifier essentially forms k linear functions of the input and then predicts the class with the largest value: equivalent to partitioning the input into k linear regions corresponding to each class  </p>
+<p><strong>What about nonlinear classification boundaries?</strong><br>	<style>.mmpynwdceitz{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307183803282.png"
+                      class="mmpynwdceitz" alt="image-20260307183803282"
+                ><br>	What if we have data that cannot be separated by a set of linear regions?<br>	We want some way to separate these points via a nonlinear set of class boundaries<br>	<strong>One idea:</strong> apply a linear classifier to some (potentially higher-dimensional) features of the data<br>$$<br>h_\theta(x) &#x3D; \theta^T \phi(x)\<br>\theta \in \mathbb{R}^{d \times k}, , \phi: \mathbb{R}^n \to \mathbb{R}^d<br>$$<br><strong>How do we create features?</strong><br>	How can we create the feature function <strong>&Phi;</strong>?<br>		1.Through manual engineering of features relevant to the problem (the “old” way of doing machine learning)<br>		2.In a way that itself is learned from data (the “new” way of doing ML)<br>	First take: what if we just again use a linear function for <strong>&Phi;</strong>?<br>$$<br>\phi(x) &#x3D; W^T x<br>$$<br>​	Doesn’t work, because it is just equivalent to another linear classifier<br>$$<br>h_\theta(x) &#x3D; \theta^T \phi(x) &#x3D; \theta^T W^T x &#x3D; \tilde{\theta} x<br>$$<br><strong>Nonlinear features</strong><br>	But what does work? essentially any nonlinear function of linear features<br>$$<br>\phi(x) &#x3D; \sigma(W^T x)<br>$$<br>​	where <strong>W ∈ R<sup>n x d</sup></strong>, and <strong>&sigma;: R<sup>d</sup> → R<sup>d</sup></strong> is essentially any nonlinear function<br>​	Example: let <strong>W</strong> be a (fixed) matrix of random Gaussian samples, and let <strong>&sigma;</strong> be the cosine function &#x3D;&#x3D;&#x3D;&gt; “random Fourier features” (work great for many problems)<br>​	But maybe we want to train <strong>W</strong> to minimize loss as well? Or maybe we want to compose multiple features together?</p>
+<h3 id="Neural-networks"><a href="#Neural-networks" class="headerlink" title="Neural networks"></a>Neural networks</h3><p><strong>Neural networks &#x2F; deep learning</strong><br>	A neural network refers to a particular type of hypothesis class, consisting of <strong>multiple, parameterized differentiable functions (a.k.a. “layers”) composed together in any manner to form the output</strong><br>	The term stems from biological inspiration, but at this point, literally any hypothesis function of the type above is referred to as a neural network<br>	“Deep network” is just a synonym for “neural network,” and “deep learning” just means “machine learning using a neural network hypothesis class” (let’s cease pretending that there is any requirements on depth beyond “just not linear”)<br>		But it’s also true that modern neural networks involve composing together a lot of functions, so “deep” is typically an appropriate qualifier  </p>
+<p><strong>The “two layer” neural network</strong><br>	We can begin with the simplest form of neural network, basically just the nonlinear features proposed earlier, but where both sets of weights are learnable parameters<br>$$<br>h_\theta(x) &#x3D; W_2^T \sigma(W_1^T x)\<br>\theta &#x3D; {W_1 \in \mathbb{R}^{n \times d}, W_2 \in \mathbb{R}^{d \times k}}<br>$$<br>​		where <strong>&sigma;: R → R</strong> is a nonlinear function applied elementwise to the vector (e.g. sigmoid, ReLU)<br>​	Written in batch matrix form<br>$$<br>h_\theta(X) &#x3D; \sigma(XW_1)W_2<br>$$</p>
+<style>.rhbdwvntismg{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307201454874.png"
+                      class="rhbdwvntismg" alt="image-20260307201454874"
+                >
+
+<p><strong>Universal function approximation</strong><br>	<strong>Theorem (1D case):</strong> Given any smooth function <strong>f: R → R</strong>, closed region <strong>D ⊂ R</strong>, and <strong>&epsilon; &gt; 0</strong>, we can construct a one-hidden-layer neural network <style>.xndypibhbhju{zoom: 50%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307210437824.png"
+                      class="xndypibhbhju" alt="image-20260307210437824"
+                > such that<br>$$<br>\max_{x \in D} |f(x) - \hat{f}(x)| \leq \epsilon<br>$$<br>​	<strong>Proof:</strong> Select some dense sampling of points <strong>(x<sup>(i)</sup>, f(x<sup>(i)</sup>))</strong> over <strong>D</strong>. Create a neural network that passes exactly through these points. Because the neural network function is piecewise linear, and the function <strong>f</strong> is smooth, by choosing the <strong>x<sup>(i)</sup></strong> close enough together, we can approximate the function arbitrarily closely<br>​	Assume one-hidden-layer ReLU network (w &#x2F; bias):<br>$$<br>\hat{f}(x) &#x3D; \sum_{i&#x3D;1}^d \pm \max{0, w_i x + b_i}<br>$$<br>​	Visual construction of approximating function<br>​	<style>.fdjkujryzevg{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307215618862.png"
+                      class="fdjkujryzevg" alt="image-20260307215618862"
+                ></p>
+<p><strong>Fully-connected deep networks</strong><br>	<style>.ovrgrhouayel{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307215810195.png"
+                      class="ovrgrhouayel" alt="image-20260307215810195"
+                ><br>	A more generic form of a L-layer neural network - a.k.a. “Multi-layer perceptron” (MLP), feedforward network, fully-connected network – (in batch form)<br>$$<br>Z_{i+1} &#x3D; \sigma_i(Z_iW_i), , i &#x3D; 1, …, L\<br>Z_1 &#x3D; X,\<br>h_\theta(X) &#x3D; Z_{L+1}\<br>[Z_i \in \mathbb{R}^{m \times n_i}, , W_i \in \mathbb{R}^{n_i \times n_{i+1}}]<br>$$<br>​	with nonlinearities <strong>&sigma;<sub>i</sub>: R → R</strong> applied elementwise, and parameters<br>$$<br>\theta &#x3D; {W_1, \dots, W_L}<br>$$<br>​	(Can also optionally add bias term)  </p>
+<p><strong>Why deep networks?</strong><br>	They work like the brain!<br>		… no they don’t!<br>	Deep circuits are provably more efficient!<br>		… at representing functions neural networks cannot actually learn (e.g. parity)!<br>	Empirically it seems like they work better for a fixed parameter count!<br>		… okay!  </p>
+<h3 id="Backpropagation-i-e-computiing-gradients"><a href="#Backpropagation-i-e-computiing-gradients" class="headerlink" title="Backpropagation (i.e., computiing gradients)"></a>Backpropagation (i.e., computiing gradients)</h3><p><strong>Neural networks in machine learning</strong><br>	Recall that neural networks just specify one of the “three” ingredients” of a machine learning algorithm, also need:<br>		Loss function: still cross entropy loss, like last time<br>		Optimization procedure: still SGD, like last time<br>	In other words, we still want to solve the optimization problem<br>$$<br>\underset{\theta}{\text{minimize}} \quad \frac{1}{m} \sum_{i&#x3D;1}^{m} \ell_{ce}(h_\theta(x^{(i)}), y^{(i)})<br>$$<br>​	using SGD, just with <strong>h<sub>&theta;</sub>(x)</strong> now being a neural network<br>​	Requires computing the gradients <style>.uvdorrlpevzm{zoom:45%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307223003854.png"
+                      class="uvdorrlpevzm" alt="image-20260307223003854"
+                > for each element of <strong>&theta;</strong>  </p>
+<p><strong>The gradient(s) of a two-layer network</strong><br>	Let’s work through the derivation of the gradients for a simple two-layer network, written in batch matrix form, i.e.,<br>	
+$$
+\nabla_{\{W_1, W_2\}} \ell_{ce}(\sigma(XW_1)W_2, y)
+$$
+​	<br>​	The gradient w.r.t. W<sub>2</sub> looks identical to the softmax regression case:<br>$$<br>\frac{\partial \ell_{ce}(\sigma(XW_1)W_2, y)}{\partial W_2} &#x3D; \frac{\partial \ell_{ce}(\sigma(XW_1)W_2, y) }{\partial \sigma(XW_1)W_2} \cdot \frac{\partial \sigma(XW_1)W_2}{\partial W_2} &#x3D; (S - I_y) \cdot (\sigma(XW_1))\<br>[S &#x3D; \text{normalize}(\exp(\sigma(XW_1)W_2))]<br>$$<br>​	so (matching sizes) the gradient is<br>$$<br>\nabla_{W_2} \ell_{ce}(\sigma(XW_1)W_2, y) &#x3D; \sigma(XW_1)^T (S - I_y)<br>$$<br>​	Deep breath and let’s do the gradient w.r.t. <strong>W<sub>1</sub></strong> …<br>$$<br>\frac{\partial \ell_{ce}(\sigma(XW_1)W_2, y)}{\partial W_1} &#x3D; \frac{\partial \ell_{ce}(\sigma(XW_1)W_2, y)}{d\sigma(XW_1)W_2} \cdot \frac{d\sigma(XW_1)W_2}{d\sigma(XW_1)} \cdot \frac{d\sigma(XW_1)}{dXW_1} \cdot \frac{dXW_1}{dW_1}\<br>&#x3D; (S - I_y) \cdot (W_2) \cdot (\sigma’(XW_1)) \cdot (X)<br>$$<br>​	and so the gradient is<br>$$<br>\nabla_{W_1} \ell_{ce}(\sigma(XW_1)W_2, y) &#x3D; X^T \left( (S - I_y) W_2^T \circ \sigma’(XW_1) \right)<br>$$<br>​	where<style>.sqztvoaxwwpt{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307224641972.png"
+                      class="sqztvoaxwwpt" alt="image-20260307224641972"
+                >denotes elementwise multiplication<br>​	… having fun yet?  </p>
+<p><strong>Backpropagation “in general”</strong><br>	There is a method to this madness … consider our fully-connected network:<br>$$<br>Z_{i+1} &#x3D; \sigma_i(Z_iW_i), \quad i &#x3D; 1, \dots, L<br>$$<br>​	Then (now being a bit terse with notation)<br>​	<style>.xeiphibjnqhv{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307225307676.png"
+                      class="xeiphibjnqhv" alt="image-20260307225307676"
+                ><br>​	Then we have a simple “backward” iteration to compute the <strong>G<sub>i</sub></strong>‘s<br>$$<br>G_i &#x3D; G_{i+1} \cdot \frac{\partial Z_{i+1}}{\partial Z_i} &#x3D; G_{i+1} \cdot \frac{\partial \sigma_i(Z_i W_i)}{\partial Z_i W_i} \cdot \frac{\partial Z_i W_i}{\partial Z_i} &#x3D; G_{i+1} \cdot \sigma’(Z_i W_i) \cdot W_i<br>$$<br><strong>Computing the real gradients</strong><br>	To convert these quantities to “real” gradients, consider matrix sizes<br>$$<br>G_i &#x3D; \frac{\partial \ell(Z_{L+1}, y)}{\partial Z_i} &#x3D; \nabla_{Z_i} \ell(Z_{L+1}, y) \in \mathbb{R}^{m \times n_i}<br>$$<br>​	so with “real” matrix operations<br>$$<br>G_i &#x3D; G_{i+1} \cdot \sigma’(Z_i W_i) \cdot W_i &#x3D; (G_{i+1} \circ \sigma’(Z_i W_i))W_i^T<br>$$<br>​	Similar formula for actual parameter gradients<br>$$<br>\nabla_{W_i} \ell(Z_{L+1}, y) \in \mathbb{R}^{n_i \times n_{i+1}}<br>$$</p>
+<p>$$<br>\frac{\partial \ell(Z_{L+1}, y)}{\partial W_i} &#x3D; G_{i+1} \cdot \frac{\partial \sigma_i(Z_i W_i)}{\partial Z_i W_i} \cdot \frac{\partial Z_i W_i}{\partial W_i} &#x3D; G_{i+1} \cdot \sigma’(Z_i W_i) \cdot Z_i\<br>\Rightarrow \nabla_{W_i} \ell(Z_{L+1}, y) &#x3D; Z_i^T (G_{i+1} \circ \sigma’(Z_i W_i))<br>$$</p>
+<p><strong>Backpropagation: Forward and backward passes</strong><br>	Putting it all together, we can efficiently compute all the gradients we need for a neural network by following the procedure below<br>		<style>.cgbwaajgwmtp{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307230323069.png"
+                      class="cgbwaajgwmtp" alt="image-20260307230323069"
+                ><br>	And we can compute all the needed gradients along the way<br>$$<br>\nabla_{W_i} \ell(Z_{k+1}, y) &#x3D; Z_i^T \left( G_{i+1} \circ \sigma’_i(Z_i W_i) \right)<br>$$<br>​	“Backpropagation” is just chain rule + intelligent caching of intermediate results  </p>
+<p><strong>A closer look at these operations</strong><br>	What is really happening with the backward iteration?<br>	<style>.prmkgejfyigv{zoom: 67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307232650273.png"
+                      class="prmkgejfyigv" alt="image-20260307232650273"
+                ><br>	Each layer needs to be able to multiply the “incoming backward” gradient <strong>G<sub>i+1</sub></strong> by its derivatives, <style>.nbirbhrkweqc{zoom: 50%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260307232824416.png"
+                      class="nbirbhrkweqc" alt="image-20260307232824416"
+                >, an operation called the “vector Jacobian product”<br>	This process can be generalized to arbitrary computation graphs: this is exactly the process of automatic differentiation we will discuss in then next lecture  </p>
+<h2 id="Homework-0"><a href="#Homework-0" class="headerlink" title="Homework 0"></a>Homework 0</h2><p>[WorldClass&#x2F;CMU 10-414(714) Deep Learning Systems&#x2F;Assignments&#x2F;Homework 0 at master · tiny-star3&#x2F;WorldClass](<a class="link"   target="_blank" rel="noopener" href="https://github.com/tiny-star3/WorldClass/tree/master/CMU" >https://github.com/tiny-star3/WorldClass/tree/master/CMU<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> 10-414(714) Deep Learning Systems&#x2F;Assignments&#x2F;Homework 0)</p>
+<h2 id="Lecture-4-Automatic-Differentiation"><a href="#Lecture-4-Automatic-Differentiation" class="headerlink" title="Lecture 4: Automatic Differentiation"></a>Lecture 4: Automatic Differentiation</h2><h3 id="General-introduction-to-different-differentiation-methods"><a href="#General-introduction-to-different-differentiation-methods" class="headerlink" title="General introduction to different differentiation methods"></a>General introduction to different differentiation methods</h3><p><strong>How does differentiation fit into machine learning</strong><br>	1.The hypothesis class:<br>		<style>.mkwmjmufldso{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318101713897.png"
+                      class="mkwmjmufldso" alt="image-20260318101713897"
+                ><br>	2.The loss function:<br>$$<br>l(h_\theta(x), y) &#x3D; -h_y(x) + \log \sum_{j&#x3D;1}^k \exp(h_j(x))<br>$$<br>​	3.An optimization method:<br>$$<br>\theta :&#x3D; \theta - \frac{\alpha}{B} \sum_{i&#x3D;1}^{B} \left[ \nabla_{\theta} \ell(h_{\theta}(x^{(i)}), y^{(i)}) \right]<br>$$<br>​	Recap: every machine learning algorithm consists of three different elements<br>​	Computing the loss function gradient with respect to hypothesis class parameters is the most common operation in machine learning  </p>
+<p><strong>Numerical differentiation</strong><br>	Directly compute the partial gradient by definition<br>$$<br>\frac{\partial f(\theta)}{\partial \theta_i} &#x3D; \lim_{\epsilon \to 0} \frac{f(\theta + \epsilon e_i) - f(\theta)}{\epsilon}<br>$$<br>​	A more numerically accurate way to approximate the gradient<br>$$<br>\frac{\partial f(\theta)}{\partial \theta_i} &#x3D; \frac{f(\theta + \epsilon e_i) - f(\theta - \epsilon e_i)}{2\epsilon} + o(\epsilon^2)<br>$$<br>​	Suffer from numerical error, less efficient to compute  </p>
+<p><strong>Numerical gradient checking</strong><br>	However, numerical differentiation is a powerful tool to check an implement of an automatic differentiation algorithm in unit test cases<br>$$<br>\delta^T \nabla_\theta f(\theta) &#x3D; \frac{f(\theta + \epsilon\delta) - f(\theta - \epsilon\delta)}{2\epsilon} + o(\epsilon^2)<br>$$<br>​	Pick 𝛿 from unit ball, check the above invariance  </p>
+<p><strong>Symbolic differentiation</strong><br>	Write down the formulas, derive the gradient by sum, product and chain rules<br>$$<br>\frac{\partial(f(\theta)+g(\theta))}{\partial \theta} &#x3D; \frac{\partial f(\theta)}{\partial \theta} + \frac{\partial g(\theta)}{\partial \theta}\<br>\frac{\partial(f(\theta)g(\theta))}{\partial \theta} &#x3D; g(\theta)\frac{\partial f(\theta)}{\partial \theta} + f(\theta)\frac{\partial g(\theta)}{\partial \theta}\<br>\frac{\partial f(g(\theta))}{\partial \theta} &#x3D; \frac{\partial f(g(\theta))}{\partial g(\theta)} \frac{\partial g(\theta)}{\partial \theta}<br>$$<br>​	Naively do so can result in wasted computations<br>​	Example:<br>$$<br>f(\theta) &#x3D; \prod_{i&#x3D;1}^{n} \theta_i\<br>\frac{\partial f(\theta)}{\partial \theta_k} &#x3D; \prod_{j \neq k} \theta_j<br>$$<br>​	Cost 𝑛(𝑛 −2) multiplies to compute all partial gradients  </p>
+<p><strong>Computational graph</strong><br>$$<br>y &#x3D; f(x_1, x_2) &#x3D; \ln(x_1) + x_1 x_2 - \sin x_2<br>$$<br>​	<style>.uhqizcqwyqjl{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318104543686.png"
+                      class="uhqizcqwyqjl" alt="image-20260318104543686"
+                ><br>​	Forward evaluation trace<br>​		𝑣<sub>1</sub> &#x3D; 𝑥<sub>1</sub> &#x3D; 2<br>​		𝑣<sub>2</sub> &#x3D; 𝑥<sub>2</sub> &#x3D; 5<br>​		𝑣<sub>3</sub> &#x3D; ln𝑣<sub>1</sub> &#x3D; ln2 &#x3D; 0.693<br>​		𝑣<sub>4</sub> &#x3D; 𝑣<sub>1</sub> × 𝑣<sub>2</sub> &#x3D; 10<br>​		𝑣<sub>5</sub> &#x3D; sin𝑣<sub>2</sub> &#x3D; sin5 &#x3D; −0.959<br>​		𝑣<sub>6</sub> &#x3D; 𝑣<sub>3</sub> + 𝑣<sub>4</sub> &#x3D; 10.693<br>​		𝑣<sub>7</sub> &#x3D; 𝑣<sub>6</sub> − 𝑣<sub>5</sub> &#x3D; 10.693 + 0.959 &#x3D; 11.652<br>​		𝑦 &#x3D; 𝑣<sub>7</sub> &#x3D; 11.652<br>​	Each node represent an (intermediate) value in the computation<br>​	Edges present input output relations  </p>
+<p><strong>Forward mode automatic differentiation (AD)</strong><br>	Define<br>$$<br>\dot{v}_i &#x3D; \frac{\partial v_i}{\partial x_1}<br>$$<br>​	We can then compute the <style>.gwihptjorgui{zoom: 50%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318105214768.png"
+                      class="gwihptjorgui" alt="image-20260318105214768"
+                > iteratively in the forward topological order of the computational graph<br>​	Forward AD trace<br>$$<br>\begin{align*}<br>\dot{v}_1 &amp;&#x3D; 1 \<br>\dot{v}_2 &amp;&#x3D; 0 \<br>\dot{v}_3 &amp;&#x3D; \dot{v}_1 &#x2F; v_1 &#x3D; 0.5 \<br>\dot{v}_4 &amp;&#x3D; \dot{v}_1 v_2 + \dot{v}_2 v_1 &#x3D; 1 \times 5 + 0 \times 2 &#x3D; 5 \<br>\dot{v}_5 &amp;&#x3D; \dot{v}_2 \cos v_2 &#x3D; 0 \times \cos 5 &#x3D; 0 \<br>\dot{v}_6 &amp;&#x3D; \dot{v}_3 + \dot{v}_4 &#x3D; 0.5 + 5 &#x3D; 5.5 \<br>\dot{v}_7 &amp;&#x3D; \dot{v}_6 - \dot{v}_5 &#x3D; 5.5 - 0 &#x3D; 5.5<br>\end{align*}<br>$$<br>​	Now we have<br>$$<br>\frac{\partial y}{\partial x_1} &#x3D; \dot{v}_7 &#x3D; 5.5<br>$$<br><strong>Limitation of forward mode AD</strong><br>	For 𝑓: ℝ<sup>𝑛</sup> → ℝ<sup>𝑘</sup>, we need 𝑛 forward AD passes to get the gradient with respect to each input<br>	We mostly care about the cases where 𝑘 &#x3D; 1 and large 𝑛<br>	In order to resolve the problem efficiently, we need to use another kind of AD  </p>
+<h3 id="Reverse-mode-automatic-differentiation"><a href="#Reverse-mode-automatic-differentiation" class="headerlink" title="Reverse mode automatic differentiation"></a>Reverse mode automatic differentiation</h3><p><strong>Reverse mode automatic differentiation(AD)</strong><br>	Define adjoint<br>$$<br>\overline{v}_i &#x3D; \frac{\partial y}{\partial v_i}<br>$$<br>​	We can then compute the <style>.mjoeneyipncu{zoom:50%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318110412423.png"
+                      class="mjoeneyipncu" alt="image-20260318110412423"
+                > iteratively in the reverse topological order of the computational graph<br>​	Reverse AD evaluation trace<br>$$<br>\begin{align*}<br>\overline{v}_7 &amp;&#x3D; \frac{\partial y}{\partial v_7} &#x3D; 1 \<br>\overline{v}_6 &amp;&#x3D; \overline{v}_7 \frac{\partial v_7}{\partial v_6} &#x3D; \overline{v}_7 \times 1 &#x3D; 1 \<br>\overline{v}_5 &amp;&#x3D; \overline{v}_7 \frac{\partial v_7}{\partial v_5} &#x3D; \overline{v}_7 \times (-1) &#x3D; -1 \<br>\overline{v}_4 &amp;&#x3D; \overline{v}_6 \frac{\partial v_6}{\partial v_4} &#x3D; \overline{v}_6 \times 1 &#x3D; 1 \<br>\overline{v}_3 &amp;&#x3D; \overline{v}_6 \frac{\partial v_6}{\partial v_3} &#x3D; \overline{v}_6 \times 1 &#x3D; 1 \<br>\overline{v}_2 &amp;&#x3D; \overline{v}_5 \frac{\partial v_5}{\partial v_2} + \overline{v}_4 \frac{\partial v_4}{\partial v_2} &#x3D; \overline{v}_5 \times \cos v_2 + \overline{v}_4 \times v_1 &#x3D; -0.284 + 2 &#x3D; 1.716 \<br>\overline{v}_1 &amp;&#x3D; \overline{v}_4 \frac{\partial v_4}{\partial v_1} + \overline{v}_3 \frac{\partial v_3}{\partial v_1} &#x3D; \overline{v}_4 \times v_2 + \overline{v}_3 \frac{1}{v_1} &#x3D; 5 + \frac{1}{2} &#x3D; 5.5<br>\end{align*}<br>$$<br><strong>Derivation for the multiple pathway case</strong><br>	𝑣<sub>1</sub> is being used in multiple pathways (𝑣<sub>2</sub> and 𝑣<sub>3</sub>)<br>	<style>.dkzlieyzftpq{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318111026806.png"
+                      class="dkzlieyzftpq" alt="image-20260318111026806"
+                ><br>	y can be written in the form of y &#x3D; f(v<sub>2</sub>,v<sub>3</sub>)<br>$$<br>\overline{v}_1 &#x3D; \frac{\partial y}{\partial v_1} &#x3D; \frac{\partial f(v_2, v_3)}{\partial v_2} \frac{\partial v_2}{\partial v_1} + \frac{\partial f(v_2, v_3)}{\partial v_3} \frac{\partial v_3}{\partial v_1} &#x3D; \overline{v}_2 \frac{\partial v_2}{\partial v_1} + \overline{v}<em>3 \frac{\partial v_3}{\partial v_1}<br>$$<br>​	Define partial adjoint <style>.heuilnfhcqxd{zoom:50%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318111228497.png"
+                      class="heuilnfhcqxd" alt="image-20260318111228497"
+                > for each input output node pair 𝑖 and 𝑗<br>$$<br>\overline{v}<em>i &#x3D; \sum</em>{j \in next(i)} \overline{v}</em>{i \to j}<br>$$<br>​	We can compute partial adjoints separately then sum them together  </p>
+<p><strong>Reverse AD algorithm</strong><br>	<style>.hfiiqlxafjid{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318111656675.png"
+                      class="hfiiqlxafjid" alt="image-20260318111656675"
+                ></p>
+<p><strong>Reverse mode AD by extending computational  graph</strong><br>	Our previous examples compute adjoint values directly by hand<br>	How can we construct a computational graph that calculates the adjoint values?<br>	<style>.eyhaeugeqgld{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318111935456.png"
+                      class="eyhaeugeqgld" alt="image-20260318111935456"
+                ><br>	<style>.nnnuhtpqrcxm{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318112106975.png"
+                      class="nnnuhtpqrcxm" alt="image-20260318112106975"
+                ><br>	<style>.xquzkidkhqtj{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318112157092.png"
+                      class="xquzkidkhqtj" alt="image-20260318112157092"
+                ><br>	<style>.aekydmfricry{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318112358290.png"
+                      class="aekydmfricry" alt="image-20260318112358290"
+                ><br>	<style>.uxoeikegcdko{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318112447117.png"
+                      class="uxoeikegcdko" alt="image-20260318112447117"
+                ></p>
+<p><strong>Reverse mode AD vs Backprop</strong><br>	<strong>Backprop</strong><br>		<style>.usufzgsgsqch{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318112650948.png"
+                      class="usufzgsgsqch" alt="image-20260318112650948"
+                ><br>		Run backward operations the same forward graph<br>		Used in first generation deep learning frameworks (caffe, cuda-convnet)<br>	<strong>Reverse mode AD by extending computational graph</strong><br>		<style>.bjqiqcrgidik{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318112825760.png"
+                      class="bjqiqcrgidik" alt="image-20260318112825760"
+                ><br>		Construct separate graph nodes for adjoints<br>		Used by modern deep learning frameworks  </p>
+<p><strong>Reverse mode AD on Tensors</strong><br>	<style>.pmrrykvmrhgj{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318124251955.png"
+                      class="pmrrykvmrhgj" alt="image-20260318124251955"
+                ><br>	Define adjoint for tensor values<br>$$<br>\bar{Z} &#x3D; \begin{bmatrix}<br>\frac{\partial y}{\partial Z_{1,1}} &amp; \cdots &amp; \frac{\partial y}{\partial Z_{1,n}} \<br>\vdots &amp; \cdots &amp; \vdots \<br>\frac{\partial y}{\partial Z_{m,1}} &amp; \cdots &amp; \frac{\partial y}{\partial Z_{m,n}}<br>\end{bmatrix}<br>$$<br>​	Forward evaluation trace<br>$$<br>\begin{align*}<br>Z_{ij} &amp;&#x3D; \sum_{k} X_{ik} W_{kj} \<br>v &amp;&#x3D; f(Z)<br>\end{align*}<br>$$<br>​	Forward matrix form<br>$$<br>\begin{align*}<br>Z &amp;&#x3D; XW \<br>v &amp;&#x3D; f(Z)<br>\end{align*}<br>$$<br>​	 Reverse evaluation in scalar form<br>$$<br>\overline{X}<em>{i,k} &#x3D; \sum</em>{j} \frac{\partial Z_{i,j}}{\partial X_{i,k}} \bar{Z}<em>{i,j} &#x3D; \sum</em>{j} W_{k,j} \bar{Z}_{i,j}<br>$$<br>​	Reverse matrix form<br>$$<br>\bar{X} &#x3D; \bar{Z} W^T<br>$$<br><strong>Discussions</strong><br>	What are the pros&#x2F;cons of backprop and reverse mode AD  </p>
+<p><strong>Handling gradient of gradient</strong><br>	The result of reverse mode AD is still a computational graph<br>	We can extend that graph further by composing more operations and run reverse mode AD again on the gradient<br>	Part of homework 1  </p>
+<p><strong>Reverse mode AD on data structures</strong><br>	<style>.bkteorbushok{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318130744030.png"
+                      class="bkteorbushok" alt="image-20260318130744030"
+                ><br>	Define adjoint data structure<br>$$<br>\bar{d} &#x3D; { \text{“cat”} : \frac{\partial y}{\partial a_0}, \text{“dog”} : \frac{\partial y}{\partial 1} }<br>$$<br>​	Forward evaluation trace<br>$$<br>\begin{align*}<br>d &amp;&#x3D; { \text{“cat”} : a_0, \text{“dog”} : a_1 } \<br>b &amp;&#x3D; d \text{ [“cat”]} \<br>v &amp;&#x3D; f(b)<br>\end{align*}<br>$$<br>​	Reverse evaluation<br>$$<br>\begin{align*}<br>\bar{b} &amp;&#x3D; \frac{\partial v}{\partial b} \bar{v} \<br>\bar{d} &amp;&#x3D; { \text{“cat”} : \bar{b} }<br>\end{align*}<br>$$<br>​	Key take away: Define “adjoint value” usually in the same data type as the forward value and adjoint propagation rule. Then the sample algorithm works<br>​	Do not need to support the general form in our framework, but we may support “tuple values”  </p>
+<h2 id="Lecture-5-Automatic-Differentiation-Implementation"><a href="#Lecture-5-Automatic-Differentiation-Implementation" class="headerlink" title="Lecture 5: Automatic Differentiation Implementation"></a>Lecture 5: Automatic Differentiation Implementation</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/dlsyscourse/lecture5/blob/main/5_automatic_differentiation_implementation.ipynb" >lecture5&#x2F;5_automatic_differentiation_implementation.ipynb at main · dlsyscourse&#x2F;lecture5<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<h2 id="Lecture-6-Fully-connected-networks-optimization-initialization"><a href="#Lecture-6-Fully-connected-networks-optimization-initialization" class="headerlink" title="Lecture 6: Fully connected networks, optimization,  initialization"></a>Lecture 6: Fully connected networks, optimization,  initialization</h2><h3 id="Fully-connected-networks"><a href="#Fully-connected-networks" class="headerlink" title="Fully connected networks"></a>Fully connected networks</h3><p><strong>Fully connected networks</strong><br>	Now that we have covered the basics of automatic differentiation, we can return to “standard” forms of deep networks<br>	A L-layer, fully connected network, a.k.a. multi-layer perceptron (MLP), now with an explicit bias term, is defined by the iteration<br>$$<br>\begin{align*}<br>z_{i+1} &amp;&#x3D; \sigma_i(W_i^T z_i + b_i), \quad i &#x3D; 1, \dots, L \<br>h_\theta(x) &amp;\equiv z_{L+1} \<br>z_1 &amp;\equiv x<br>\end{align*}<br>$$<br>​	with parameters &theta; &#x3D; { W<sub>1:L</sub>, b<sub>1:L</sub> }, and where &sigma;<sub>i</sub>(x) is the nonlinear activation, usually with &sigma;<sub>L</sub>(x) &#x3D; x  </p>
+<p><strong>Matrix form and broadcasting subtleties</strong><br>	Let’s consider the matrix form of the the iteration<br>$$<br>Z_{i+1} &#x3D; \sigma_i(Z_i W_i + \mathbf{1} b_i^T)<br>$$<br>​	Notice a subtle point: to write things correctly in matrix form, the update for Z<sub>i+1</sub> ∈ ℝ<sup>m×n</sup> requires that we form the matrix 1b<sub>i</sub><sup>T</sup> ∈ ℝ<sup>m×n</sup><br>​	In practice, you don’t form these matrices, you perform operation via broadcasting<br>​		E.g. for a n×1 vector (or higher-order tensor), broadcasting treats it as an nxp matrix repeating the same column p times<br>​		We could write iteration (informally) just as Z<sub>i+1</sub> &#x3D; &sigma;<sub>i</sub>(Z<sub>i</sub>W<sub>i</sub>+b<sub>i</sub><sup>T</sup>)<br>​		Broadcasting does not copy any data (described more in later lecture)  </p>
+<p><strong>Key questions for fully connected networks</strong><br>	In order to actually train a fully-connected network (or any deep network), we need to address a certain number of questions:<br>		How do we choose the width and depth of the network?<br>		How do we actually optimize the objective? (“SGD” is the easy answer, but not the algorithm most commonly used in practice)<br>		How do we initialize the weights of the network?<br>		How do we ensure the network can continue to be trained easily over multiple optimization iterations?<br>	All related questions that affect each other<br>	There are (still) no definite answers to these questions, and for deep learning they wind up being problem-specific, but we will cover some basic principles  </p>
+<h3 id="Optimization"><a href="#Optimization" class="headerlink" title="Optimization"></a>Optimization</h3><p><strong>Gradient descent</strong><br>	Let’s reconsider the generic gradient descent updates we described previously, now for a general function f, and writing iterate number t explicitly<br>$$<br>\theta_{t+1} &#x3D; \theta_t - \alpha \nabla_\theta f(\theta_t)<br>$$<br>​	where &alpha; &gt; 0 is step size (learning rate), <style>.kbwchmgqymxj{zoom:50%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324095854213.png"
+                      class="kbwchmgqymxj" alt="image-20260324095854213"
+                > is gradient evaluated at the parameters &theta;<sub>t</sub><br>​	Takes the “steepest descent direction” locally (defined in terms of &ell;₂ norm, as we will discuss shortly), but may oscillate over larger time scales  </p>
+<p><strong>Illustration of gradient descent</strong><br>	For &theta; ∈ ℝ<sup>2</sup>, consider quadratic function<br>$$<br>f(\theta) &#x3D; \frac{1}{2} \theta^T P \theta + q^T \theta<br>$$<br>​	for P positive definite (all positive eigenvalues)<br>​	Illustration of gradient descent with different step sizes:  </p>
+<style>.hqmxlnembvhr{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324101005312.png"
+                      class="hqmxlnembvhr" alt="image-20260324101005312"
+                >
+
+<p><strong>Newton’s Method</strong><br>	One way to integrate more “global” structure into optimization methods is Newton’s method, which scales gradient according to inverse of the Hessian (matrix of second derivatives)<br>$$<br>\theta_{t+1} &#x3D; \theta_t - \alpha \left( \nabla^2_\theta f(\theta_t) \right)^{-1} \nabla_\theta f(\theta_t)<br>$$<br>​	where <style>.hoxmurysgpgo{zoom:50%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324102017143.png"
+                      class="hoxmurysgpgo" alt="image-20260324102017143"
+                > is the Hessian, n×n matrix of all second derivatives<br>​	Equivalent to approximating the function as quadratic using second-order Taylor expansion, then solving for optimal solution<br>​	Full step given by &alpha; &#x3D; 1, otherwise called a damped Newton method  </p>
+<p><strong>Illustration of Newton’s method</strong><br>	Newton’s method (will &alpha; &#x3D; 1) will optimize quadratic functions in one step<br>	Not of that much practical relevance to deep learning for two reasons<br>		We can’t efficiently solve for Newton step, even using automatic differentiation (though there are tricks to approximately solve it)<br>		For non-convex optimization, it’s very unclear that we even want to use the Newton direction<br>	<style>.tkmtqgzrugbq{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324104541121.png"
+                      class="tkmtqgzrugbq" alt="image-20260324104541121"
+                ></p>
+<p><strong>Momentum</strong><br>	Can we find “middle grounds” that are as easy to compute as gradient descent, but which take into account more “global” structure like Newton’s method<br>	One common strategy is to use momentum update, that takes into account a moving average of multiple previous gradients<br>$$<br>\begin{aligned}<br>u_{t+1} &amp;&#x3D; \beta u_t + (1 - \beta) \nabla_\theta f(\theta_t) \<br>\theta_{t+1} &amp;&#x3D; \theta_t - \alpha u_{t+1}<br>\end{aligned}<br>$$<br>​	where &alpha; is step size as before, and &beta; is momentum averaging parameter<br>​		Note: often written in alternative forms u<sub>t+1</sub> &#x3D; &beta;u<sub>t</sub> + <style>.cnxlodsyuysi{zoom:50%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324095854213.png"
+                      class="cnxlodsyuysi" alt="image-20260324095854213"
+                > (or u<sub>t+1</sub> &#x3D; &beta;u<sub>t</sub> + &alpha;<style>.glgcqdlwssqc{zoom:50%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324095854213.png"
+                      class="glgcqdlwssqc" alt="image-20260324095854213"
+                >) but I prefer above to keep u the same “scale” as gradient  </p>
+<p><strong>Illustration of momentum</strong><br>	Momentum “smooths” out the descent steps, but can also introduce other forms of oscillation and non-descent behavior<br>	Frequently useful in training deep networks in practice  </p>
+<style>.mbdtjyextmlu{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324105912337.png"
+                      class="mbdtjyextmlu" alt="image-20260324105912337"
+                >
+
+<p><strong>“Unbiasing” momentum terms</strong><br>	The momentum term u<sub>t</sub> (if initialized to zero, as is common), will be smaller in initial iterations than in later ones<br>	To “unbias” the update to have equal expected magnitude across all iterations, we can use the update<br>$$<br>\theta_{t+1} &#x3D; \theta_t - \frac{\alpha u_{t+1}}{1 - \beta^{t+1}}<br>$$</p>
+<style>.anjryvciozgk{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324110354272.png"
+                      class="anjryvciozgk" alt="image-20260324110354272"
+                >
+
+<p><strong>Nesterov Momentum</strong><br>	One (admittedly, of many) useful tricks in the notion of Nesterov momentum (or Nesterov acceleration), which computes momentum update at “next” point<br>$$<br>\begin{aligned}<br>u_{t+1} &amp;&#x3D; \beta u_t + (1 - \beta) \nabla_\theta f(\theta_t) \<br>\theta_{t+1} &amp;&#x3D; \theta_t - \alpha u_{t+1}<br>\end{aligned}<br>\quad \Longrightarrow \quad<br>\begin{aligned}<br>u_{t+1} &amp;&#x3D; \beta u_t + (1 - \beta) \nabla_\theta f(\theta_t - \alpha u_t) \<br>\theta_{t+1} &amp;&#x3D; \theta_t - \alpha u_{t+1}<br>\end{aligned}<br>$$<br>​	A “good” thing for convex optimization, and (sometimes) helps for deep networks  </p>
+<style>.wqaxtywthtes{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324110637505.png"
+                      class="wqaxtywthtes" alt="image-20260324110637505"
+                >
+
+<p><strong>Adam</strong><br>	The scale of the gradients can vary widely for different parameters, especially e.g. across different layers of a deep network, different layer types, etc<br>	So-called adaptive gradient methods attempt to estimate this scale over iterations and then re-scale the gradient update accordingly<br>	Most widely used adaptive gradient method for deep learning is Adam algorithm, which combines momentum and adaptive scale estimation<br>$$<br>\begin{aligned}<br>u_{t+1} &amp;&#x3D; \beta_1 u_t + (1 - \beta_1) \nabla_\theta f(\theta_t) \<br>v_{t+1} &amp;&#x3D; \beta_2 v_t + (1 - \beta_2) \left( \nabla_\theta f(\theta_t) \right)^2 \<br>\theta_{t+1} &amp;&#x3D; \theta_t - \alpha \frac{u_{t+1}}{\sqrt{v_{t+1}} + \epsilon}<br>\end{aligned}<br>$$<br>​	(Common to use unbiased momentum estimated for both terms)  </p>
+<p><strong>Notes on &#x2F; illustration of Adam</strong><br>	Whether Adam is “good” optimizer is endlessly debated within deep learning, but it often seems to work quite well in practice (maybe?)<br>	There are alternative universes where endless other variants became the “standard” (no unbiasing? average of absolute magnitude rather than squared? Nesterov-like acceleration?) but Adam is well-tuned and hard to uniformly beat<br>	<style>.bgtjgfgeuxlp{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324114038336.png"
+                      class="bgtjgfgeuxlp" alt="image-20260324114038336"
+                ></p>
+<p><strong>Stochastic variants</strong><br>	All the previous examples considered batch update to the parameters, but the single most important optimization choice is to use stochastic variants<br>	Recall our machine learning optimization problem<br>$$<br>minimize_{\theta} \frac{1}{m} \sum_{i&#x3D;1}^{m} \ell(h_\theta(x^{(i)}), y^{(i)})<br>$$<br>​	which is the minimization of an empirical expectation over losses<br>​	We can get a noisy (but unbiased) estimate of gradient by computing gradient of the loss over just a subset of examples (called a minibatch)  </p>
+<p><strong>Stochastic Gradient Descent</strong><br>	This leads us again to the SGD algorithm, repeating for batches B &subset; { 1, …, m }<br>$$<br>\theta_{t+1} &#x3D; \theta_t - \frac{\alpha}{B} \sum_{i \in B} \nabla_\theta \ell(h(x^{(i)}), y^{(i)})<br>$$<br>​	Instead of taking a few expensive, noise-free, steps, we take many cheap, noisy steps, which ends having much strong performance per compute  </p>
+<style>.vuiwtufscjcl{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324114911325.png"
+                      class="vuiwtufscjcl" alt="image-20260324114911325"
+                >
+
+<p><strong>The most important takeaways</strong><br>	All the optimization methods you have seen thus far presented are only actually used in their stochastic form<br>	The amount of valid intuition about these optimization methods you will get from looking at simple (convex, quadratic) optimization problems is limited<br>	You need to constantly experiment to gain an understanding &#x2F; intuition of how these methods actually affect deep networks of different types  </p>
+<h3 id="Initialization"><a href="#Initialization" class="headerlink" title="Initialization"></a>Initialization</h3><p><strong>Initialization of weights</strong><br>	Recall that we optimize parameters iteratively by stochastic gradient descent, e.g.<br>$$<br>W_i :&#x3D; W_i - \alpha \nabla_{W_i} \ell(h_\theta(X), y)<br>$$<br>​	But how do we choose the initial values of W<sub>i</sub>, b<sub>i</sub>? (maybe just initialize to zero?)<br>​	Recall the manual backpropagation forward&#x2F;backward passes (without bias):<br>$$<br>Z_{i+1} &#x3D; \sigma_i(Z_i W_i) \<br>G_i &#x3D; \left( G_{i+1} \circ \sigma_i’(Z_i W_i) \right) W_i^\top \<br>\text{If } W_i &#x3D; 0, \text{ then } G_j &#x3D; 0 \text{ for } j \leq i \implies \nabla_{W_i} \ell(h_\theta(X), y) &#x3D; 0 \<br>\text{i.e., } W_i &#x3D; 0 \text{ is a (very bad) local optimum of the objective}<br>$$<br><strong>Key idea #1: Weights don’t move “that much”</strong><br>	Might have the picture in your mind that the parameters of a network converge to some similar region of points regardless of their initialization<br>	This is not true … weights often stay much closer to their initialization than to the “final” point after optimization from different<br>	End result: initialization matters … we’ll see some of the practical aspects next lecture  </p>
+<p><strong>Key idea #2: Choice of initialization matters</strong><br>	Let’s just initialize weights “randomly”, e.g., W<sub>i</sub> ~ N(0, σ²I)<br>	The choice of variance &sigma;² will affect two (related) quantities:<br>		The norm of the forward activations Z<sub>i</sub><br>		The norm of the the gradients <style>.egkclafmutte{zoom:50%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324130541186.png"
+                      class="egkclafmutte" alt="image-20260324130541186"
+                ><br>	Illustration on MNIST with n &#x3D; 100 hidden units, depth 50, ReLU nonlinearities<br>	<style>.zgjbowbcmnfg{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324130642541.png"
+                      class="zgjbowbcmnfg" alt="image-20260324130642541"
+                ></p>
+<p><strong>What causes these effects?</strong><br>	<style>.adkpttuydjcq{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324131220857.png"
+                      class="adkpttuydjcq" alt="image-20260324131220857"
+                ><br>	<style>.ojgzetqnkkjs{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324131232226.png"
+                      class="ojgzetqnkkjs" alt="image-20260324131232226"
+                ><br>	<style>.evqoiionptnx{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324131257224.png"
+                      class="evqoiionptnx" alt="image-20260324131257224"
+                ></p>
+<h2 id="Homework-1"><a href="#Homework-1" class="headerlink" title="Homework 1"></a>Homework 1</h2><h2 id="Lecture-7-Neural-Network-Library-Abstractions"><a href="#Lecture-7-Neural-Network-Library-Abstractions" class="headerlink" title="Lecture 7: Neural Network Library Abstractions"></a>Lecture 7: Neural Network Library Abstractions</h2><h3 id="Programming-abstractions"><a href="#Programming-abstractions" class="headerlink" title="Programming abstractions"></a>Programming abstractions</h3><p><strong>Programming abstractions</strong><br>	The programming abstraction of a framework defines the common ways to implement, extend and execute model computations<br>	While the design choices may seem obvious after seeing them, it is useful to learn about the thought process, so that:<br>		We know why the abstractions are designed in this way<br>		Learn lessons to design new abstractions  </p>
+<p><strong>Case studies</strong><br>	<style>.epirhkekxcjy{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326104327581.png"
+                      class="epirhkekxcjy" alt="image-20260326104327581"
+                ><br>	There are many frameworks being development along the way that we do not have time to study: theano, torch7, mxnet, caffe2, chainer, jax …  </p>
+<p><strong>Forward and backward layer interface</strong><br>	Example framework: Caffe 1.0<br>	Early pioneer: cuda-convnet<br>	<style>.qpqytdnrvudd{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318112650948.png"
+                      class="qpqytdnrvudd" alt="image-20260318112650948"
+                ></p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Layer</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">bottom, top</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">backward</span>(<span class="params">top, propagate_down, bottom</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure></div>
+
+<p>​	Defines the forward computation and backward(gradient) operations<br>​	Used in cuda-convenet (the AlexNet framework)  </p>
+<p><strong>Computational graph and declarative programming</strong><br>	Example framework: Tensorflow 1.0<br>	Early pioneer: Theano<br>	<style>.bwxhyqgiefdc{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326104804402.png"
+                      class="bwxhyqgiefdc" alt="image-20260326104804402"
+                ></p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">v1 = tf.Variable()</span><br><span class="line">v2 = tf.exp(v1)</span><br><span class="line">v3 = v2 + <span class="number">1</span></span><br><span class="line">v4 = v2 * v3</span><br><span class="line"></span><br><span class="line">sess = tf.Session()</span><br><span class="line">value4 = sess.run(v4, feed_dict=&#123;v1: numpy.array([<span class="number">1</span>])&#125;)</span><br></pre></td></tr></table></figure></div>
+
+<p>​	First declare the computational graph<br>​	Then execute the graph by feeding input value  </p>
+<p><strong>Imperative automatic differentiation</strong><br>	Example framework: PyTorch (needle:)<br>	Early pioneer: Chainer<br>	<style>.qyvdslqvjfeq{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326104804402.png"
+                      class="qyvdslqvjfeq" alt="image-20260326104804402"
+                ></p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> needle <span class="keyword">as</span> ndl</span><br><span class="line"></span><br><span class="line">v1 = ndl.Tensor([<span class="number">1</span>])</span><br><span class="line">v2 = ndl.exp(v1)</span><br><span class="line">v3 = v2 + <span class="number">1</span></span><br><span class="line">v4 = v2 * v3</span><br></pre></td></tr></table></figure></div>
+
+<p>​	Executes computation as we construct the computational graph<br>​	Allow easy mixing of python control flow and construction  </p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> v4.numpy() &gt; <span class="number">0.5</span>:</span><br><span class="line">    v5 = v4 * <span class="number">2</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    v5 = v4</span><br><span class="line">v5.backward()</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Discussions</strong><br>	What are the pros and cons of each programming abstraction?  </p>
+<h3 id="High-level-modular-library-components"><a href="#High-level-modular-library-components" class="headerlink" title="High level modular library components"></a>High level modular library components</h3><p><strong>Elements of Machine Learning</strong><br>	1.The hypothesis class:<br>		<style>.bsrlcbhikrat{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318101713897.png"
+                      class="bsrlcbhikrat" alt="image-20260318101713897"
+                ><br>	2.The loss function:<br>$$<br>l(h_\theta(x), y) &#x3D; -h_y(x) + \log \sum_{j&#x3D;1}^k \exp(h_j(x))<br>$$<br>​	3.An optimization method:<br>$$<br>\theta :&#x3D; \theta - \frac{\alpha}{B} \sum_{i&#x3D;1}^{B} \left[ \nabla_{\theta} \ell(h_{\theta}(x^{(i)}), y^{(i)}) \right]<br>$$<br>​	Question: how do they translate to modular components in code?  </p>
+<p><strong>Deep learning is modular in nature</strong><br>	Deep learning is modular in nature<br>	<style>.tbvnzozsbypb{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326131039284.png"
+                      class="tbvnzozsbypb" alt="image-20260326131039284"
+                ><br>	Residual block<br>	<style>.usilzgtvkoem{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326131111866.png"
+                      class="usilzgtvkoem" alt="image-20260326131111866"
+                ><br>	Linear<br>	<style>.cskklxcgtoxb{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326131151162.png"
+                      class="cskklxcgtoxb" alt="image-20260326131151162"
+                ><br>	ReLU<br>	<style>.nbbgnccqdrsg{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326131222359.png"
+                      class="nbbgnccqdrsg" alt="image-20260326131222359"
+                ></p>
+<p><strong>Residual Connections</strong><br>	One of the most well-cited paper<br>		<a class="link"   target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/7780459" >Deep Residual Learning for Image Recognition | IEEE Conference Publication | IEEE Xplore<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a><br>	ResNetV2<br>		<a class="link"   target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/978-3-319-46493-0_38" >Identity Mappings in Deep Residual Networks | Springer Nature Link<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  </p>
+<p><strong>nn.Module: Compose Things Together</strong><br>	Residual block<br>	<style>.qynsceollcpz{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326131111866.png"
+                      class="qynsceollcpz" alt="image-20260326131111866"
+                ><br>	Linear<br>	<style>.kehgwctrxdob{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326131151162.png"
+                      class="kehgwctrxdob" alt="image-20260326131151162"
+                ><br>	Tensor in, tensor out<br>	Key things to consider:<br>		For given inputs, how to compute outputs<br>		Get the list of (trainable) parameters<br>		Ways to initialize the parameters  </p>
+<p><strong>Loss functions as a special kind of module</strong><br>	<style>.tusvlxrliuvf{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326131907442.png"
+                      class="tusvlxrliuvf" alt="image-20260326131907442"
+                ><br>	Tensor in, scalar out<br>$$<br>\ell(h_\theta(x), y) &#x3D; -h_y(x) + \log \sum_{j&#x3D;1}^{k} \exp\left(h_j(x)\right)<br>$$<br>​	Questions<br>​		How to compose multiple objective functions together?<br>​		What happens during inference time after training?  </p>
+<p><strong>Optimizer</strong><br>	Model<br>	<style>.lyvmhkihvwqp{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326132207916.png"
+                      class="lyvmhkihvwqp" alt="image-20260326132207916"
+                ><br>	Takes a list of weights from the model perform steps of optimization<br>	Keep tracks of auxiliary states (momentum)<br>	SGD<br>$$<br>w_i \leftarrow w_i - \alpha g_i<br>$$<br>​	SGD with momentum<br>$$<br>u_i \leftarrow \beta u_i + (1 - \beta) g_i \<br>w_i \leftarrow w_i - \alpha u_i<br>$$<br>​	Adam<br>$$<br>u_i \leftarrow \beta_1 u_i + (1 - \beta_1) g_i \<br>v_i \leftarrow \beta_2 v_i + (1 - \beta_2) g_i^2 \<br>w_i \leftarrow w_i - \alpha u_i &#x2F; (v_i^{1&#x2F;2} + \epsilon)<br>$$<br><strong>Regularization and optimizer</strong><br>	Two ways to incorporate regularization:<br>		Implement as part of loss function<br>		Directly incorporate as part of optimizer update<br>	SGD with weight decay (𝑙<sub>2</sub> regularization)<br>$$<br>w_i \leftarrow (1 - \alpha \lambda) w_i - \alpha g_i<br>$$<br><strong>Initialization</strong><br>	Initialization strategy depends on the module being involved and the type of the parameter. Most neural network libraries have a set of common initialization routines<br>		weights: uniform, order of magnitude depends on input&#x2F;output<br>		bias: zero<br>		Running sum of variance: one<br>	Initialization can be folded into the construction phase of a nn.module  </p>
+<p><strong>Data loader and preprocessing</strong><br>	Data loading and augmentation pipeline<br>	<style>.yzoohselrmzr{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326201715516.png"
+                      class="yzoohselrmzr" alt="image-20260326201715516"
+                ><br>	Model<br>	<style>.wcgonemwaths{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326201735005.png"
+                      class="wcgonemwaths" alt="image-20260326201735005"
+                ><br>	We often preprocess (augment) the dataset by randomly shuffle and transform the input<br>	Data augmentation can account for significant portion of prediction accuracy boost in deep learning models<br>	Data loading and augmentation is also compositional in nature  </p>
+<p><strong>Deep learning is modular in nature</strong><br>	<style>.ilgpbtzedluu{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326202058621.png"
+                      class="ilgpbtzedluu" alt="image-20260326202058621"
+                ></p>
+<p><strong>Discussions</strong><br>	What are other possible examples of modular components?  </p>
+<p><strong>Revisit programming abstraction</strong><br>	Example framework: Caffe 1.0<br>	<style>.nmzmmhnpnfwr{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260318112650948.png"
+                      class="nmzmmhnpnfwr" alt="image-20260318112650948"
+                ></p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Layer</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">bottom, top</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">backward</span>(<span class="params">top, propagate_down, bottom</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure></div>
+
+<p>​	Couples gradient computation with the module composition  </p>
+<p><strong>Revisit programming abstraction</strong><br>	Example framework: PyTorch (needle:)<br>	<style>.oqgcvflijbpn{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260326104804402.png"
+                      class="oqgcvflijbpn" alt="image-20260326104804402"
+                ></p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> needle <span class="keyword">as</span> ndl</span><br><span class="line"></span><br><span class="line">v1 = ndl.Tensor([<span class="number">1</span>])</span><br><span class="line">v2 = ndl.exp(v1)</span><br><span class="line">v3 = v2 + <span class="number">1</span></span><br><span class="line">v4 = v2 * v3</span><br></pre></td></tr></table></figure></div>
+
+<p>​	Two levels of abstractions<br>​		Computational graph abstraction on Tensors, handles AD<br>​		High level abstraction to handle modular composition  </p>
+<h2 id="Lecture-8-Normalization-and-Regularization"><a href="#Lecture-8-Normalization-and-Regularization" class="headerlink" title="Lecture 8: Normalization and Regularization"></a>Lecture 8: Normalization and Regularization</h2><h3 id="Feature-evolution"><a href="#Feature-evolution" class="headerlink" title="Feature evolution"></a>Feature evolution</h3><p><strong>What are distributed feature representations?</strong><br>	<style>.oznyothqslcc{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329120742986.png"
+                      class="oznyothqslcc" alt="image-20260329120742986"
+                ></p>
+<p><strong>How neural networks start to learn: Initial features</strong>  </p>
+<style>.dfxmewjdbevm{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329130107020.png"
+                      class="dfxmewjdbevm" alt="image-20260329130107020"
+                >
+
+<p><strong>One initial feature for each class</strong>  </p>
+<style>.ygbtrnpehrcd{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329130417530.png"
+                      class="ygbtrnpehrcd" alt="image-20260329130417530"
+                >
+
+<p><strong>Overcoming feature competition</strong>  </p>
+<style>.zgbiyjzeuynm{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329130456202.png"
+                      class="zgbiyjzeuynm" alt="image-20260329130456202"
+                >
+
+<h3 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h3><p><strong>Initialization vs. optimization</strong><br>	Suppose we choose W<sub>i</sub> ~ N (0,c&#x2F;n), where (for a ReLU network) c ≠ 2…<br>	Won’t the the scale of the initial weights be “fixed” after a few iterations of optimization?<br>		No! A deep network with poorly-chosen weights will never train (at least with vanilla SGD)<br>	<style>.inbwesdseljs{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260324130642541.png"
+                      class="inbwesdseljs" alt="image-20260324130642541"
+                ><br>	<style>.kgjtjsnldohj{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329131317006.png"
+                      class="kgjtjsnldohj" alt="image-20260329131317006"
+                ><br>	The problem is even more fundamental, however: even when trained successfully, the effects&#x2F;scales present at initialization persist throughout training<br>	<style>.cxrqkunmmxst{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329142417220.png"
+                      class="cxrqkunmmxst" alt="image-20260329142417220"
+                ></p>
+<p><strong>Normalization</strong><br>	Initialization matters a lot for training, and can vary over the course of training to no longer be “consistent” across layers &#x2F; networks<br>	But remember that a “layer” in deep networks can be any computation at all…<br>	…let’s just add layers that “fix” the normalization of the activations to be whatever we want!  </p>
+<p><strong>Batch and layer normalization</strong><br>	<style>.tjtfflideonw{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329143019475.png"
+                      class="tjtfflideonw" alt="image-20260329143019475"
+                ><br>	<style>.fwaulkwsdoqa{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329143045810.png"
+                      class="fwaulkwsdoqa" alt="image-20260329143045810"
+                ></p>
+<p><strong>Layer normalization</strong><br>	First idea: let’s normalize (mean zero and variance one) activations at each layer; this is known as layer normalization<br>$$<br>\begin{aligned}<br>    \hat{z}<em>{i+1} &amp;&#x3D; \sigma_i(W_i^T z_i + b_i) \<br>    z</em>{i+1} &amp;&#x3D; \frac{\hat{z}<em>{i+1} - \mathbb{E}[\hat{z}</em>{i+1}]}{(\text{Var}[\hat{z}_{i+1}] + \epsilon)^{1&#x2F;2}}<br>\end{aligned}<br>$$<br>​	Also common to add an additional scalar weight and bias to each term (only changes representation e.g., if we put normalization prior to nonlinearity instead)  </p>
+<p><strong>LayerNorm illustration</strong><br>	“Fixes” the problem of varying norms of layer activations (obviously)<br>	<style>.tzhkguortrlj{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329143900887.png"
+                      class="tzhkguortrlj" alt="image-20260329143900887"
+                ><br>	In practice, for standard FCN, harder to train resulting networks to low loss (relative norms of examples are a useful discriminative feature)  </p>
+<p><strong>Batch normalization</strong><br>	An odd idea: let’s consider the matrix form of our updates<br>$$<br>\hat{Z}_{i+1} &#x3D; \sigma_i(Z_i W_i + b_i^T)<br>$$<br>​	then layer normalization is equivalent to normalizing the rows of this matrix<br>​	What if, instead, we normalize it’s columns? This is called batch normalization, as we are normalizing the activations over the minibatch<br>​	<style>.rtlrpvuywmtj{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329143019475.png"
+                      class="rtlrpvuywmtj" alt="image-20260329143019475"
+                ><style>.naelmqlxkmbl{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329143045810.png"
+                      class="naelmqlxkmbl" alt="image-20260329143045810"
+                ></p>
+<p><strong>Minibatch dependence</strong><br>	One oddity to BatchNorm is that it makes the predictions for each example dependent on the entire batch<br>	Common solution is to compute a running average of mean&#x2F;variance for all features at each layer <style>.hnfrzloouzgc{zoom:50%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329153133733.png"
+                      class="hnfrzloouzgc" alt="image-20260329153133733"
+                > and at test time normalize by these quantities<br>$$<br>(z_{i+1})<em>j &#x3D; \frac{(\hat{z}</em>{i+1})<em>j - (\hat{\mu}</em>{i+1})<em>j}{\left( (\hat{\sigma}^2</em>{i+1})_j + \epsilon \right)^{1&#x2F;2}}<br>$$</p>
+<h3 id="Regularization"><a href="#Regularization" class="headerlink" title="Regularization"></a>Regularization</h3><p><strong>Regularization of deep networks</strong><br>	Typically deep networks (even the simple two layer network you wrote in the homework) are overparameterized models: they contain more parameters (weights) than the number of training examples<br>		This means (formally, under a few assumptions), that they are capable of fitting the training data exactly<br>	In “traditional” ML&#x2F;statistical thinking (with a number of big caveats), this should imply that the models will overfit the training set, and not generalize well<br>		… but they do generalize well to test examples<br>		… but not always (many larger models will often still overfit)  </p>
+<p><strong>Regularization</strong><br>	Regularization is the process of “limiting the complexity of the function class” in order to ensure that networks will generalize better to new data; typically occurs in two ways in deep learning<br>	Implicit regularization refers to the manner in which our existing algorithms (namely SGD) or architectures already limit functions considered<br>		E.g., we aren’t actually optimizing over “all neural networks”, we are optimizing over all neural networks considered by SGD, with a given weight initialization<br>	Explicit regularization refers to modifications made to the network and training procedure explicitly intended to regularize the network  </p>
+<p><strong>&ell;<sub>2</sub> Regularization a.k.a. weight decay</strong><br>	Classically, the magnitude of a model’s parameters are often a reasonable proxy for complexity, so we can minimize loss while also keeping parameters small<br>$$<br>minimize_{W_{1:L}} \frac{1}{m} \sum_{i&#x3D;1}^{m} \ell\big( h_{W_{1:L}}(x^{(i)}), y^{(i)} \big) + \frac{\lambda}{2} \sum_{i&#x3D;1}^{L} | W_i |<em>2^2<br>$$<br>​	Results in the gradient descent updates:<br>$$<br>W_i :&#x3D; W_i - \alpha \nabla</em>{W_i} \ell(h(X), y) - \alpha \lambda W_i &#x3D; (1 - \alpha \lambda) W_i - \alpha \nabla_{W_i} \ell(h(X), y)<br>$$<br>​	I.e., at each iteration we shrink the weights by a factor (1 – αλ) before taking the gradient step  </p>
+<p><strong>Caveats of &ell;₂ regularization</strong><br>	&ell;<sub>2</sub> regularization is exceedingly common deep learning, often just rolled into the optimization procedure as a “weight decay” term<br>	However, recall our optimized networks with different initializations:<br>	<style>.fifypornsodw{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329161653297.png"
+                      class="fifypornsodw" alt="image-20260329161653297"
+                ><br>	… Parameter magnitude may be a bad proxy for complexity in deep networks  </p>
+<p><strong>Dropout</strong><br>	Another common regularization strategy: randomly set some fraction of the activations at each layer to zero<br>$$<br>\begin{aligned}<br>\hat{z}<em>{i+1} &amp;&#x3D; \sigma_i(W_i^T z_i + b_i) \<br>(z</em>{i+1})<em>j &amp;&#x3D;<br>\begin{cases}<br>(\hat{z}</em>{i+1})_j &#x2F; (1 - p) &amp; \text{with probability } 1 - p \<br>0 &amp; \text{with probability } p<br>\end{cases}<br>\end{aligned}<br>$$<br>​	(Not unlike BatchNorm) seems very odd on first glance: doesn’t this massively change the function being approximated?  </p>
+<p><strong>Overcoming feature saturation</strong>  </p>
+<style>.lqmslqnduqmo{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329162048950.png"
+                      class="lqmslqnduqmo" alt="image-20260329162048950"
+                >
+
+<h3 id="Interaction-of-optimization-initialization-normalization-regularization"><a href="#Interaction-of-optimization-initialization-normalization-regularization" class="headerlink" title="Interaction of optimization, initialization, normalization, regularization"></a>Interaction of optimization, initialization, normalization, regularization</h3><p><strong>Many solutions … many more questions</strong><br>	Many design choices meant to ease optimization ability of deep networks<br>		Choice of optimizer learning rate &#x2F; momentum<br>		Choice of weight initialization<br>		Normalization layer<br>		Reguarlization<br>	These factors all (of course) interact with each other<br>	And these don’t even include many other “tricks” we’ll cover in later lectures: residual connections, learning rate schedules, others I’m likely forgetting<br>	…you would be forgiven for feeling like the practice of deep learning is all about flailing around randomly with lots of GPUs  </p>
+<p><strong>BatchNorm: An illustrative example</strong><br>	<style>.hlgpceluuycy{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329162710520.png"
+                      class="hlgpceluuycy" alt="image-20260329162710520"
+                ></p>
+<p>​	“Here is what we know about batch norm as a field. It works because it reduces internal covariant shift. Wouldn’t you like to know why reducing internal covariant shift speeds up gradient descent? Wouldn’t you like to see a theorem or an experiment? Wouldn’t you like to know, wouldn’t you like to see evidence that batch norm reduces internal covariant shift? Wouldn’t you like to know what internal covariant shift is? Wouldn’t you like to see a definition of it?”												- Ali Rahimi (NeurIPS 2017 Test of Time Talk)  </p>
+<p>​	<style>.lystrmmcknhi{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329163016779.png"
+                      class="lystrmmcknhi" alt="image-20260329163016779"
+                ></p>
+<p>​	<style>.towpscdydqzt{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329163108821.png"
+                      class="towpscdydqzt" alt="image-20260329163108821"
+                ></p>
+<p><strong>BatchNorm: Other benefits?</strong><br>	<style>.emxkftyvmhxh{zoom:67%;}</style><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/image-20260329163233382.png"
+                      class="emxkftyvmhxh" alt="image-20260329163233382"
+                ></p>
+<p><strong>The ultimate takeaway message</strong><br>	I don’t want to give the impression that deep learning is all about random hacks: there have been a lot of excellent scientific experimentation with all the above<br>	But it is true that we don’t have a complete picture of how all the different empirical tricks people use really work and interact<br>	The “good” news is that in many cases, it seems to be possible to get similarly good results with wildly different architectural and methodological choices  </p>
+<h2 id="Lecture-9-NN-Library-Implementation"><a href="#Lecture-9-NN-Library-Implementation" class="headerlink" title="Lecture 9: NN Library Implementation"></a>Lecture 9: NN Library Implementation</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/dlsyscourse/lecture8/blob/main/8_nn_library_implementation.ipynb" >lecture8&#x2F;8_nn_library_implementation.ipynb at main · dlsyscourse&#x2F;lecture8<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<h2 id="Lecture-10"><a href="#Lecture-10" class="headerlink" title="Lecture 10:"></a>Lecture 10:</h2><h2 id="Homework-2"><a href="#Homework-2" class="headerlink" title="Homework 2"></a>Homework 2</h2>
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Titre:</strong> 【Class】CMU 10-414(714) Deep Learning Systems</li>
+        <li><strong>Auteur:</strong> tiny_star</li>
+        <li><strong>Créé à
+                :</strong> 2026-03-02 22:38:27</li>
+        
+            <li>
+                <strong>Mis à jour à
+                    :</strong> 2026-03-31 16:02:30
+            </li>
+        
+        <li>
+            <strong>Lien:</strong> https://tiny-star3.github.io/2026/03/02/Ai/[Class]CMU-10-414-714-Deep-Learning-Systems/
+        </li>
+        <li>
+            <strong>
+                Licence:
+            </strong>
+            
+
+            
+                Cette œuvre est sous licence <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2026/03/10/Cpp/%5BClass%5DMIT%206.824(6.5840)%20Distributed%20Systems/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">MIT 6.824(6.5840) Distributed Systems</span>
+						<span class="post-nav-item">Articles précédents</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/01/01/Life/World%20Class/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">World Class</span>
+						<span class="post-nav-item">Articles suivants</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Commentaires
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">Sur cette page</div>
+		<div class="page-title">【Class】CMU 10-414(714) Deep Learning Systems</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B"><span class="nav-text">课程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E8%A7%86%E9%A2%91"><span class="nav-text">课程视频</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E4%BF%A1%E6%81%AF"><span class="nav-text">课程信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Assignments"><span class="nav-text">Assignments</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-1-Introduction-and-Logistics"><span class="nav-text">Lecture 1: Introduction and Logistics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-2-ML-Refresher-Softmax-Regression"><span class="nav-text">Lecture 2: ML Refresher &#x2F; Softmax Regression</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basics-of-machine-learning"><span class="nav-text">Basics of machine learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example-softmax-regression"><span class="nav-text">Example: softmax regression</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-3-%E2%80%9CManual%E2%80%9D-Neural-Networks"><span class="nav-text">Lecture 3: “Manual” Neural Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#From-linear-to-nonlinear-hypothesis-classes"><span class="nav-text">From linear to nonlinear hypothesis classes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Neural-networks"><span class="nav-text">Neural networks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Backpropagation-i-e-computiing-gradients"><span class="nav-text">Backpropagation (i.e., computiing gradients)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Homework-0"><span class="nav-text">Homework 0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-4-Automatic-Differentiation"><span class="nav-text">Lecture 4: Automatic Differentiation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#General-introduction-to-different-differentiation-methods"><span class="nav-text">General introduction to different differentiation methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reverse-mode-automatic-differentiation"><span class="nav-text">Reverse mode automatic differentiation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-5-Automatic-Differentiation-Implementation"><span class="nav-text">Lecture 5: Automatic Differentiation Implementation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-6-Fully-connected-networks-optimization-initialization"><span class="nav-text">Lecture 6: Fully connected networks, optimization,  initialization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fully-connected-networks"><span class="nav-text">Fully connected networks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Optimization"><span class="nav-text">Optimization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Initialization"><span class="nav-text">Initialization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Homework-1"><span class="nav-text">Homework 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-7-Neural-Network-Library-Abstractions"><span class="nav-text">Lecture 7: Neural Network Library Abstractions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Programming-abstractions"><span class="nav-text">Programming abstractions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#High-level-modular-library-components"><span class="nav-text">High level modular library components</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-8-Normalization-and-Regularization"><span class="nav-text">Lecture 8: Normalization and Regularization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Feature-evolution"><span class="nav-text">Feature evolution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Normalization"><span class="nav-text">Normalization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Regularization"><span class="nav-text">Regularization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interaction-of-optimization-initialization-normalization-regularization"><span class="nav-text">Interaction of optimization, initialization, normalization, regularization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-9-NN-Library-Implementation"><span class="nav-text">Lecture 9: NN Library Implementation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-10"><span class="nav-text">Lecture 10:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Homework-2"><span class="nav-text">Homework 2</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2025</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">tiny_star</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        24  posts au total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITEURS</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">NOMBRE TOTAL DE PAGES VUES</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                Blog en ligne depuis <span class="odometer" id="runtime_days" ></span> Jours <span class="odometer" id="runtime_hours"></span> Hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="recherche..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>

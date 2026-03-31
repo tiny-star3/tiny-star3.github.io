@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="tiny_star">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://tiny-star3.github.io/2026/03/10/cpp/[class]mit 6.824(6.5840) distributed systems/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MIT 6.824(6.5840) Distributed Systems">
+<meta property="og:url" content="http://tiny-star3.github.io/2026/03/10/Cpp/[Class]MIT%206.824(6.5840)%20Distributed%20Systems/index.html">
+<meta property="og:site_name" content="tiny_star_blog">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale">
+<meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-03-10T03:45:32.000Z">
+<meta property="article:modified_time" content="2026-03-25T11:19:17.662Z">
+<meta property="article:author" content="tiny_star">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/mystar.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/mystar.png">
+    <meta name="theme-color" content="#6495ed">
+    <link rel="shortcut icon" href="/images/mystar.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            MIT 6.824(6.5840) Distributed Systems | tiny_star_blog
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"tiny-star3.github.io","root":"/","language":"zh","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":4,"number":false,"expand":false,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#6495ed","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"tiny_star","subtitle":{"text":["渺如尘埃，灿若星辰！","You are more than what you have become. Remember who you are!"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#87CEFA","dark":"#6495ED"},"text_style":{"title_size":"3rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Life":{"path":"/categories/Life","icon":"fa-regular fa-face-awesome"},"Metaphysics":{"path":"/categories/Metaphysics","icon":"fa-regular fa-stars"},"Cpp":{"icon":"fa-regular fa-face-glasses","path":"/categories/Cpp"},"Algorithm":{"path":"/categories/Algorithm","icon":"fa-regular fa-face-explode"},"Ai":{"path":"/categories/Ai","icon":"fa-regular fa-alien-8bit"},"Sundry":{"path":"/categories/Sundry","icon":"fa-regular fa-earth-asia"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2025/7/22 22:28:54"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/images/mystar.png" class="w-full h-full rounded-xs">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                tiny_star_blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    ACCUEIL
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Life"
+                                        >
+                                    <i class="fa-regular fa-face-awesome fa-fw"></i>
+                                    LIFE
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Metaphysics"
+                                        >
+                                    <i class="fa-regular fa-stars fa-fw"></i>
+                                    METAPHYSICS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Cpp"
+                                        >
+                                    <i class="fa-regular fa-face-glasses fa-fw"></i>
+                                    CPP
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Algorithm"
+                                        >
+                                    <i class="fa-regular fa-face-explode fa-fw"></i>
+                                    ALGORITHM
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Ai"
+                                        >
+                                    <i class="fa-regular fa-alien-8bit fa-fw"></i>
+                                    AI
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Sundry"
+                                        >
+                                    <i class="fa-regular fa-earth-asia fa-fw"></i>
+                                    SUNDRY
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                ACCUEIL
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Life"
+                        >
+                            <span>
+                                LIFE
+                            </span>
+                            
+                                <i class="fa-regular fa-face-awesome fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Metaphysics"
+                        >
+                            <span>
+                                METAPHYSICS
+                            </span>
+                            
+                                <i class="fa-regular fa-stars fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Cpp"
+                        >
+                            <span>
+                                CPP
+                            </span>
+                            
+                                <i class="fa-regular fa-face-glasses fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Algorithm"
+                        >
+                            <span>
+                                ALGORITHM
+                            </span>
+                            
+                                <i class="fa-regular fa-face-explode fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Ai"
+                        >
+                            <span>
+                                AI
+                            </span>
+                            
+                                <i class="fa-regular fa-alien-8bit fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Sundry"
+                        >
+                            <span>
+                                SUNDRY
+                            </span>
+                            
+                                <i class="fa-regular fa-earth-asia fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Catégories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">24</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">MIT 6.824(6.5840) Distributed Systems</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/staravatar.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">tiny_star</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-03-10 11:45:32</span>
+        <span class="mobile">2026-03-10 11:45:32</span>
+        <span class="hover-info">Créé</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-03-25 19:19:17</span>
+            <span class="mobile">2026-03-25 19:19:17</span>
+            <span class="hover-info">Mis à jour</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Cpp/">Cpp</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<p>本科就打算学的课程一直拖到现在，这次一定要学完🤔 6.5840 is a core 12-unit graduate subject with lectures, readings, programming labs, an optional project, a mid-term exam, and a final exam. It will present abstractions and implementation techniques for engineering distributed systems. Major topics include fault tolerance, replication, and consistency. Much of the class consists of studying and discussing case studies of distributed systems</p>
+<span id="more"></span>
+
+<h2 id="Lecture-1-Introduction"><a href="#Lecture-1-Introduction" class="headerlink" title="Lecture 1: Introduction"></a>Lecture 1: Introduction</h2><p><strong>A “distributed system”:</strong><br>	a group of computers cooperating to provide a service  </p>
+<p><strong>Examples:</strong><br>	popular apps’ back-ends, e.g. for messaging<br>	big web sites<br>	cloud providers  </p>
+<p><strong>Focus here is distributed infrastructure:</strong><br>	storage<br>	transaction systems<br>	 “big data” processing frameworks  </p>
+<p><strong>Hard to build:</strong><br>	concurrency<br>	complex interactions<br>	performance bottlenecks<br>	partial failure  </p>
+<p><strong>Why useful?</strong><br>	to increase capacity via parallel processing<br>	to tolerate faults via replication<br>	to match distribution of physical devices e.g. sensors<br>	to increase security via isolation  </p>
+<p><strong>Why take this course?</strong><br>	interesting – hard problems, powerful solutions<br>	big demand – driven by the rise of big Web sites<br>	active research area – important unsolved problems<br>	challenging – the labs  </p>
+<p><strong>Lectures:</strong><br>	paper discussion, context, lab guidance  </p>
+<p><strong>Papers:</strong><br>	one per lecture<br>	research papers, some classic, some new<br>	ideas, problems, implementation details, evaluation<br>	please read papers before class!<br>	web site has a question about each paper  </p>
+<p><strong>Labs:</strong><br>	goal: deeper grasp of some important techniques<br>	goal: experience with distributed programming<br>	first lab is due a week from Friday<br>	one per week after that for a while  </p>
+<p>Lab 1: distributed big-data framework (like MapReduce)<br>Lab 2: client&#x2F;server vs unreliable network<br>Lab 3: fault tolerance using replication (Raft)<br>Lab 4: a fault-tolerant database<br>Lab 5: scalable database performance via sharding  </p>
+<h3 id="MAIN-TOPICS"><a href="#MAIN-TOPICS" class="headerlink" title="MAIN TOPICS"></a>MAIN TOPICS</h3><p><strong>This is a course about infrastructure</strong><br>	Storage<br>	Communication<br>	Computation  </p>
+<p><strong>A big goal: hide the complexity of distribution from applications</strong>  </p>
+<p><strong>Topic: fault tolerance</strong><br>	1000s of servers, big network -&gt; constant failures<br>		We’d like to hide these failures<br>		“High availability”: service continues despite failures<br>	Big idea: replication<br>		If one server crashes, can proceed using the other(s)  </p>
+<p><strong>Topic: consistency</strong><br>	General-purpose infrastructure needs well-defined behavior<br>		E.g. “read(x) yields the value from the most recent write(x)”<br>	Guaranteeing specified behavior is hard!<br>		e.g. “replica” servers are hard to keep identical  </p>
+<p><strong>Topic: performance</strong><br>	A common goal: scalable throughput<br>		Nx servers -&gt; Nx total throughput via parallel CPU, RAM, disk, net<br>	Scaling gets harder as N grows<br>		e.g. load imbalance  </p>
+<p><strong>Topic: tradeoffs</strong><br>	Fault-tolerance, consistency, and performance are enemies<br>	Fault tolerance and consistency require communication<br>		e.g., send data to backup server<br>		e.g., check if cached data is up-to-date<br>		but communication is often slow and hard to scale up<br>	Many designs sacrifice consistency to gain speed<br>		e.g. read(x) might <em>not</em> yield the latest write(x)!<br>		Painful for application programmers (or users)<br>	We’ll see many consistency&#x2F;performance design points  </p>
+<p><strong>Topic: implementation</strong><br>	RPC, threads, concurrency control<br>	The labs..  </p>
+<h3 id="CASE-STUDY-MapReduce"><a href="#CASE-STUDY-MapReduce" class="headerlink" title="CASE STUDY: MapReduce"></a>CASE STUDY: MapReduce</h3><p><strong>Let’s talk about MapReduce (MR)</strong><br>	a good illustration of 6.5840’s main topics<br>	hugely influential<br>	the focus of Lab 1  </p>
+<p><strong>Context: multi-hour computations on multi-terabyte data-sets</strong><br>	e.g. build search index, or sort, or analyze structure of web<br>	only practical with 1000s of computers  </p>
+<p><strong>A big goal: easy for non-specialist programmers</strong><br>	programmer just defines Map and Reduce functions<br>	often simple sequential code<br>	MR manages, and hides, all aspects of distribution!<br>	MR is a framework &#x2F; library; “application” is just Map()&#x2F;Reduce()  </p>
+<p><strong>Abstract view of a MapReduce job – word count</strong><br>	Input1 -&gt; Map -&gt; a,1 b,1<br>	Input2 -&gt; Map -&gt;       b,1<br>	Input3 -&gt; Map -&gt; a,1       c,1<br>				                  |     |     |<br>		                          |     |     -&gt; Reduce -&gt; c,1<br>		                          |     ——&gt; Reduce -&gt; b,2<br>		                          ———–&gt; Reduce -&gt; a,2<br>	1) input is (already) split into M pieces<br>	2) MR calls Map() for each input split, produces list of k,v pairs<br>		“intermediate” data<br>		each Map() call is a “task”<br>	3) when Maps are done,<br>		MR gathers all intermediate v’s for each k,<br>		and passes each key + values to a Reduce call<br>	4) final output is set of &lt;k,v&gt; pairs from Reduce()s  </p>
+<p><strong>Word-count code</strong><br>	Map(d)<br>		chop d into words<br>		for each word w<br>			emit(w, “1”)<br>	Reduce(k, v[])<br>		emit(len(v[]))  </p>
+<p><strong>MapReduce scales well:</strong><br>	N “worker” computers (might) get you Nx throughput<br>		Maps()s can run in parallel, since they don’t interact<br>		Same for Reduce()s<br>	Thus more computers -&gt; more throughput – very nice!  </p>
+<p><strong>MapReduce hides much complexity:</strong><br>	sending map+reduce code to servers<br>	tracking which tasks have finished<br>	“shuffling” intermediate data from Maps to Reduces<br>	balancing load over servers<br>	recovering from crashed servers  </p>
+<p><strong>To get these benefits, MapReduce restricts applications:</strong><br>	Only one pattern (Map -&gt; shuffle -&gt; Reduce)<br>	No interaction or state (other than via intermediate output)<br>	Only batch: no real-time or streaming processing  </p>
+<h3 id="Some-details-paper’s-Figure-1"><a href="#Some-details-paper’s-Figure-1" class="headerlink" title="Some details (paper’s Figure 1)"></a>Some details (paper’s Figure 1)</h3><p><strong>Input and output are stored on the GFS cluster file system</strong><br>	MR needs huge parallel input and output throughput<br>	GFS splits files over many servers, many disks, in 64 MB chunks<br>		Maps read in parallel<br>		Reduces write in parallel<br>	GFS replicates data on 2 or 3 servers, for fault tolerance<br>	GFS is a big win for MapReduce  </p>
+<p><strong>MR writes Map() output to local disk</strong><br>	MR splits into files by hash(key) mod R<br>	each “hash bucket” contains multiple keys<br>	The map workers all hash the same way  </p>
+<p><strong>The shuffle</strong><br>	each Reduce task processes one hash bucket<br>	MR fetches each Reduce tasks’ bucket from every Map worker<br>	merge, sort by key, call Reduce() for each key<br>	each Reduce task writes a separate output file on GFS  </p>
+<p><strong>The “Coordinator” manages all the steps in a job</strong><br>	tracks state of each task<br>	hands out tasks to worker machines  </p>
+<p><strong>What will limit performance?</strong><br>	We care since that limit is the thing to optimize<br>	CPU? memory? disk? network?  </p>
+<p><strong>In 2004 authors were limited by network speed</strong><br>	What does MR send over the network?<br>		Maps read input from GFS<br>		Reduces fetch Map intermediate output<br>			Often as large as input, e.g. for sorting<br>		Reduces write output files to GFS  </p>
+<p><strong>How fast was the paper’s network?</strong><br>	Section 5.1: 1800 machines, two-level switched network<br>	[diagram: root switch, 2nd level of switches, machines]<br>		each switch must have had ~42 ports (square root of 1800)<br>	MR’s shuffle requires every worker to fetch data from every other<br>		Only 1&#x2F;42nd stays in local switch<br>	So MR’s shuffle sends most data through root switch<br>	Paper’s root switch: 100 to 200 gigabits&#x2F;second, total<br>		1800 machines, so ~55 megabits&#x2F;second&#x2F;machine<br>		55 is small: less than disk or RAM speed  </p>
+<p><strong>How does MR minimize network use?</strong><br>	Coordinator tries to run each Map task on GFS server that stores its input<br>		All computers run both GFS and MR workers<br>		So Map input is usually read from GFS data on local disk, not over network<br>	Intermediate data goes over network just once<br>		Map worker writes to local disk<br>		Reduce workers read from Map worker disks over the network<br>		(Storing it in GFS would require at least two trips over the network.)  </p>
+<p><strong>How does MR get good load balance?</strong><br>	Why do we care about load balance?<br>		If one server has more work than others, or is slower,<br>		then other servers will lie idle (wasted) at the end, waiting<br>	So ideally MR divides work so that all workers finish at same time<br>	But tasks vary in size, and computers vary in speed<br>	Solution: many more tasks than worker machines<br>		Coordinator hands out new tasks to workers who finish previous tasks<br>		So faster servers do more tasks than slower ones<br>		And slow servers are given less work, reducing impact on total time  </p>
+<p><strong>What about fault tolerance?</strong><br>	What if a worker computer crashes?<br>	We want MR framework to hide failures<br>	Does MR have to re-run the whole job from the beginning?<br>		Why not?<br>	Coordinator re-runs just the failed Map()s and Reduce()s  </p>
+<p><strong>Suppose MR runs a Map task twice, one Reduce sees first run’s output, but another Reduce sees the second run’s output?</strong><br>	The two Map executions had better produce identical intermediate output!<br>	Map and Reduce should be pure deterministic functions:<br>		they are only allowed to look at their arguments&#x2F;input<br>		no state, no file I&#x2F;O, no interaction, no external communication, no random numbers<br>	Programmer is responsible for ensuring this determinism  </p>
+<p><strong>Other failures&#x2F;problems:</strong><br>	What if the coordinator gives two workers the same Map() task?<br>		perhaps the coordinator incorrectly thinks one worker died<br>		it will tell Reduce workers about only one of them<br>	What if the coordinator gives two workers the same Reduce() task?<br>		they will both try to write the same output file on GFS!<br>		atomic GFS rename prevents mixing; one complete file will be visible<br>	What if a single worker is very slow – a “straggler”?<br>		perhaps due to flakey hardware<br>		coordinator starts a second copy of last few tasks<br>	What if a worker computes incorrect output, due to broken h&#x2F;w or s&#x2F;w?<br>		too bad! MR assumes “fail-stop” CPUs and software<br>	What if the coordinator crashes?  </p>
+<p><strong>Performance?</strong><br>	Figure 2<br>	X-Axis is time<br>	Y-Axis is total rate at which a “grep”-style job reads its input<br>	A terabyte (1000 GB) of input<br>	1764 workers<br>	30,000 MB&#x2F;s (30 GB&#x2F;s) is huge!<br>	Why 30,000 MB&#x2F;s?<br>		17 MB&#x2F;s per worker machine – 140 megabits&#x2F;second<br>		more than our guess (55 mbit&#x2F;s) of net bandwidth<br>		input probably read direct from two local GFS disks<br>		so each disk probably could read at about 9 MB&#x2F;second<br>	Why is the main period of activity about 30 seconds?<br>	Why does it take 50 seconds for throughput to reach maximum?  </p>
+<p><strong>Current status?</strong><br>	Hugely influential (Hadoop, Spark, Lab 1, &amp;c)<br>	Probably no longer in use at Google<br>		Replaced by Flume &#x2F; FlumeJava (see paper by Chambers et al)<br>		GFS replaced by Colossus (no good description), and BigTable  </p>
+<h2 id="Lecture-2-Threads-and-RPC"><a href="#Lecture-2-Threads-and-RPC" class="headerlink" title="Lecture 2: Threads and RPC"></a>Lecture 2: Threads and RPC</h2><p><strong>Details are Go specific but the concepts are important and widely used</strong>  </p>
+<h3 id="Go-threads-and-the-web-crawler"><a href="#Go-threads-and-the-web-crawler" class="headerlink" title="Go threads, and the web crawler"></a>Go threads, and the web crawler</h3><p><strong>Why Go?</strong><br>	good support for threads<br>	convenient RPC<br>	type- and memory- safe<br>	garbage-collected (no use after freeing problems)<br>		threads + GC is particularly attractive!<br>	not too complex<br>	Go is often used in distributed systems  </p>
+<p><strong>After the tutorial, use <a class="link"   target="_blank" rel="noopener" href="https://golang.org/doc/effective_go.html" >https://golang.org/doc/effective_go.html<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></strong>  </p>
+<p><strong>Threads</strong><br>	a useful structuring tool, but can be tricky<br>	Go calls them goroutines; everyone else calls them threads  </p>
+<p><strong>Thread &#x3D; “thread of execution”</strong><br>	threads allow one program to do many things at once<br>	each thread executes serially, just like a non-threaded program<br>	the threads share memory<br>	each thread includes some per-thread state:<br>		program counter, registers, stack  </p>
+<p><strong>Why threads?</strong><br>	I&#x2F;O concurrency<br>		Client sends requests to many servers in parallel and waits for replies<br>		Server processes many simultaneous client requests<br>			Each request may block<br>			While waiting for the disk to read data for client X, process a request from client Y<br>	Multicore performance<br>		Execute code in parallel on several cores<br>	Convenience<br>		In background, once per second, check whether each worker is still alive  </p>
+<p><strong>Is there an alternative to threads?</strong><br>	Yes: write code that explicitly interleaves activities, in a single thread<br>		Usually called “event-driven”<br>	Keep a table of state about each activity, e.g. each client request<br>	One “event” loop that:<br>		checks for new input for each activity (e.g. arrival of reply from server), does the next step for each activity, updates state<br>	Event-driven can get you I&#x2F;O concurrency, and eliminates thread costs (which can be substantial), but doesn’t get multi-core speedup, and is painful to program  </p>
+<p><strong>Threading challenges:</strong><br>	sharing data safely<br>		what if two threads do n &#x3D; n + 1 at the same time?<br>			or one thread reads while another increments?<br>		this is a “race”<br>			&#x3D; two threads use same memory at same time, one (or both) writes<br>			often a bug<br>		-&gt; use locks (Go’s sync.Mutex)<br>		-&gt; or avoid sharing mutable data<br>	coordination between threads<br>		one thread is producing data, another thread is consuming it<br>			how can the consumer wait (and release the CPU)?<br>			how can the producer wake up the consumer?<br>		-&gt; use Go channels or sync.Cond or sync.WaitGroup<br>	deadlock<br>		a cycle of threads waiting for each other<br>		via locks, or channels, or RPC  </p>
+<p><strong>Let’s look at the tutorial’s web crawler as a threading example</strong>  </p>
+<p><strong>What is a web crawler?</strong><br>	goal: fetch all web pages, e.g. to feed to an indexer<br>	you give it a starting web page<br>	it recursively follows all links<br>	[diagram: pages, links, a DAG, a cycle]<br>	but don’t fetch a given page more than once<br>		and don’t get stuck in cycles  </p>
+<p><strong>Crawler challenges</strong><br>	Exploit I&#x2F;O concurrency<br>		Network latency is more limiting than network capacity<br>			internet latency: maybe 0.1 seconds, due to speed of light &amp;c<br>			internet throughput: maybe MB&#x2F;sec or GB&#x2F;sec<br>		Fetch many pages in parallel<br>			To increase URLs fetched per second<br>		&#x3D;&gt; Use threads for concurrency<br>	Fetch each URL only <em>once</em><br>		avoid wasting network bandwidth<br>		avoid link cycles<br>		be nice to remote servers<br>		&#x3D;&gt; Need to remember which URLs visited<br>	Know when finished  </p>
+<p><strong>We’ll look at three solutions</strong><br>	Serial<br>	Concurrent, coordination via shared data<br>	Concurrent, coordination via channels  </p>
+<p><strong>Serial crawler:</strong><br>	performs depth-first exploration via recursive Serial calls<br>	the “fetched” map avoids repeats, breaks cycles<br>		a single map, passed by reference, caller sees callee’s updates<br>	finished when all [recursive] links are explored: easy<br>	but: fetches only one page at a time – slow<br>		can we just put a “go” in front of the Serial() call?<br>		what will happen?<br>		let’s try it… what happened?  </p>
+<p><strong>ConcurrentMutex crawler:</strong><br>	Creates a thread for each page fetch<br>		Many concurrent fetches, higher fetch rate<br>	the “go func” creates a goroutine and starts it running<br>		func… is an “anonymous function”<br>	The threads share the fs.fetched map<br>		So only one thread will fetch any given page<br>	Why the Mutex (Lock() and Unlock()) in testAndSet()?<br>		One reason:<br>			Two threads make simultaneous calls to ConcurrentMutex() with same URL<br>				Due to two different pages containing link to same URL<br>			T1 reads fetched[url], T2 reads fetched[url]<br>			Both see that url hasn’t been fetched (fetched[url] &#x3D; false)<br>			Both fetch, which is wrong<br>			The mutex causes one to wait while the other does both check and set<br>				So only one thread sees fetched[url]&#x3D;&#x3D;false<br>			We say “the lock protects fs.fetched[]”<br>				But note Go does not enforce any relationship between locks and data!<br>			The code between lock&#x2F;unlock is often called a “critical section”<br>		Another reason:<br>			Internally, map is a complex data structure (tree? expandable hash?)<br>			Concurrent update&#x2F;update may wreck internal invariants<br>			Concurrent update&#x2F;read may crash the read<br>		defer…<br>		What if I comment out Lock() &#x2F; Unlock()?<br>			go run crawler.go<br>				Does it always work? Always fail? Why?<br>			go run -race crawler.go<br>				Detects races even when output is correct!<br>		What if I forget to Unlock()?  deadlock<br>	How does the ConcurrentMutex crawler decide it is done?<br>		sync.WaitGroup – it’s basically a counter<br>		Wait() waits for all Add()s to be balanced by Done()s<br>			i.e. waits for all child threads to finish<br>		[diagram: tree of goroutines, overlaid on cyclic URL graph]<br>		there’s a WaitGroup per node in the tree<br>	How many concurrent threads might there be?  </p>
+<p><strong>ConcurrentChannel crawler</strong><br>	a Go channel:<br>		a channel is an object<br>			ch :&#x3D; make(chan int)<br>		a channel lets one thread send an object to another thread<br>		ch &lt;- x<br>			the sender waits until some goroutine receives<br>		y :&#x3D; &lt;- ch<br>			a receiver waits until some goroutine sends<br>		also: for y :&#x3D; range ch<br>		channels both communicate and synchronize<br>		several threads can send and receive on a channel<br>		send+recv takes less than a microsecond – fairly cheap<br>		remember: sender blocks until the receiver receives!<br>			“synchronous”<br>			watch out for deadlock<br>	ConcurrentChannel coordinator()<br>		coordinator() creates a worker goroutine to fetch each page<br>		worker() sends slice of page’s URLs on a channel<br>			multiple workers send on the single channel<br>		coordinator() reads URL slices from the channel<br>	At what line does the coordinator wait?<br>		Does the coordinator use CPU time while it waits?<br>	Note: there is no recursion here; coordinator() creates all workers<br>	Note: no need to lock the fetched map, because it isn’t shared!<br>	How does the coordinator know it is done?<br>		Keeps count of workers in n<br>		Each worker sends exactly one item on channel<br>	The channel does two things:<br>		1.communication of values<br>		2.notification of events (e.g. thread termination)  </p>
+<p><strong>Why is it safe for multiple threads use the same channel?</strong>  </p>
+<p><strong>Is this a race:</strong><br>	Worker thread modifies (creates) url slice, coordinator uses it?<br>		worker only writes slice <em>before</em> sending<br>		coordinator only reads slice <em>after</em> receiving<br>	So they can’t use the slice at the same time, so there’s no race  </p>
+<p><strong>Why does ConcurrentChannel() create a goroutine just for “ch &lt;- …”?</strong><br>	Let’s get rid of the goroutine…  </p>
+<p><strong>When to use sharing and locks, versus channels?</strong><br>	Most (all?) problems can be solved in either style<br>	What makes the most sense depends on how the programmer thinks<br>		state – sharing and locks<br>		communication – channels<br>	For the 6.824 labs, I recommend sync.Mutex&#x2F;sync.Cond for shared state  </p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Several solutions to the crawler exercise from the Go tutorial</span></span><br><span class="line"><span class="comment">// https://tour.golang.org/concurrency/10</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Serial crawler</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Serial</span><span class="params">(url <span class="type">string</span>, fetcher Fetcher, fetched <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> fetched[url] &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	fetched[url] = <span class="literal">true</span></span><br><span class="line">	urls, err := fetcher.Fetch(url)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> _, u := <span class="keyword">range</span> urls &#123;</span><br><span class="line">		Serial(u, fetcher, fetched)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Concurrent crawler with shared state and Mutex</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> fetchState <span class="keyword">struct</span> &#123;</span><br><span class="line">	mu      sync.Mutex</span><br><span class="line">	fetched <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(fs *fetchState)</span></span> testAndSet(url <span class="type">string</span>) <span class="type">bool</span> &#123;</span><br><span class="line">	fs.mu.Lock()</span><br><span class="line">	<span class="keyword">defer</span> fs.mu.Unlock()</span><br><span class="line">	r := fs.fetched[url]</span><br><span class="line">	fs.fetched[url] = <span class="literal">true</span></span><br><span class="line">	<span class="keyword">return</span> r</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ConcurrentMutex</span><span class="params">(url <span class="type">string</span>, fetcher Fetcher, fs *fetchState)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> fs.testAndSet(url) &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	urls, err := fetcher.Fetch(url)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> done sync.WaitGroup</span><br><span class="line">	<span class="keyword">for</span> _, u := <span class="keyword">range</span> urls &#123;</span><br><span class="line">		done.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(u <span class="type">string</span>)</span></span> &#123;</span><br><span class="line">			ConcurrentMutex(u, fetcher, fs)</span><br><span class="line">			done.Done()</span><br><span class="line">		&#125;(u)</span><br><span class="line">	&#125;</span><br><span class="line">	done.Wait()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">makeState</span><span class="params">()</span></span> *fetchState &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;fetchState&#123;fetched: <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>)&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Concurrent crawler with channels</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">worker</span><span class="params">(url <span class="type">string</span>, ch <span class="keyword">chan</span> []<span class="type">string</span>, fetcher Fetcher)</span></span> &#123;</span><br><span class="line">	urls, err := fetcher.Fetch(url)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		ch &lt;- []<span class="type">string</span>&#123;&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		ch &lt;- urls</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">coordinator</span><span class="params">(ch <span class="keyword">chan</span> []<span class="type">string</span>, fetcher Fetcher)</span></span> &#123;</span><br><span class="line">	n := <span class="number">1</span></span><br><span class="line">	fetched := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>)</span><br><span class="line">	<span class="keyword">for</span> urls := <span class="keyword">range</span> ch &#123;</span><br><span class="line">		<span class="keyword">for</span> _, u := <span class="keyword">range</span> urls &#123;</span><br><span class="line">			<span class="keyword">if</span> fetched[u] == <span class="literal">false</span> &#123;</span><br><span class="line">				fetched[u] = <span class="literal">true</span></span><br><span class="line">				n += <span class="number">1</span></span><br><span class="line">				<span class="keyword">go</span> worker(u, ch, fetcher)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		n -= <span class="number">1</span></span><br><span class="line">		<span class="keyword">if</span> n == <span class="number">0</span> &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ConcurrentChannel</span><span class="params">(url <span class="type">string</span>, fetcher Fetcher)</span></span> &#123;</span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> []<span class="type">string</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		ch &lt;- []<span class="type">string</span>&#123;url&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	coordinator(ch, fetcher)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// main</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;=== Serial===\n&quot;</span>)</span><br><span class="line">	Serial(<span class="string">&quot;http://golang.org/&quot;</span>, fetcher, <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">string</span>]<span class="type">bool</span>))</span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">&quot;=== ConcurrentMutex ===\n&quot;</span>)</span><br><span class="line">	ConcurrentMutex(<span class="string">&quot;http://golang.org/&quot;</span>, fetcher, makeState())</span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">&quot;=== ConcurrentChannel ===\n&quot;</span>)</span><br><span class="line">	ConcurrentChannel(<span class="string">&quot;http://golang.org/&quot;</span>, fetcher)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Fetcher</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Fetcher <span class="keyword">interface</span> &#123;</span><br><span class="line">	<span class="comment">// Fetch returns a slice of URLs found on the page.</span></span><br><span class="line">	Fetch(url <span class="type">string</span>) (urls []<span class="type">string</span>, err <span class="type">error</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// fakeFetcher is Fetcher that returns canned results.</span></span><br><span class="line"><span class="keyword">type</span> fakeFetcher <span class="keyword">map</span>[<span class="type">string</span>]*fakeResult</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> fakeResult <span class="keyword">struct</span> &#123;</span><br><span class="line">	body <span class="type">string</span></span><br><span class="line">	urls []<span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f fakeFetcher)</span></span> Fetch(url <span class="type">string</span>) ([]<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="keyword">if</span> res, ok := f[url]; ok &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;found:   %s\n&quot;</span>, url)</span><br><span class="line">		<span class="keyword">return</span> res.urls, <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;missing: %s\n&quot;</span>, url)</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span>, fmt.Errorf(<span class="string">&quot;not found: %s&quot;</span>, url)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// fetcher is a populated fakeFetcher.</span></span><br><span class="line"><span class="keyword">var</span> fetcher = fakeFetcher&#123;</span><br><span class="line">	<span class="string">&quot;http://golang.org/&quot;</span>: &amp;fakeResult&#123;</span><br><span class="line">		<span class="string">&quot;The Go Programming Language&quot;</span>,</span><br><span class="line">		[]<span class="type">string</span>&#123;</span><br><span class="line">			<span class="string">&quot;http://golang.org/pkg/&quot;</span>,</span><br><span class="line">			<span class="string">&quot;http://golang.org/cmd/&quot;</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="string">&quot;http://golang.org/pkg/&quot;</span>: &amp;fakeResult&#123;</span><br><span class="line">		<span class="string">&quot;Packages&quot;</span>,</span><br><span class="line">		[]<span class="type">string</span>&#123;</span><br><span class="line">			<span class="string">&quot;http://golang.org/&quot;</span>,</span><br><span class="line">			<span class="string">&quot;http://golang.org/cmd/&quot;</span>,</span><br><span class="line">			<span class="string">&quot;http://golang.org/pkg/fmt/&quot;</span>,</span><br><span class="line">			<span class="string">&quot;http://golang.org/pkg/os/&quot;</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="string">&quot;http://golang.org/pkg/fmt/&quot;</span>: &amp;fakeResult&#123;</span><br><span class="line">		<span class="string">&quot;Package fmt&quot;</span>,</span><br><span class="line">		[]<span class="type">string</span>&#123;</span><br><span class="line">			<span class="string">&quot;http://golang.org/&quot;</span>,</span><br><span class="line">			<span class="string">&quot;http://golang.org/pkg/&quot;</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="string">&quot;http://golang.org/pkg/os/&quot;</span>: &amp;fakeResult&#123;</span><br><span class="line">		<span class="string">&quot;Package os&quot;</span>,</span><br><span class="line">		[]<span class="type">string</span>&#123;</span><br><span class="line">			<span class="string">&quot;http://golang.org/&quot;</span>,</span><br><span class="line">			<span class="string">&quot;http://golang.org/pkg/&quot;</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="Go-RPC"><a href="#Go-RPC" class="headerlink" title="Go RPC"></a>Go RPC</h3><p><strong>Remote Procedure Call (RPC)</strong><br>	a key piece of distributed system machinery; all the labs use RPC<br>	goal: easy-to-program client&#x2F;server communication<br>	hide details of network protocols<br>	convert data (strings, arrays, maps, &amp;c) to “wire format”<br>	portability &#x2F; interoperability  </p>
+<p><strong>RPC message diagram:</strong><br>  Client             Server<br>	request—&gt;<br>       &lt;—response  </p>
+<p><strong>Software structure</strong><br>	client app        handler fns<br>	 stub fns         dispatcher<br>	 RPC lib           RPC lib<br>		  net  ———— net  </p>
+<p><strong>Go example: kv.go on schedule page</strong><br>	A toy key&#x2F;value storage server – Put(key,value), Get(key)-&gt;value<br>	Uses Go’s RPC library<br>	Common:<br>		Declare Args and Reply struct for each server handler<br>	Client:<br>		connect()’s Dial() creates a TCP connection to the server<br>		get() and put() are client “stubs”<br>		Call() asks the RPC library to perform the call<br>			you specify connection, function name, arguments, place to put reply<br>			library marshalls args, sends request, waits, unmarshalls reply<br>			return value from Call() indicates whether it got a reply<br>			usually you’ll also have a reply.Err indicating service-level failure<br>	Server:<br>		Go requires server to declare an object with methods as RPC handlers<br>		Server then registers that object with the RPC library<br>		Server accepts TCP connections, gives them to RPC library<br>		The RPC library<br>			reads each request<br>			creates a new goroutine for this request<br>			unmarshalls request<br>			looks up the named object (in table create by Register())<br>			calls the object’s named method (dispatch)<br>			marshalls reply<br>			writes reply on TCP connection<br>		The server’s Get() and Put() handlers<br>			Must lock, since RPC library creates a new goroutine for each request<br>			read args; modify reply  </p>
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;net&quot;</span></span><br><span class="line">	<span class="string">&quot;net/rpc&quot;</span></span><br><span class="line">	<span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Common RPC request/reply definitions</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> PutArgs <span class="keyword">struct</span> &#123;</span><br><span class="line">	Key   <span class="type">string</span></span><br><span class="line">	Value <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> PutReply <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> GetArgs <span class="keyword">struct</span> &#123;</span><br><span class="line">	Key <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> GetReply <span class="keyword">struct</span> &#123;</span><br><span class="line">	Value <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Client</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">connect</span><span class="params">()</span></span> *rpc.Client &#123;</span><br><span class="line">	client, err := rpc.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;:1234&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">&quot;dialing:&quot;</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> client</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">get</span><span class="params">(key <span class="type">string</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">	client := connect()</span><br><span class="line">	args := GetArgs&#123; key &#125;</span><br><span class="line">	reply := GetReply&#123;&#125;</span><br><span class="line">	err := client.Call(<span class="string">&quot;KV.Get&quot;</span>, &amp;args, &amp;reply)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">&quot;error:&quot;</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	client.Close()</span><br><span class="line">	<span class="keyword">return</span> reply.Value</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">put</span><span class="params">(key <span class="type">string</span>, val <span class="type">string</span>)</span></span> &#123;</span><br><span class="line">	client := connect()</span><br><span class="line">	args := PutArgs&#123; key, val &#125;</span><br><span class="line">	reply := PutReply&#123;&#125;</span><br><span class="line">	err := client.Call(<span class="string">&quot;KV.Put&quot;</span>, &amp;args, &amp;reply)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">&quot;error:&quot;</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	client.Close()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Server</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> KV <span class="keyword">struct</span> &#123;</span><br><span class="line">	mu   sync.Mutex</span><br><span class="line">	data <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">server</span><span class="params">()</span></span> &#123;</span><br><span class="line">	kv := &amp;KV&#123;data: <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span>&#123;&#125;&#125;</span><br><span class="line">	rpcs := rpc.NewServer()</span><br><span class="line">	rpcs.Register(kv)</span><br><span class="line">	l, e := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;:1234&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> e != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">&quot;listen error:&quot;</span>, e)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> &#123;</span><br><span class="line">			conn, err := l.Accept()</span><br><span class="line">			<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">				<span class="keyword">go</span> rpcs.ServeConn(conn)</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		l.Close()</span><br><span class="line">	&#125;()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(kv *KV)</span></span> Get(args *GetArgs, reply *GetReply) <span class="type">error</span> &#123;</span><br><span class="line">	kv.mu.Lock()</span><br><span class="line">	<span class="keyword">defer</span> kv.mu.Unlock()</span><br><span class="line"></span><br><span class="line">	reply.Value = kv.data[args.Key]</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(kv *KV)</span></span> Put(args *PutArgs, reply *PutReply) <span class="type">error</span> &#123;</span><br><span class="line">	kv.mu.Lock()</span><br><span class="line">	<span class="keyword">defer</span> kv.mu.Unlock()</span><br><span class="line"></span><br><span class="line">	kv.data[args.Key] = args.Value</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// main</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	server()</span><br><span class="line"></span><br><span class="line">	put(<span class="string">&quot;subject&quot;</span>, <span class="string">&quot;6.5840&quot;</span>)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;Put(subject, 6.5840) done\n&quot;</span>)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;get(subject) -&gt; %s\n&quot;</span>, get(<span class="string">&quot;subject&quot;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>A few details:</strong><br>	Binding: how does client know what server computer to talk to?<br>		For Go’s RPC, server name&#x2F;port is an argument to Dial<br>		Big systems have some kind of name or configuration server<br>	Marshalling: format data into packets<br>		Go’s RPC library can pass strings, arrays, objects, maps, &amp;c<br>		Go passes pointers by copying the pointed-to data<br>		Cannot pass channels or functions<br>		Marshals only exported fields (i.e., fields w&#x2F; CAPITAL letter)   </p>
+<p><strong>RPC problem: what to do about failures?</strong><br>	e.g. lost packet, broken network, slow server, crashed server  </p>
+<p><strong>What does a failure look like to the client RPC library?</strong><br>	Client never sees a response from the server<br>	Client does <em>not</em> know if the server saw the request!<br>		[diagram of losses at various points]<br>		Maybe server never saw the request<br>		Maybe server executed, crashed just before sending reply<br>		Maybe server executed, but network died just before delivering reply<br>	Remote procedure call doesn’t behave the same as procedure call on a single machine!<br>		A recurring challenge in implementing distributed systems  </p>
+<p><strong>Simplest failure-handling scheme: “best-effort RPC”</strong><br>	Call() waits for response for a while<br>	If none arrives, re-send the request<br>	Do this a few times<br>	Then give up and return an error  </p>
+<p><strong>Q: is “best effort” easy for applications to cope with?</strong><br>A particularly bad situation:<br>	client executes<br>		Put(“k”, 10);<br>		Put(“k”, 20);<br>	both succeed<br>	what will Get(“k”) yield?<br>	[diagram, timeout, re-send, original arrives late]  </p>
+<p><strong>Q: is best effort ever OK?</strong><br>	read-only operations<br>	operations that it’s harmless to repeat<br>		e.g. DB checks if record has already been inserted<br>Other common semantics: at-most-once<br>	For example, Go RPC is a simple form of “at-most-once”<br>		open TCP connection<br>		write request to TCP connection<br>		Go RPC never re-sends a request<br>			So server won’t see duplicate requests<br>		Go RPC code returns an error if it doesn’t get a reply<br>			perhaps after a timeout (from TCP)<br>			perhaps server didn’t see request<br>			perhaps server processed request but server&#x2F;net failed before reply came back<br>	Labs explore others way of implementing at-most-once<br>		No retry is too restrictive for replicated servers<br>		Like to retry at another replica if first replica fails  </p>
+<h3 id="Go-FAQ"><a href="#Go-FAQ" class="headerlink" title="Go FAQ"></a>Go FAQ</h3><p><strong>Q: Why does 6.5840 use Go for the labs?</strong><br>A: Until a few years ago 6.5840 used C++, which worked well. Go works a little better for 6.5840 labs for a couple of reasons. Go is garbage collected and type-safe, which eliminates some common classes of bugs. Go has good support for threads (goroutines), and a nice RPC package, which are directly useful in 6.5840. Threads and garbage collection work particularly well together, since garbage collection can eliminate programmer effort to decide when the last thread using an object has stopped using it. There are other languages with these features that would probably work fine for 6.5840 labs, such as Java  </p>
+<p><strong>Q: are there any tips&#x2F;tricks for building an intuition of how to build effective Go code?</strong><br>A: Get experience by writing Go code and reading other’s people go code.  This page has many useful tips: <a class="link"   target="_blank" rel="noopener" href="https://go.dev/doc/effective_go" >https://go.dev/doc/effective_go<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  </p>
+<p><strong>Q: Do goroutines run in parallel? Can you use them to increase performance?</strong><br>A: Go’s goroutines are the same as threads in other languages. The Go runtime executes goroutines on all available cores, in parallel. If<br>there are fewer cores than runnable goroutines, the runtime will pre-emptively time-share the cores among goroutines  </p>
+<p><strong>Q: How do Go channels work? How does Go make sure they are synchronized between the many possible goroutines?</strong><br>A: You can see the source at <a class="link"   target="_blank" rel="noopener" href="https://golang.org/src/runtime/chan.go" >https://golang.org/src/runtime/chan.go<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>, though it is not easy to follow<br>At a high level, a chan is a struct holding a buffer and a lock. Sending on a channel involves acquiring the lock, waiting (perhaps<br>releasing the CPU) until some thread is receiving, and handing off the message. Receiving involves acquiring the lock and waiting for a<br>sender. You could implement your own channels with Go sync.Mutex and sync.Cond  </p>
+<p><strong>Q: I’m using a channel to wake up another goroutine, by sending a dummy bool on the channel. But if that other goroutine is already running (and thus not receiving on the channel), the sending goroutine blocks. What should I do?</strong><br>A: Try condition variables (Go’s sync.Cond) rather than channels. Condition variables work well to alert goroutines that may (or may<br>not) be waiting for something. Channels, because they are synchronous, are awkward if you’re not sure if there will be a goroutine waiting at the other end of the channel  </p>
+<p><strong>Q: How can I have a goroutine wait for input from any one of a number of different channels? Trying to receive on any one channel blocks if there’s nothing to read, preventing the goroutine from checking other channels</strong><br>A: Try creating a separate goroutine for each channel, and have each goroutine block on its channel. That’s not always possible, but when it works it’s often the simplest approach<br>Otherwise try Go’s select  </p>
+<p><strong>Q: When should we use sync.WaitGroup instead of channels? and vice versa?</strong><br>A: WaitGroup is fairly special-purpose; it’s only useful when waiting for a bunch of activities to complete. Channels are more general-purpose; for example, you can communicate values over channels. You can wait for multiple goroutines using channels, though it takes a few more lines of code than with WaitGroup  </p>
+<p><strong>Q: I need my code to perform a task once per second. What’s the easiest way to do that?</strong><br>A: Create a goroutine dedicated to that periodic task. It should have a loop that uses time.Sleep() to pause for a second, and then do the task, and then loop around to the time.Sleep()  </p>
+<p><strong>Q: How do we know when the overhead of spawning goroutines exceeds the concurrency we gain from them?</strong><br>A: It depends! If your machine has 16 cores, and you are looking for CPU parallelism, you should have roughly 16 executable goroutines. If it takes 0.1 second of real time to fetch a web page, and your network is capable of transmitting 100 web pages per second, you probably need about 10 goroutines concurrently fetching in order to use all of the network capacity. Experimentally, as you increase the number of goroutines, for a while you’ll see increased throughput, and then you’ll stop getting more throughput; at that point you have enough goroutines from the point of view of performance  </p>
+<p><strong>Q: How would one create a Go channel that connects over the Internet?How would one specify the protocol to use to send messages?</strong><br>A: A Go channel only works within a single program; channels cannot be used to talk to other programs or other computers<br>Have a look at Go’s RPC package, which lets you talk to other Go programs over the Internet: <a class="link"   target="_blank" rel="noopener" href="https://golang.org/pkg/net/rpc/" >https://golang.org/pkg/net/rpc/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  </p>
+<p><strong>Q: What are some important&#x2F;useful Go-specific concurrency patterns to know?</strong><br>A: Here’s a slide deck on this topic, from a Go expert: <a class="link"   target="_blank" rel="noopener" href="https://talks.golang.org/2012/concurrency.slide" >https://talks.golang.org/2012/concurrency.slide<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  </p>
+<p><strong>Q: How are slices implemented?</strong><br>A: A slice is an object that contains a pointer to an array and a start and end index into that array. This arrangement allows multiple slices to share an underlying array, with each slice perhaps exposing a different range of array elements<br>Here’s a more extended discussion: <a class="link"   target="_blank" rel="noopener" href="https://blog.golang.org/go-slices-usage-and-internals" >https://blog.golang.org/go-slices-usage-and-internals<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a><br>I use slices often, and arrays never. A Go slice is more flexible than a Go array since an array’s size is part of its type, whereas a function that takes a slice as argument can take a slice of any length  </p>
+<p><strong>Q: What are common debugging tools people use for Go?</strong><br>A: fmt.Printf()<br>As far as I know there’s not a great debugger for Go, though gdb can be made to work: <a class="link"   target="_blank" rel="noopener" href="https://golang.org/doc/gdb" >https://golang.org/doc/gdb<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a><br>In any case, for most bugs I’ve found fmt.Printf() to be an extremely effective debugging tool  </p>
+<p><strong>Q: When is it right to use a synchronous RPC call and when is it right to use an asynchronous RPC call?</strong><br>A: Most code needs the RPC reply before it can proceed; in that case it makes sense to use synchronous RPC<br>But sometimes a client wants to launch many concurrent RPCs; in that case async may be better. Or the client wants to do other work while it waits for the RPC to complete, perhaps because the server is far away (so speed-of-light time is high) or because the server might not be reachable so that the RPC suffers a long timeout period<br>I have never used async RPC in Go. When I want to send an RPC but not have to wait for the result, I create a goroutine, and have the<br>goroutine make a synchronous Call()  </p>
+<p><strong>Q: Is Go used in industry?</strong><br>A: Yes. You can see an estimate of how much different programming languages are used here: <a class="link"   target="_blank" rel="noopener" href="https://www.tiobe.com/tiobe-index/" >https://www.tiobe.com/tiobe-index/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  </p>
+<p><strong>Q: What are common problems that developers face when starting with Go?</strong><br>A:  Here are a few:<br>	Not protecting maps with locks when there is concurrent access. Use Go’s race detector!<br>	Deadlocks with channels<br>	Not capturing a variable when creating a goroutine<br>	Leaking goroutines  </p>
+<p><strong>Q: Does Go support inheritance? (In the Java&#x2F;C++ kind of “extends” way?)</strong><br>A: Go doesn’t support C++ style inheritance but has generics, interfaces, and embedded structs, which allow you to do many things<br>for which you would use inheritance in C++  </p>
+<p><strong>Q: The thing I found most confusing about the Go tutorial was that goroutines don’t continue executing after the main thread has completed. I don’t think this was mentioned explicitly anywhere in the tutorial; I figured it out through debuging the crawler exercise</strong><br>A: Yes, I don’t think it is in the tutorial, but the language spec is explicit about this: <a class="link"   target="_blank" rel="noopener" href="https://golang.org/ref/spec" >https://golang.org/ref/spec<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> (see Program<br>execution)  </p>
+<p><strong>Q: I’m still a little confused about when to choose value or pointer receivers. Can you provide any concrete&#x2F;real-world examples of when we would choose one over the other?</strong><br>A: When you want to modify the state of the receiver, you have to use pointer receivers.  If the struct is very big, you probably want to<br>use a pointer receiver because value receivers operate on a copy.  If neither applies, you can use a value receiver.  However, be careful<br>with value receivers; e.g., if you have a mutex in a struct, you cannot make it a value receiver, because the mutex would be copied, defeating its purpose  </p>
+<h3 id="vote-examples"><a href="#vote-examples" class="headerlink" title="vote examples"></a>vote examples</h3><div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vote-count-1.go</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;time&quot;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;math/rand&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rand.Seed(time.Now().UnixNano())</span><br><span class="line"></span><br><span class="line">	count := <span class="number">0</span></span><br><span class="line">	finished := <span class="number">0</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			vote := requestVote()</span><br><span class="line">			<span class="keyword">if</span> vote &#123;</span><br><span class="line">				count++</span><br><span class="line">			&#125;</span><br><span class="line">			finished++</span><br><span class="line">		&#125;()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> count &lt; <span class="number">5</span> &amp;&amp; finished != <span class="number">10</span> &#123;</span><br><span class="line">		<span class="comment">// wait</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> count &gt;= <span class="number">5</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">&quot;received 5+ votes!&quot;</span>)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">&quot;lost&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">requestVote</span><span class="params">()</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	time.Sleep(time.Duration(rand.Intn(<span class="number">100</span>)) * time.Millisecond)</span><br><span class="line">	<span class="keyword">return</span> rand.Int() % <span class="number">2</span> == <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vote-count-2.go</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;sync&quot;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;time&quot;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;math/rand&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rand.Seed(time.Now().UnixNano())</span><br><span class="line"></span><br><span class="line">	count := <span class="number">0</span></span><br><span class="line">	finished := <span class="number">0</span></span><br><span class="line">	<span class="keyword">var</span> mu sync.Mutex</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			vote := requestVote()</span><br><span class="line">			mu.Lock()</span><br><span class="line">			<span class="keyword">defer</span> mu.Unlock()</span><br><span class="line">			<span class="keyword">if</span> vote &#123;</span><br><span class="line">				count++</span><br><span class="line">			&#125;</span><br><span class="line">			finished++</span><br><span class="line">		&#125;()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		mu.Lock()</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> count &gt;= <span class="number">5</span> || finished == <span class="number">10</span> &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		mu.Unlock()</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> count &gt;= <span class="number">5</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">&quot;received 5+ votes!&quot;</span>)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">&quot;lost&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	mu.Unlock()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">requestVote</span><span class="params">()</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	time.Sleep(time.Duration(rand.Intn(<span class="number">100</span>)) * time.Millisecond)</span><br><span class="line">	<span class="keyword">return</span> rand.Int()%<span class="number">2</span> == <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vote-count-3.go</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;sync&quot;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;time&quot;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;math/rand&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rand.Seed(time.Now().UnixNano())</span><br><span class="line"></span><br><span class="line">	count := <span class="number">0</span></span><br><span class="line">	finished := <span class="number">0</span></span><br><span class="line">	<span class="keyword">var</span> mu sync.Mutex</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			vote := requestVote()</span><br><span class="line">			mu.Lock()</span><br><span class="line">			<span class="keyword">defer</span> mu.Unlock()</span><br><span class="line">			<span class="keyword">if</span> vote &#123;</span><br><span class="line">				count++</span><br><span class="line">			&#125;</span><br><span class="line">			finished++</span><br><span class="line">		&#125;()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		mu.Lock()</span><br><span class="line">		<span class="keyword">if</span> count &gt;= <span class="number">5</span> || finished == <span class="number">10</span> &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		mu.Unlock()</span><br><span class="line">		time.Sleep(<span class="number">50</span> * time.Millisecond)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> count &gt;= <span class="number">5</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">&quot;received 5+ votes!&quot;</span>)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">&quot;lost&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	mu.Unlock()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">requestVote</span><span class="params">()</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	time.Sleep(time.Duration(rand.Intn(<span class="number">100</span>)) * time.Millisecond)</span><br><span class="line">	<span class="keyword">return</span> rand.Int() % <span class="number">2</span> == <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vote-count-4.go</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;sync&quot;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;time&quot;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;math/rand&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rand.Seed(time.Now().UnixNano())</span><br><span class="line"></span><br><span class="line">	count := <span class="number">0</span></span><br><span class="line">	finished := <span class="number">0</span></span><br><span class="line">	<span class="keyword">var</span> mu sync.Mutex</span><br><span class="line">	cond := sync.NewCond(&amp;mu)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			vote := requestVote()</span><br><span class="line">			mu.Lock()</span><br><span class="line">			<span class="keyword">defer</span> mu.Unlock()</span><br><span class="line">			<span class="keyword">if</span> vote &#123;</span><br><span class="line">				count++</span><br><span class="line">			&#125;</span><br><span class="line">			finished++</span><br><span class="line">			cond.Broadcast()</span><br><span class="line">		&#125;()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	mu.Lock()</span><br><span class="line">	<span class="keyword">for</span> count &lt; <span class="number">5</span> &amp;&amp; finished != <span class="number">10</span> &#123;</span><br><span class="line">		cond.Wait()</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> count &gt;= <span class="number">5</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">&quot;received 5+ votes!&quot;</span>)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">&quot;lost&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	mu.Unlock()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">requestVote</span><span class="params">()</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	time.Sleep(time.Duration(rand.Intn(<span class="number">100</span>)) * time.Millisecond)</span><br><span class="line">	<span class="keyword">return</span> rand.Int() % <span class="number">2</span> == <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vote-count-5.go</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;time&quot;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;math/rand&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rand.Seed(time.Now().UnixNano())</span><br><span class="line"></span><br><span class="line">	count := <span class="number">0</span></span><br><span class="line">	finished := <span class="number">0</span></span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">bool</span>)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			ch &lt;- requestVote()</span><br><span class="line">		&#125;()</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> count &lt; <span class="number">5</span> &amp;&amp; finished &lt; <span class="number">10</span> &#123;</span><br><span class="line">		v := &lt;-ch</span><br><span class="line">		<span class="keyword">if</span> v &#123;</span><br><span class="line">			count += <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">		finished += <span class="number">1</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> count &gt;= <span class="number">5</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">&quot;received 5+ votes!&quot;</span>)</span><br><span class="line"></span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">&quot;lost&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">requestVote</span><span class="params">()</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	time.Sleep(time.Duration(rand.Intn(<span class="number">100</span>)) * time.Millisecond)</span><br><span class="line">	<span class="keyword">return</span> rand.Int()%<span class="number">2</span> == <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Go"><figure class="iseeu highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vote-count-6.go</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;time&quot;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;math/rand&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rand.Seed(time.Now().UnixNano())</span><br><span class="line"></span><br><span class="line">	count := <span class="number">0</span></span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">bool</span>)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			ch &lt;- requestVote()</span><br><span class="line">		&#125;()</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		v := &lt;-ch</span><br><span class="line">		<span class="keyword">if</span> v &#123;</span><br><span class="line">			count += <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> count &gt;= <span class="number">5</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">&quot;received 5+ votes!&quot;</span>)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">&quot;lost&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">requestVote</span><span class="params">()</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	time.Sleep(time.Duration(rand.Intn(<span class="number">100</span>)) * time.Millisecond)</span><br><span class="line">	<span class="keyword">return</span> rand.Int()%<span class="number">2</span> == <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="Lecture-3-GFS"><a href="#Lecture-3-GFS" class="headerlink" title="Lecture 3: GFS"></a>Lecture 3: GFS</h2><p><strong>The Google File System</strong><br>Sanjay Ghemawat, Howard Gobioff, and Shun-Tak Leung<br>SOSP 2003  </p>
+<p>**Why are we reading this paper? **<br>	GFS paper touches on many themes of 6.5840<br>		parallel performance, fault tolerance, replication, consistency<br>	good systems paper – details from apps all the way to network<br>	successful real-world design  </p>
+<p><strong>Important distributed system ideas</strong><br>	Build fault-tolerant applications using fault-tolerant storage<br>	Sharding<br>	Primary-backup replication protocol<br>	Leases to ensure 1 primary<br>	Checksums for detecting faulty hardware&#x2F;software<br>	Sacrifice consistency for performance&#x2F;simplicity  </p>
+<p><strong>GFS context</strong><br>	Many Google services needed a big fast unified storage system<br>		Mapreduce, crawler, indexer, log storage&#x2F;analysis<br>	Shared among multiple applications e.g. crawl, index, analyze<br>	Huge capacity<br>	Huge performance<br>	Fault tolerant<br>	But:<br>		just for internal Google use<br>		aimed at batch big-data performance, not interactive  </p>
+<p>**GFS overview **<br>	100s&#x2F;1000s of clients (e.g. MapReduce worker machines)<br>	100s of chunkservers, each with its own disk<br>	one coordinator  </p>
+<p><strong>Capacity story?</strong><br>	big files split into 64 MB chunks<br>	each file’s chunks striped&#x2F;sharded over chunkservers<br>		so a file can be much larger than any one disk<br>	each chunk in a Linux file  </p>
+<p><strong>Throughput story?</strong><br>	clients talk directly to chunkservers to read&#x2F;write data<br>	if lots of clients access different chunks, huge parallel throughput<br>	read or write  </p>
+<p><strong>Fault tolerance story?</strong><br>	each 64 MB chunk stored (replicated) on three chunkservers<br>	client writes are sent to all of a chunk’s copies<br>	a read just needs to consult one copy  </p>
+<p><strong>What are the steps when client C wants to read a file?</strong><br>	1.C sends filename and offset to coordinator (CO) (if not cached)<br>		CO has a filename -&gt; array-of-chunkhandle table<br>		and a chunkhandle -&gt; list-of-chunkservers table<br>	2.CO finds chunk handle for that offset<br>	3.CO replies with chunkhandle + list of chunkservers<br>	4.C caches handle + chunkserver list<br>	5.C sends request to nearest chunkserver<br>		chunk handle, offset<br>	6.chunk server reads from chunk file on disk, returns to client  </p>
+<p><strong>Clients only ask coordinator where to find a file’s chunks</strong><br>	clients cache name -&gt; chunkhandle info<br>	coordinator does not handle data, so (hopefully) not heavily loaded  </p>
+<p><strong>What about writes?</strong><br>	Client knows which chunkservers hold replicas that must be updated<br>	How should we manage updating of replicas of a chunk?  </p>
+<p><strong>A bad replication scheme</strong><br>	(This is <em>not</em> what GFS does)<br>	[diagram: C, S1, S2, S3]<br>	Client sends update to each replica chunkserver<br>	Each chunkserver applies the update to its copy  </p>
+<p><strong>What can go wrong?</strong><br>	*Two* clients write the same data at the same time<br>		i.e. “concurrent writes”<br>		Chunkservers may see the updates in different orders!<br>		Again, the risk is that, later, two clients may read different content  </p>
+<p><strong>Idea: primary&#x2F;secondary replication</strong><br>	(or primary&#x2F;backup)<br>	For each chunk, designate one server as “primary”<br>	Clients send write requests just to the primary<br>		The primary alone manages interactions with secondary servers<br>		(Some designs send reads just to primary, some also to secondaries)<br>	The primary chooses the order for all client writes<br>		Tells the secondaries – with sequence numbers – so all replicas<br>		apply writes in the same order, even for concurrent client writes<br>	There are still many details to fill in, and we’ll<br>		see a number of variants in upcoming papers  </p>
+<p><strong>What are the steps when C wants to write a file at some offset?</strong><br>	paper’s Figure 2<br>	1.C asks CO about file’s chunk @ offset<br>	2.CO tells C the primary and secondaries<br>	3.C sends data to all (just temporary…), waits for all replies (?)<br>	4.C asks P to write<br>	5.P checks that lease hasn’t expired<br>	6.P writes its own chunk file (a Linux file)<br>	7.P tells each secondary to write (copy temporary into chunk file)<br>	8.P waits for all secondaries to reply, or timeout<br>		secondary can reply “error” e.g. out of disk space<br>	9.P tells C “ok” or “error”<br>	10.C retries from start if error  </p>
+<p><strong>What data may a client read after a failed write?</strong><br>	Replicas may return different data<br>	Primary P updated its own state<br>	But secondary S1 did not update (failed? slow? network problem?)<br>	Client C1 reads from P; Client C2 reads from S1<br>		they will see different results!<br>	Such a departure from ideal behavior is an “anomaly”<br>		in non-replicated systems, this couldn’t happen!<br>		data can be *inconsistent*<br>	Note: a successful writes doesn’t lead to inconsistency  </p>
+<p><strong>What is the result of concurrent writes?</strong><br>	Clients break writes spanning chunks into two writes<br>	C1 writes chunks x and y at offset 0 and 1, respectively<br>	C2 writes chunks a b at offset 0 and 1<br>	A possible state of the replicas (without errors): [a y]<br>		x was overwritten by a<br>		b was overwritten with y<br>		x and b are lost!  </p>
+<p><strong>GFS solution: atomic append of records</strong><br>	Primary picks the offset and pads if record spans chunks<br>	Result for the above case: some interleaving of [a, b, x, and y]<br>	No data lost, but “empty” areas due to padding<br>	Note: client doesn’t determine where the data is in the file<br>		primary picks the offset<br>		append returns offset where client’s record is written<br>	Note: requires changing applications to use append instead of write  </p>
+<p><strong>What data may a client read after a failed append?</strong><br>	Read from a backup that has the record<br>	Read from a backup that didn’t apply the append: a hole<br>	Read from a backup that recorded the initial and retried append<br>		duplicate records  </p>
+<p><strong>Consistency: guarantees offered by a storage system to applications</strong><br>	GFS consistency is complex! (Table 1)<br>	if primary tells client that a write succeeded,<br>		and no other client is writing the same part of the file,<br>		all readers will see the write<br>		“defined”<br>	if successful concurrent writes to the same part of a file,<br>		and they all succeed,<br>		all readers will see the same content,<br>		but maybe it will be a mix of the writes<br>		“consistent”<br>		E.g. C1 writes “ab”, C2 writes “xy”, everyone might see “xb”<br>	if primary doesn’t tell the client that the write succeeded,<br>		different readers may see different content, or none<br>		“inconsistent”  </p>
+<p><strong>Why are these anomalies OK?</strong><br>	They only intended to support a certain subset of their own applications<br>		Written with knowledge of GFS’s behavior<br>	Probably mostly single-writer and Record Append<br>	Writers could include checksums and record IDs<br>		Readers could use them to filter out junk and duplicates<br>	Later commentary by Google engineers suggests that it might have been better to make GFS more consistent<br>	<a class="link"   target="_blank" rel="noopener" href="http://queue.acm.org/detail.cfm?id=1594206" >http://queue.acm.org/detail.cfm?id=1594206<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  </p>
+<p><strong>What might better consistency look like?</strong><br>	There are many possible answers<br>	Trade-off between easy-to-use for client application programmers, and easy-to-implement for storage system designers<br>	Maybe try to mimic local disk file behavior<br>	Perhaps:<br>		* atomic writes: either all replicas are updated, or none, even if failures<br>		* read sees latest write<br>		* all readers see the same content (assuming no writes)<br>	We’ll see more precision later  </p>
+<p>Let’s think about how GFS handles crashes of various entities  </p>
+<p><strong>A client crashes while writing?</strong><br>	Either it got as far as asking primary to write, or not  </p>
+<p><strong>A secondary crashes just as the primary asks it to write?</strong><br>	1.Primary may retry a few times, if secondary revives quickly with disk intact, it may execute the primary’s request and all is well<br>	2.Primary gives up, and returns an error to the client<br>		Client can retry – but why would the write work the second time around?<br>	3.Coordinator notices that a chunkserver is down<br>		Periodically pings all chunk servers<br>		Removes the failed chunkserver from all chunkhandle lists<br>		Perhaps re-replicates, to maintain 3 replicas<br>		Tells primary the new secondary list  </p>
+<p><strong>Re-replication after a chunkserver failure may take a Long Time</strong><br>	Since a chunkserver failure requires re-replication of all its chunks<br>	80 GB disk, 10 MB&#x2F;s network -&gt; an hour or two for full copy<br>	So the primary probably re-tries for a while, and the coordinator lets the system operate with a missing chunk replica, before declaring the chunkserver permanently dead<br>	How long to wait before re-replicating?<br>		Too short: wasted copying work if chunkserver comes back to life<br>		Too long: more failures might destroy all copies of data  </p>
+<p><strong>What if a primary crashes?</strong><br>	Remove that chunkserver from all chunkhandle lists<br>	For each chunk for which it was primary, wait for lease to expire, grant lease to another chunkserver holding that chunk  </p>
+<p><strong>What is a lease?</strong><br>	Permission to act as primary for a given time (60 seconds)<br>	Primary promises to stop acting as primary before lease expires<br>	Coordinator promises not to change primaries until after expiration<br>	Separate lease per actively written chunk  </p>
+<p><strong>Why are leases helpful?</strong><br>	The coordinator must be able to designate a new primary if the present primary fails<br>	But the coordinator cannot distinguish “primary has failed” from “primary is still alive but the network has a problem.”<br>	What if the coordinator designates a new primary while old one is active?<br>		two active primaries!<br>		C1 writes to P1, C2 reads from P2, doesn’t seen C1’s write!<br>		called “split brain” – a disaster<br>	Leases help prevent split brain:<br>		Coordinator won’t designate new primary until the current one is guaranteed to have stopped acting as primary  </p>
+<p><strong>What if the coordinator crashes?</strong><br>	Two strategies<br>	1.Coordinator writes critical state to its disk<br>		If it crashes and reboots with disk intact, re-reads state, resumes operations<br>	2.Coordinator sends each state update to a “backup coordinator”, which also records it to disk; backup coordinator can take over if main coordinator cannot be restarted  </p>
+<p><strong>What information must the coordinator save to disk to recover from crashes?</strong><br>	Table mapping file name -&gt; array of chunk handles<br>	Table mapping chunk handle -&gt; current version #<br>	What about the list of chunkservers for each chunk?<br>		A rebooted coordinator asks all the chunkservers what they store<br>	A rebooted coordinator must also wait one lease time before designating any new primaries  </p>
+<p>*<strong>Who&#x2F;what decides the coordinator is dead, and chooses a replacement?</strong><br>	Paper does not say<br>	Could the coordinator replicas ping the coordinator, and automatically take over if no response?  </p>
+<p>*<strong>Suppose the coordinator reboots, and polls chunkservers</strong><br>	What if a chunkserver has a chunk, but it wasn’t a secondary?<br>		I.e. the current primary wasn’t keeping it up to date?<br>	Coordinator remembers version number per chunk, on disk<br>		Increments each time it designates a new primary for the chunk<br>	Chunkserver also remembers its version number per chunk<br>	When chunkserver reports to coordinator, coordinator compares version number, only accepts if current version  </p>
+<p>*<strong>What if a client has cached a stale (wrong) primary for a chunk?</strong>  </p>
+<p>*<strong>What if the reading client has cached a stale server list for a chunk?</strong>  </p>
+<p>*<strong>What if the primary crashes before sending append to all secondaries?</strong><br>	Could a secondary that <em>didn’t</em> see the append be chosen as the new primary?<br>	Is it a problem that the other secondary <em>did</em> see the append?  </p>
+<p><strong>What would it take to have no anomalies – strict consistency?</strong><br>	I.e. all clients see the same file content<br>	Too hard to give a real answer, but here are some issues<br>	*All replicas should complete each write, or none – “atomic write”<br>	 Perhaps tentative writes until all promise to complete it?<br>	 Don’t expose writes until all have agreed to perform them!<br>	*Primary should detect duplicate client write requests<br>	 If primary crashes, some replicas may be missing the last few ops<br>	 They must sync up<br>	*Clients must be prevented from reading from stale ex-secondaries<br>	You’ll see solutions in Labs 2, 3, and 4!  </p>
+<p>*<strong>Are there circumstances in which GFS will break its guarantees?</strong><br>	e.g. write succeeds, but subsequent readers don’t see the data<br>	All coordinator replicas permanently lose state (permanent disk failure)<br>		Read will fail<br>	All chunkservers holding the chunk permanently lose disk content<br>		Read will fail<br>	CPU, RAM, network, or disk yields an incorrect value<br>		checksum catches some cases, but not all<br>		Read may say “success” but yield the wrong data!<br>		Above errors were “fail-stop”, but this is a “byzantine” failure<br>	Time is not properly synchronized, so leases don’t work out<br>		So multiple primaries, maybe write goes to one, read to the other<br>		Again, read may yield “success” but wrong data – byzantine failure  </p>
+<p> <strong>Performance (Figure 3)</strong><br>	large aggregate throughput for read<br>		94 MB&#x2F;sec total for 16 clients + 16 chunkservers<br>			or 6 MB&#x2F;second per client<br>			is that good?<br>			one disk sequential throughput was about 30 MB&#x2F;s<br>			one NIC was about 10 MB&#x2F;s<br>		Close to saturating inter-switch link’s 125 MB&#x2F;sec (1 Gbit&#x2F;sec)<br>		So: multi-client scalability is good<br>		Table 3 reports 500 MB&#x2F;sec for cluster A, which was a lot<br>	writes to different files lower than possible maximum<br>		authors blame their network stack (but no detail)<br>	concurrent appends to single file<br>		limited by the server that stores last chunk<br>	hard to interpret after 15 years, e.g. how fast were the disks?  </p>
+<p><strong>Retrospective interview with GFS engineer:</strong><br>	<a class="link"   target="_blank" rel="noopener" href="http://queue.acm.org/detail.cfm?id=1594206" >http://queue.acm.org/detail.cfm?id=1594206<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a><br>	file count was the biggest problem<br>		eventual numbers grew to 1000x those in Table 2 !<br>		hard to fit in coordinator RAM<br>		coordinator scanning of all files&#x2F;chunks for GC is slow<br>	1000s of clients -&gt; too much CPU load on coordinator<br>	coordinator fail-over initially manual, 10s of minutes, too long<br>	applications had to be designed to cope with GFS semantics and limitations<br>		more painful than expected<br>	BigTable is one answer to many-small-files problem and Colossus apparently shards coordinator data over many coordinators  </p>
+<p><strong>Summary</strong><br>	case study of performance, fault-tolerance, consistency<br>		specialized for MapReduce applications<br>	good ideas:<br>		global cluster file system as universal infrastructure<br>		separation of naming (coordinator) from storage (chunkserver)<br>		sharding for parallel throughput<br>		huge files&#x2F;chunks to reduce overheads<br>		primary to choose order for concurrent writes<br>		leases to prevent split-brain<br>	not so great:<br>		single coordinator performance<br>			ran out of RAM and CPU<br>		chunkservers not very efficient for small files<br>		lack of automatic fail-over to coordinator replica<br>		maybe consistency was too relaxed  </p>
+<p><a class="link"   target="_blank" rel="noopener" href="http://queue.acm.org/detail.cfm?id=1594206" >http://queue.acm.org/detail.cfm?id=1594206<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a><br><a class="link"   target="_blank" rel="noopener" href="https://cloud.google.com/blog/products/storage-data-transfer/a-peek-behind-colossus-googles-file-system" >https://cloud.google.com/blog/products/storage-data-transfer/a-peek-behind-colossus-googles-file-system<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<h3 id="Paper-Questions"><a href="#Paper-Questions" class="headerlink" title="Paper Questions"></a>Paper Questions</h3><p>The GFS paper is a “classic” paper that describes one of the first distributed file systems for data-center applications such as large MapReduce jobs. It touches on many themes of 6.5840: parallel performance, fault tolerance, replication, and consistency. It is good systems paper with details from apps all the way to network successful  </p>
+<p>GFS has been replaced by something called <a class="link"   target="_blank" rel="noopener" href="https://cloud.google.com/blog/products/storage-data-transfer/a-peek-behind-colossus-googles-file-system" >Colossus<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>, with the same overall goals, but improvements in master performance and fault-tolerance. In addition, many applications within Google have switched to more database-like storage systems such as BigTable and Spanner. However, much of the GFS design lives on in HDFS, the storage system for the Hadoop open-source MapReduce  </p>
+<p><strong>Question</strong>: Describe a sequence of events that would result in a client reading stale data from the <a class="link"   target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.824/papers/gfs.pdf" >Google File System<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  </p>
+<p><strong>Answer</strong>: 基于“元数据缓存”与“版本号延迟检测”的序列<br>	导致过期数据（Stale Data）的核心原因是：客户端依赖了过期的元数据缓存，而此时 Master 尚未剔除或检测到已经落后的副本<br>	事件序列描述：<br>		初始状态：<br>			某个数据块（Chunk）在 Chunkserver A、B、C 上有三个副本<br>			Master 记录的该 Chunk 当前版本号（Version Number）为 V1<br>		客户端缓存位置：<br>			客户端 C1 询问 Master 该 Chunk 的位置<br>			Master 返回副本列表 [A, B, C]<br>			关键点：客户端 C1 将该列表及其版本号 V1 缓存在本地内存中（通常缓存有效期为数分钟）<br>		副本故障与数据更新：<br>			副本 C 发生故障（如网络断开或暂时宕机）<br>			另一个客户端 C2 此时申请写入该 Chunk<br>			Master 发现副本 C 不可用，于是增加版本号到 V2，并只将 V2 发送给在线的副本 A 和 B<br>			客户端 C2 成功将新数据写入副本 A 和 B，此时 A、B 的数据是 V2 版本<br>		副本恢复：<br>			副本 C 重新上线。由于它错过了刚才的写入，它持有的依然是 V1 版本 的旧数据<br>			此时，Master 可能尚未通过心跳信号（Heartbeat）检测到 C 的版本号已经落后，或者检测到了但尚未通知到所有客户端<br>		客户端读取过期数据：<br>			客户端 C1 再次需要读取该 Chunk<br>			关键点：C1 不询问 Master，而是直接从本地 缓存 中获取了副本列表 [A, B, C]<br>			C1 随机选择或根据负载选择了副本 C 进行读取<br>			副本 C 并不自知已过期，直接返回了 V1 版本 的旧数据<br>		结果：客户端 C1 读取到了过期数据  </p>
+<p><strong>Version Number（版本号）</strong>：用于区分新旧数据，但 Master 增加版本号的操作可能无法立即同步给所有潜在读者<br><strong>Metadata Caching（元数据缓存）</strong>：客户端为了性能，在缓存有效期内不会联系 Master，这是过期读取的根本原因<br><strong>Master-Chunkserver Heartbeats（心跳机制）</strong>：Master 发现副本过期的过程是<strong>异步</strong>的（通过周期性心跳），存在时间差<br><strong>Fail-stop model</strong>：GFS 假设副本是诚实的，如果副本没意识到自己过期，它会直接提供旧数据  </p>
+<p><strong>GFS 如何缓解此问题？</strong><br>	大多数文件是 <strong>Append-only（只追加）</strong> 的，读取时通过文件长度或校验和很容易发现数据异常<br>	元数据缓存有超时限制<br>	客户端在下一次打开文件或缓存失效后，最终会从 Master 处获得正确的副本列表  </p>
+<h3 id="GFS-FAQ"><a href="#GFS-FAQ" class="headerlink" title="GFS FAQ"></a>GFS FAQ</h3><p><strong>Q: Did having a single master turn out to be a good idea?</strong><br>A: That idea simplified initial deployment but was not so great in the long run. This article (GFS: Evolution on Fast Forward, <a class="link"   target="_blank" rel="noopener" href="https://queue.acm.org/detail.cfm?id=1594206" >https://queue.acm.org/detail.cfm?id=1594206<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>) says that as the years went by and GFS use grew, a few things went wrong. The number of files grew enough that it wasn’t reasonable to store all files’ metadata in the RAM of a single master. The number of clients grew enough that a single master didn’t have enough CPU power to serve them. The fact that switching from a failed master to one of its secondaries required human intervention made recovery slow. Apparently Google’s replacement for GFS, Colossus, splits the master over multiple servers, and has more automated master failure recovery  </p>
+<p><strong>Q: Why is atomic record append at-least-once, rather than exactly once?</strong><br>A: Section 3.1, Step 7, says that if a write fails at one of the secondaries, the client re-tries the write. That will cause the data to be appended more than once at the non-failed replicas. A different design could detect duplicate client requests despite arbitrary failures (e.g. a primary failure between the original request and the client’s retry). You’ll implement such a design in the labs, at considerable expense in complexity and performance  </p>
+<p><strong>Q: How does an application know what sections of a chunk consist of padding and duplicate records?</strong><br>A: To detect padding, applications can put a predictable magic number at the start of a valid record, or include a checksum that will likely only be valid if the record is valid. The application can detect duplicates by including unique IDs in records. Then, if it reads a record that has the same ID as an earlier record, it knows that they are duplicates of each other. GFS provides a library for applications that handles these cases. This aspect of the GFS design effectively moves complexity from GFS to applications, which is perhaps not ideal  </p>
+<p><strong>Q: How can clients find their data given that atomic record append writes it at an unpredictable offset in the file?</strong><br>A: Append (and GFS in general) is mostly intended for applications that sequentially read entire files. Such applications will scan the file looking for valid records (see the previous question), so they don’t need to know the record locations in advance. For example, the file might contain URLs encountered by a set of concurrent web crawlers. The file offset of any given URL doesn’t matter much; readers just want to be able to read the entire set of URLs  </p>
+<p><strong>Q: What’s a checksum?</strong><br>A: A checksum algorithm takes a sequence of bytes as input and returns a single number that’s a function of that sequence. For example, a simple checksum might be the sum of all the bytes in the input. GFS stores the checksum of each 64 kilobyte “block” in each chunk. When a chunkserver writes a block of data to its disk, it first computes the checksum of the block, and saves the checksum on disk. When a chunkserver reads a block from its disk, it also reads the relevant previously-saved checksum, re-computes a checksum from the data read from disk, and checks that the two checksums match. If the data was corrupted by the disk, the checksums won’t match, and the chunkserver will know to return an error. Separately, some GFS applications store their own checksums, over application-defined records, inside GFS files, to distinguish between correct records and padding. CRC32 is an example of a checksum algorithm  </p>
+<p><strong>Q: The paper mentions reference counts – what are they?</strong><br>A: They are part of the implementation of copy-on-write for snapshots. When GFS creates a snapshot, it doesn’t copy the chunks, but instead increases the reference counter of each chunk. This makes creating a snapshot inexpensive. If a client writes a chunk and the master notices the reference count is greater than one, the master first makes a copy so that the client can update the copy (instead of the chunk that is part of the snapshot). You can view this as delaying the copy until it is absolutely necessary. The hope is that not all chunks will be modified and one can avoid making some copies  </p>
+<p><strong>Q: If an application uses the standard POSIX file APIs, would it need to be modified in order to use GFS?</strong><br>A: Yes, but GFS isn’t intended for existing applications. It is designed for newly-written applications, such as MapReduce programs  </p>
+<p><strong>Q: How does GFS determine the location of the nearest replica?</strong><br>A: The paper hints that GFS does this based on the IP addresses of the servers storing the available replicas. In 2003, Google must have assigned IP addresses in such a way that if two IP addresses are close to each other in IP address space, then they are also close to each other in machine-room network topology (perhaps plugged into the same Ethernet switch, or into Ethernet switches that are themselves directly connected)  </p>
+<p><strong>Q: What’s a lease?</strong><br>A: For GFS, a lease is a period of time for which the master grants a chunkserver the ability to act as the primary for a particular chunk. The master guarantees not to assign a different primary for the duration of the lease, and the primary agrees to stop acting as primary before the lease expires (unless the primary first asks the master to extend the lease). Leases are a way to avoid having the primary have to repeatedly ask the master if it is still primary – it knows it can act as primary for the next minute (or whatever the lease interval is) without talking to the master again  </p>
+<p><strong>Q: Suppose S1 is the primary for a chunk, and the network between the master and S1 fails. The master will notice and designate some other server as primary, say S2. Since S1 didn’t actually fail, are there now two primaries for the same chunk?</strong><br>A: That would be a disaster, since both primaries might apply different updates to the same chunk. Luckily GFS’s lease mechanism prevents this scenario. The master granted S1 a 60-second lease to be primary. S1 knows to stop being primary before its lease expires. The master won’t grant a lease to S2 until after the lease to S1 expires. So S2 won’t start acting as primary until after S1 stops  </p>
+<p><strong>Q: 64 megabytes sounds awkwardly large for the chunk size!</strong><br>A: The 64 MB chunk size is the unit of book-keeping in the master, and the granularity at which files are sharded over chunkservers. Clients can issue smaller reads and writes – they are not forced to deal in whole 64 MB chunks. The point of using such a big chunk size is to reduce the size of the meta-data tables in the master, and to avoid limiting clients that want to do huge transfers to reduce overhead. On the other hand, files less than 64 MB in size do not get much parallelism  </p>
+<p><strong>Q: Does Google still use GFS?</strong><br>A: GFS has been replaced by something called Colossus, with the same overall goals, but improvements in master performance and fault-tolerance. In addition, many applications within Google have switched to more database-like storage systems such as BigTable and Spanner. However, much of the GFS design lives on in HDFS, the storage system for the Hadoop open-source MapReduce<br><a class="link"   target="_blank" rel="noopener" href="https://cloud.google.com/blog/products/storage-data-transfer/a-peek-behind-colossus-googles-file-system" >https://cloud.google.com/blog/products/storage-data-transfer/a-peek-behind-colossus-googles-file-system<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  </p>
+<p><strong>Q: How acceptable is it that GFS trades correctness for performance and simplicity?</strong><br>A: This a recurring theme in distributed systems. Strong consistency usually requires protocols that are complex and require communication and waiting for replies (as we will see in the next few lectures). By exploiting ways that specific application classes can tolerate relaxed consistency, one can design systems that have good performance and sufficient consistency. For example, GFS optimizes for MapReduce applications, which need high read performance for large files and are OK with having holes in files, records showing up several times, and inconsistent reads. On the other hand, GFS would not be good for storing account balances at a bank  </p>
+<p><strong>Q: What if the master fails?</strong><br>A: There are replica masters with a full copy of the master state; the paper’s design requires some outside entity (a human?) to decide to switch to one of the replicas after a master failure (Section 5.1.3). We will see later how to build replicated services that automatically<br>switch to a backup server if the main server fails, and you’ll build such a thing in Lab 2  </p>
+<p><strong>Q: Why 3 replicas?</strong><br>A: Perhaps this was the line of reasoning: two replicas are not enough because, after one fails, there may not be enough time to re-replicate before the remaining replica fails; three makes that scenario much less likely. With 1000s of disks, low-probabilty events like multiple replicas failing in short order occur uncomfortably often. Here is a study of disk reliability from that era: <a class="link"   target="_blank" rel="noopener" href="https://research.google.com/archive/disk_failures.pdf" >https://research.google.com/archive/disk_failures.pdf<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>. You need to factor in the time it takes to make new copies of all the chunks that were stored on a failed disk; and perhaps also the frequency of power, server, network, and software failures. The cost of disks (and associated power, air conditioning, and rent), and the value of the data being protected, are also relevant  </p>
+<p><strong>Q: What is internal fragmentation? Why does lazy allocation help?</strong><br>A: Internal fragmentation is the space wasted when a system uses an allocation unit larger than needed for the requested allocation. If<br>GFS allocated disk space in 64MB units, then a one-byte file would waste almost 64MB of disk. GFS avoids this problem by allocating disk space lazily. Every chunk is a Linux file, and Linux file systems use block sizes of a few tens of kilobytes; so when an application creates a one-byte GFS file, the file’s chunk consumes only one Linux disk block, not 64 MB  </p>
+<p><strong>Q: What benefit does GFS obtain from the weakness of its consistency?</strong><br>A: It’s easier to think about the additional work GFS would have to do to achieve stronger consistency<br>	The primary should not let secondaries apply a write unless all the secondaries will be able to do it. This likely requires two rounds of<br>communication – one to ask all secondaries if they are alive and are able to promise to do the write if asked, and (if all answer yes) a second round to tell the secondaries to commit the write<br>	If the primary dies, some secondaries may have missed the last few update messages the primary sent. This will cause the remaining secondaries to have slightly differing copies of the data. Before resuming operation, a new primary should ensure that all the secondaries have identical copies<br>	Since clients re-send requests if they suspect something has gone wrong, primaries would need to filter out operations that have already been executed<br>	Clients cache chunk locations, and may send reads to a chunkserver that holds a stale version of a chunk. GFS would need a way to<br>guarantee that this cannot succeed  </p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Titre:</strong> MIT 6.824(6.5840) Distributed Systems</li>
+        <li><strong>Auteur:</strong> tiny_star</li>
+        <li><strong>Créé à
+                :</strong> 2026-03-10 11:45:32</li>
+        
+            <li>
+                <strong>Mis à jour à
+                    :</strong> 2026-03-25 19:19:17
+            </li>
+        
+        <li>
+            <strong>Lien:</strong> https://tiny-star3.github.io/2026/03/10/Cpp/[Class]MIT 6.824(6.5840) Distributed Systems/
+        </li>
+        <li>
+            <strong>
+                Licence:
+            </strong>
+            
+
+            
+                Cette œuvre est sous licence <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/03/02/Ai/%5BClass%5DCMU-10-414-714-Deep-Learning-Systems/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">【Class】CMU 10-414(714) Deep Learning Systems</span>
+						<span class="post-nav-item">Articles suivants</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Commentaires
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">Sur cette page</div>
+		<div class="page-title">MIT 6.824(6.5840) Distributed Systems</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-1-Introduction"><span class="nav-text">Lecture 1: Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MAIN-TOPICS"><span class="nav-text">MAIN TOPICS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CASE-STUDY-MapReduce"><span class="nav-text">CASE STUDY: MapReduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Some-details-paper%E2%80%99s-Figure-1"><span class="nav-text">Some details (paper’s Figure 1)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-2-Threads-and-RPC"><span class="nav-text">Lecture 2: Threads and RPC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Go-threads-and-the-web-crawler"><span class="nav-text">Go threads, and the web crawler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Go-RPC"><span class="nav-text">Go RPC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Go-FAQ"><span class="nav-text">Go FAQ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vote-examples"><span class="nav-text">vote examples</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-3-GFS"><span class="nav-text">Lecture 3: GFS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Paper-Questions"><span class="nav-text">Paper Questions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GFS-FAQ"><span class="nav-text">GFS FAQ</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2025</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">tiny_star</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        24  posts au total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITEURS</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">NOMBRE TOTAL DE PAGES VUES</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                Blog en ligne depuis <span class="odometer" id="runtime_days" ></span> Jours <span class="odometer" id="runtime_hours"></span> Hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="recherche..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>
