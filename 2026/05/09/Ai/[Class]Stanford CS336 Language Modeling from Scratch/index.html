@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="tiny_star">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://tiny-star3.github.io/2026/05/09/ai/[class]stanford cs336 language modeling from scratch/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Class]Stanford CS336 Language Modeling from Scratch】">
+<meta property="og:url" content="http://tiny-star3.github.io/2026/05/09/Ai/[Class]Stanford%20CS336%20Language%20Modeling%20from%20Scratch/index.html">
+<meta property="og:site_name" content="tiny_star_blog">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale">
+<meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-05-08T17:43:47.000Z">
+<meta property="article:modified_time" content="2026-05-27T05:44:18.683Z">
+<meta property="article:author" content="tiny_star">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/mystar.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/mystar.png">
+    <meta name="theme-color" content="#6495ed">
+    <link rel="shortcut icon" href="/images/mystar.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            【Class]Stanford CS336 Language Modeling from Scratch】 | tiny_star_blog
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"tiny-star3.github.io","root":"/","language":"zh","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":4,"number":false,"expand":false,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#6495ed","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"tiny_star","subtitle":{"text":["渺如尘埃，灿若星辰！","You are more than what you have become. Remember who you are!"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#87CEFA","dark":"#6495ED"},"text_style":{"title_size":"3rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Life":{"path":"/categories/Life","icon":"fa-regular fa-face-awesome"},"Metaphysics":{"path":"/categories/Metaphysics","icon":"fa-regular fa-stars"},"Cpp":{"icon":"fa-regular fa-face-glasses","path":"/categories/Cpp"},"Algorithm":{"path":"/categories/Algorithm","icon":"fa-regular fa-face-explode"},"Ai":{"path":"/categories/Ai","icon":"fa-regular fa-alien-8bit"},"Sundry":{"path":"/categories/Sundry","icon":"fa-regular fa-earth-asia"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2025/7/22 22:28:54"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/images/mystar.png" class="w-full h-full rounded-xs">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                tiny_star_blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    ACCUEIL
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Life"
+                                        >
+                                    <i class="fa-regular fa-face-awesome fa-fw"></i>
+                                    LIFE
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Metaphysics"
+                                        >
+                                    <i class="fa-regular fa-stars fa-fw"></i>
+                                    METAPHYSICS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Cpp"
+                                        >
+                                    <i class="fa-regular fa-face-glasses fa-fw"></i>
+                                    CPP
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Algorithm"
+                                        >
+                                    <i class="fa-regular fa-face-explode fa-fw"></i>
+                                    ALGORITHM
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Ai"
+                                        >
+                                    <i class="fa-regular fa-alien-8bit fa-fw"></i>
+                                    AI
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Sundry"
+                                        >
+                                    <i class="fa-regular fa-earth-asia fa-fw"></i>
+                                    SUNDRY
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                ACCUEIL
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Life"
+                        >
+                            <span>
+                                LIFE
+                            </span>
+                            
+                                <i class="fa-regular fa-face-awesome fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Metaphysics"
+                        >
+                            <span>
+                                METAPHYSICS
+                            </span>
+                            
+                                <i class="fa-regular fa-stars fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Cpp"
+                        >
+                            <span>
+                                CPP
+                            </span>
+                            
+                                <i class="fa-regular fa-face-glasses fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Algorithm"
+                        >
+                            <span>
+                                ALGORITHM
+                            </span>
+                            
+                                <i class="fa-regular fa-face-explode fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Ai"
+                        >
+                            <span>
+                                AI
+                            </span>
+                            
+                                <i class="fa-regular fa-alien-8bit fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Sundry"
+                        >
+                            <span>
+                                SUNDRY
+                            </span>
+                            
+                                <i class="fa-regular fa-earth-asia fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Catégories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">36</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">【Class]Stanford CS336 Language Modeling from Scratch】</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/staravatar.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">tiny_star</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv4</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-05-09 01:43:47</span>
+        <span class="mobile">2026-05-09 01:43:47</span>
+        <span class="hover-info">Créé</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-05-27 13:44:18</span>
+            <span class="mobile">2026-05-27 13:44:18</span>
+            <span class="hover-info">Mis à jour</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Ai/">Ai</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h2 id="课程"><a href="#课程" class="headerlink" title="课程"></a>课程</h2><p>2026年课程</p>
+<h3 id="课程视频"><a href="#课程视频" class="headerlink" title="课程视频"></a>课程视频</h3><h3 id="课程信息"><a href="#课程信息" class="headerlink" title="课程信息"></a>课程信息</h3><p><a class="link"   target="_blank" rel="noopener" href="https://cs336.stanford.edu/" >Stanford CS336 | Language Modeling from Scratch<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  </p>
+<h3 id="Lectures"><a href="#Lectures" class="headerlink" title="Lectures"></a>Lectures</h3><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/stanford-cs336/lectures" >GitHub - stanford-cs336&#x2F;lectures · GitHub<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  </p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/stanford-cs336/spring2025-lectures" >GitHub - stanford-cs336&#x2F;spring2025-lectures · GitHub<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  </p>
+<p>在 Linux(WSL) 条件下运行，Windows 报错有点多  </p>
+<p>下载 2026 年和 2025 年仓库，然后将 2025 年中除 lecture_XX.py 文件复制进2026年中，然后 2025 年可删除  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/stanford-cs336/lectures</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/stanford-cs336/spring2025-lectures</span><br></pre></td></tr></table></figure></div>
+
+<p>安装 uv<br>	在 WSL&#x2F;Linux 上，snap 有时候会因为 systemd 配置问题运行缓慢。uv 官方最推荐的安装方式是直接运行他们的安装脚本，这样最快且最稳定：  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 运行安装命令：</span></span><br><span class="line">curl -LsSf https://astral.sh/uv/install.sh | sh</span><br><span class="line"><span class="comment"># 让命令立即生效：安装完后，输入以下命令（或者直接关闭并重新打开你的 WSL 窗口）：</span></span><br><span class="line"><span class="built_in">source</span> <span class="variable">$HOME</span>/.local/bin/env</span><br><span class="line"><span class="comment"># 验证，如果看到版本号，就说明装好了</span></span><br><span class="line">uv --version</span><br></pre></td></tr></table></figure></div>
+
+<p>修复文件夹权限，把 &#x2F;home&#x2F;WorldClass 及其下面所有文件的所有者都改成当前的用户  </p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chown -R $USER:$USER &quot;/home/WorldClass&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>接下来，按照仓库执行  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uv <span class="built_in">sync</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/percyliang/edtrace</span><br></pre></td></tr></table></figure></div>
+
+<p>运行任何课程脚本，都要在前面加上 uv。它会自动帮你找 python3  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uv run python execute.py -m lecture_01</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 似乎不需要下载 2025 年仓库</span></span><br><span class="line">uv run python -m edtrace.execute -m lecture_01</span><br></pre></td></tr></table></figure></div>
+
+<p>报错<br>UnicodeEncodeError: ‘gbk’ codec can’t encode character… 是因为 Windows 中文系统的终端（Terminal）默认编码是 GBK，而老师的代码里有一个“摊手”的表情包符号 (🤷)，GBK 编码处理不了它  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">$ python -m uv run python execute.py -m lecture_01</span><br><span class="line">Executing lecture_01...</span><br><span class="line">[0 lecture_01.py:37] def main():</span><br><span class="line">[1 lecture_01.py:38] welcome()</span><br><span class="line">[2 lecture_01.py:52] def welcome():</span><br><span class="line">[3 lecture_01.py:53] text(<span class="string">&quot;## CS336: Language Models From Scratch (Spring 2026)&quot;</span>),</span><br><span class="line">[4 lecture_01.py:55] image(<span class="string">&quot;images/course-staff.png&quot;</span>, width=600)</span><br><span class="line">[5 lecture_01.py:56] text(<span class="string">&quot;...bringing you the 3rd offering of CS336.&quot;</span>)</span><br><span class="line">[6 lecture_01.py:58] text(<span class="string">&quot;Lectures from 2nd offering (Spring 2025) are on YouTube.&quot;</span>)</span><br><span class="line">[7 lecture_01.py:59] text(<span class="string">&quot;What&#x27;s new?&quot;</span>)</span><br><span class="line">[8 lecture_01.py:60] text(<span class="string">&quot;- Same &#x27;from scratch&#x27; philosophy&quot;</span>)</span><br><span class="line">[9 lecture_01.py:61] text(<span class="string">&quot;- Prioritize high value-per-time concepts, don&#x27;t lose the forest for the trees&quot;</span>)</span><br><span class="line">[10 lecture_01.py:62] text(<span class="string">&quot;- More coverage of modern LM ingredients (mixture of experts, long-context, agents)&quot;</span>)</span><br><span class="line">[11 lecture_01.py:38] welcome()</span><br><span class="line">[12 lecture_01.py:39] why_this_course_exists()</span><br><span class="line">[13 lecture_01.py:65] def why_this_course_exists():</span><br><span class="line">[14 lecture_01.py:66] text(<span class="string">&quot;## Why did we make this course?&quot;</span>)</span><br><span class="line">[15 lecture_01.py:68] text(<span class="string">&quot;Problem: researchers are becoming disconnected from the underlying technology.&quot;</span>)</span><br><span class="line">[16 lecture_01.py:69] text(<span class="string">&quot;- 2016: researchers implemented and trained their own models.&quot;</span>)</span><br><span class="line">[17 lecture_01.py:70] text(<span class="string">&quot;- 2018: researchers downloaded models (e.g., BERT) and fine-tuned them.&quot;</span>)</span><br><span class="line">[18 lecture_01.py:71] text(<span class="string">&quot;- Today: researchers prompt API models (e.g., GPT/Claude/Gemini).&quot;</span>)</span><br><span class="line">[19 lecture_01.py:73] text(<span class="string">&quot;Moving up levels of abstraction boosts productivity, but&quot;</span>)</span><br><span class="line">[20 lecture_01.py:74] text(<span class="string">&quot;- These abstractions are leaky (in contrast to programming languages or operating systems).&quot;</span>)</span><br><span class="line">[21 lecture_01.py:75] text(<span class="string">&quot;- There is still fundamental research to be done that requires tearing up the stack.&quot;</span>)</span><br><span class="line">[22 lecture_01.py:77] text(<span class="string">&quot;Full understanding of this technology is necessary for fundamental research.&quot;</span>)</span><br><span class="line">[23 lecture_01.py:79] text(<span class="string">&quot;Philosophy of this course: understanding via building.&quot;</span>)</span><br><span class="line">[24 lecture_01.py:80] text(<span class="string">&quot;But there&#x27;s one small problem...&quot;</span>)</span><br><span class="line">[25 lecture_01.py:82] text(<span class="string">&quot;## The industrialization of language models&quot;</span>)</span><br><span class="line">[26 lecture_01.py:83] image(<span class="string">&quot;https://upload.wikimedia.org/wikipedia/commons/c/cc/Industrialisation.jpg&quot;</span>, width=400)</span><br><span class="line">[27 lecture_01.py:85] text(<span class="string">&quot;Frontier models are really expensive:&quot;</span>)</span><br><span class="line">[28 lecture_01.py:86] text(<span class="string">&quot;- 2023: GPT-4 supposedly cost <span class="variable">$100M</span> to train. &quot;</span>), article_link(<span class="string">&quot;https://www.wired.com/story/openai-ceo-sam-altman-the-age-of-giant-ai-models-is-already-over/&quot;</span>)</span><br><span class="line">[29 lecture_01.py:87] text(<span class="string">&quot;- 2025: xAI builds cluster with 230K GPUs for training Grok. &quot;</span>), article_link(<span class="string">&quot;https://x.com/elonmusk/status/1947701807389515912&quot;</span>)</span><br><span class="line">[30 lecture_01.py:89] text(<span class="string">&quot;There are no public details on how frontier models are built.&quot;</span>)</span><br><span class="line">[31 lecture_01.py:90] text(<span class="string">&quot;From the GPT-4 technical report &quot;</span>), <span class="built_in">link</span>(gpt_4_2023), text(<span class="string">&quot;:&quot;</span>)</span><br><span class="line">[32 lecture_01.py:91] image(<span class="string">&quot;images/gpt4-no-details.png&quot;</span>, width=600)</span><br><span class="line">[33 lecture_01.py:93] text(<span class="string">&quot;Frontier models are out of reach for us.&quot;</span>)</span><br><span class="line">[34 lecture_01.py:94] text(<span class="string">&quot;We could build small language models (&lt;1B parameters), but this might not be representative of large language models.&quot;</span>)</span><br><span class="line">[35 lecture_01.py:96] text(<span class="string">&quot;Example 1: fraction of FLOPs spent in attention versus MLP changes with scale. &quot;</span>), post_link(<span class="string">&quot;https://x.com/stephenroller/status/1579993017234382849&quot;</span>)</span><br><span class="line">[36 lecture_01.py:97] image(<span class="string">&quot;images/roller-flops.png&quot;</span>, width=400)</span><br><span class="line">[37 lecture_01.py:98] text(<span class="string">&quot;Example 2: emergence of behavior with scale &quot;</span>), <span class="built_in">link</span>(<span class="string">&quot;https://arxiv.org/pdf/2206.07682&quot;</span>)</span><br><span class="line">[38 lecture_01.py:99] image(<span class="string">&quot;images/wei-emergence-plot.png&quot;</span>, width=600)</span><br><span class="line">[39 lecture_01.py:101] text(<span class="string">&quot;## What can we learn in this class that transfers to frontier models?&quot;</span>)</span><br><span class="line">[40 lecture_01.py:102] text(<span class="string">&quot;There are three types of knowledge:&quot;</span>)</span><br><span class="line">[41 lecture_01.py:103] text(<span class="string">&quot;- Mechanics: how things work (what a Transformer is, how model parallelism works)&quot;</span>)</span><br><span class="line">[42 lecture_01.py:104] text(<span class="string">&quot;- Mindset: squeezing the most out of the hardware, taking scaling seriously&quot;</span>)</span><br><span class="line">[43 lecture_01.py:105] text(<span class="string">&quot;- Intuitions: which data and modeling decisions yield good accuracy&quot;</span>)</span><br><span class="line">[44 lecture_01.py:107] text(<span class="string">&quot;We can teach mechanics and mindset (these do transfer).&quot;</span>)</span><br><span class="line">[45 lecture_01.py:108] text(<span class="string">&quot;We can only partially teach intuitions (do not necessarily transfer across scales).&quot;</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">File <span class="string">&quot;D:\assmallasstar\class\World Class\Stanford CS336 Language Modeling from Scratch\Lecture\lectures\execute.py&quot;</span>, line 265, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">trace = execute(module_name=module, inspect_all_variables=args.inspect_all_variables)</span><br><span class="line">File <span class="string">&quot;D:\assmallasstar\class\World Class\Stanford CS336 Language Modeling from Scratch\Lecture\lectures\execute.py&quot;</span>, line 242, <span class="keyword">in</span> execute</span><br><span class="line">module.main()</span><br><span class="line">~~~~~~~~~~~^^</span><br><span class="line">File <span class="string">&quot;D:\assmallasstar\class\World Class\Stanford CS336 Language Modeling from Scratch\Lecture\lectures\lecture_01.py&quot;</span>, line 39, <span class="keyword">in</span> main</span><br><span class="line">why_this_course_exists()</span><br><span class="line">~~~~~~~~~~~~~~~~~~~~~~^^</span><br><span class="line">File <span class="string">&quot;D:\assmallasstar\class\World Class\Stanford CS336 Language Modeling from Scratch\Lecture\lectures\lecture_01.py&quot;</span>, line 110, <span class="keyword">in</span> why_this_course_exists</span><br><span class="line">text(<span class="string">&quot;## Intuitions? \U0001f937&quot;</span>)</span><br><span class="line">^^^^</span><br><span class="line">File <span class="string">&quot;D:\assmallasstar\class\World Class\Stanford CS336 Language Modeling from Scratch\Lecture\lectures\execute.py&quot;</span>, line 233, <span class="keyword">in</span> local_trace_func</span><br><span class="line"><span class="built_in">return</span> trace_func(frame, event, arg)</span><br><span class="line">File <span class="string">&quot;D:\assmallasstar\class\World Class\Stanford CS336 Language Modeling from Scratch\Lecture\lectures\execute.py&quot;</span>, line 179, <span class="keyword">in</span> trace_func</span><br><span class="line"><span class="built_in">print</span>(f<span class="string">&quot;  [&#123;len(steps)&#125; &#123;os.path.basename(item.path)&#125;:&#123;item.line_number&#125;] &#123;item.code&#125;&quot;</span>, file=real_stdout)</span><br><span class="line">~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span><br><span class="line">UnicodeEncodeError: <span class="string">&#x27;gbk&#x27;</span> codec can<span class="string">&#x27;t encode character &#x27;</span>\U0001f937<span class="string">&#x27; in position 46: illegal multibyte sequence</span></span><br></pre></td></tr></table></figure></div>
+
+<p><strong>解决方法：强制 Python 使用 UTF-8 编码</strong><br>	在运行命令前设置一个环境变量，告诉 Python 无论系统是什么编码，都强制使用 <strong>UTF-8</strong>  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PYTHONUTF8=1	<span class="comment"># 设置环境变量（仅对当前窗口有效）</span></span><br><span class="line">python -m uv run python execute.py -m lecture_01</span><br></pre></td></tr></table></figure></div>
+
+<p>To view it locally:<br>		Load a local server to view at <code>http://localhost:5173?trace=var/traces/sample.json</code>:  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run --prefix=edtrace/frontend dev</span><br></pre></td></tr></table></figure></div>
+
+<p>报错<br>	vite 不是内部或外部命令 (环境混淆)<br>	报错里出现了 CMD.EXE 和 UNC 路径<br>	这说明在 WSL 里运行 npm 时，WSL 并没有调用 Linux 里的 npm，而是跑去调用了 Windows 里的 npm.cmd。Windows 的工具无法处理 WSL 内部的路径（\wsl.localhost...），所以它报错了  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ npm run --prefix=edtrace/frontend dev</span><br><span class="line"></span><br><span class="line">&gt; edtrace@0.0.0 dev</span><br><span class="line">&gt; vite</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;\\wsl.localhost\Ubuntu-24.04\home\WorldClass\Stanford CS336 Language Modeling f</span></span><br><span class="line"><span class="string">rom Scratch\Lecture\lectures\edtrace\frontend&#x27;</span></span><br><span class="line">用作为当前目录的以上路径启动了 CMD.EXE。</span><br><span class="line">UNC 路径不受支持。默认值设为 Windows 目录。</span><br><span class="line"><span class="string">&#x27;vite&#x27;</span> 不是内部或外部命令，也不是可运行的程序</span><br><span class="line">或批处理文件。</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>解决方法：在 WSL 内部安装 Linux 版的 Node.js</strong><br>	在 WSL (Ubuntu) 里安装 Node：  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install nodejs npm -y</span><br></pre></td></tr></table></figure></div>
+
+<p>​	在 WSL 内部彻底清除 Windows 的痕迹，并重新安装 Linux 版的依赖<br>​		彻底删除旧依赖  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入前端文件夹</span></span><br><span class="line"><span class="built_in">cd</span> edtrace/frontend</span><br><span class="line"></span><br><span class="line"><span class="comment"># 彻底删除 Windows 下生成的 node_modules 和 锁文件</span></span><br><span class="line"><span class="built_in">rm</span> -rf node_modules</span><br><span class="line"><span class="built_in">rm</span> -f package-lock.json</span><br></pre></td></tr></table></figure></div>
+
+<p>​		在 WSL 内重新安装  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这一步会下载适合 Linux 环境的 vite 和相关脚本</span></span><br><span class="line">npm install</span><br></pre></td></tr></table></figure></div>
+
+<p>​		重新启动服务  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ../</span><br><span class="line">npm run --prefix=edtrace/frontend dev</span><br></pre></td></tr></table></figure></div>
+
+<p>​		npm install 报错 Node.js 版本不匹配，则升级 Node.js  </p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载并安装 nvm</span></span><br><span class="line">curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 激活 nvm (或者关闭终端重新打开)</span></span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装并使用 Node.js 22 (最新的 LTS)</span></span><br><span class="line">nvm install 22</span><br><span class="line">nvm use 22</span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证版本</span></span><br><span class="line">node -v  <span class="comment"># 应该显示 v22.x.x</span></span><br></pre></td></tr></table></figure></div>
+
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Titre:</strong> 【Class]Stanford CS336 Language Modeling from Scratch】</li>
+        <li><strong>Auteur:</strong> tiny_star</li>
+        <li><strong>Créé à
+                :</strong> 2026-05-09 01:43:47</li>
+        
+            <li>
+                <strong>Mis à jour à
+                    :</strong> 2026-05-27 13:44:18
+            </li>
+        
+        <li>
+            <strong>Lien:</strong> https://tiny-star3.github.io/2026/05/09/Ai/[Class]Stanford CS336 Language Modeling from Scratch/
+        </li>
+        <li>
+            <strong>
+                Licence:
+            </strong>
+            
+
+            
+                Cette œuvre est sous licence <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2026/07/12/Cpp/%5BBook%20Exercises%5DProgramming%20Massively%20Parallel%20Processors%20A%20Hands-on%20Approach(Fourth%20Edition)/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48"></span>
+						<span class="post-nav-item">Articles précédents</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/05/03/Algorithm/%5BClass%5DMIT%206.006(2011)%20Introduction%20to%20Algorithms/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">【Class】MIT 6.006(2011) Introduction to Algorithms&#39;</span>
+						<span class="post-nav-item">Articles suivants</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Commentaires
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">Sur cette page</div>
+		<div class="page-title">【Class]Stanford CS336 Language Modeling from Scratch】</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B"><span class="nav-text">课程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E8%A7%86%E9%A2%91"><span class="nav-text">课程视频</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E4%BF%A1%E6%81%AF"><span class="nav-text">课程信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lectures"><span class="nav-text">Lectures</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2025</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">tiny_star</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        36  posts au total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITEURS</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">NOMBRE TOTAL DE PAGES VUES</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                Blog en ligne depuis <span class="odometer" id="runtime_days" ></span> Jours <span class="odometer" id="runtime_hours"></span> Hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="recherche..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>

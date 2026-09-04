@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="tiny_star">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://tiny-star3.github.io/2026/05/03/algorithm/[class]mit 6.006(2011) introduction to algorithms/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Class】MIT 6.006(2011) Introduction to Algorithms&#39;">
+<meta property="og:url" content="http://tiny-star3.github.io/2026/05/03/Algorithm/[Class]MIT%206.006(2011)%20Introduction%20to%20Algorithms/index.html">
+<meta property="og:site_name" content="tiny_star_blog">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale">
+<meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-05-03T15:49:09.000Z">
+<meta property="article:modified_time" content="2026-05-05T02:03:35.179Z">
+<meta property="article:author" content="tiny_star">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/mystar.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/mystar.png">
+    <meta name="theme-color" content="#6495ed">
+    <link rel="shortcut icon" href="/images/mystar.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            【Class】MIT 6.006(2011) Introduction to Algorithms&#39; | tiny_star_blog
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"tiny-star3.github.io","root":"/","language":"zh","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":4,"number":false,"expand":false,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#6495ed","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"tiny_star","subtitle":{"text":["渺如尘埃，灿若星辰！","You are more than what you have become. Remember who you are!"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#87CEFA","dark":"#6495ED"},"text_style":{"title_size":"3rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Life":{"path":"/categories/Life","icon":"fa-regular fa-face-awesome"},"Metaphysics":{"path":"/categories/Metaphysics","icon":"fa-regular fa-stars"},"Cpp":{"icon":"fa-regular fa-face-glasses","path":"/categories/Cpp"},"Algorithm":{"path":"/categories/Algorithm","icon":"fa-regular fa-face-explode"},"Ai":{"path":"/categories/Ai","icon":"fa-regular fa-alien-8bit"},"Sundry":{"path":"/categories/Sundry","icon":"fa-regular fa-earth-asia"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2025/7/22 22:28:54"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/images/mystar.png" class="w-full h-full rounded-xs">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                tiny_star_blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    ACCUEIL
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Life"
+                                        >
+                                    <i class="fa-regular fa-face-awesome fa-fw"></i>
+                                    LIFE
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Metaphysics"
+                                        >
+                                    <i class="fa-regular fa-stars fa-fw"></i>
+                                    METAPHYSICS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Cpp"
+                                        >
+                                    <i class="fa-regular fa-face-glasses fa-fw"></i>
+                                    CPP
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Algorithm"
+                                        >
+                                    <i class="fa-regular fa-face-explode fa-fw"></i>
+                                    ALGORITHM
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Ai"
+                                        >
+                                    <i class="fa-regular fa-alien-8bit fa-fw"></i>
+                                    AI
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Sundry"
+                                        >
+                                    <i class="fa-regular fa-earth-asia fa-fw"></i>
+                                    SUNDRY
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                ACCUEIL
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Life"
+                        >
+                            <span>
+                                LIFE
+                            </span>
+                            
+                                <i class="fa-regular fa-face-awesome fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Metaphysics"
+                        >
+                            <span>
+                                METAPHYSICS
+                            </span>
+                            
+                                <i class="fa-regular fa-stars fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Cpp"
+                        >
+                            <span>
+                                CPP
+                            </span>
+                            
+                                <i class="fa-regular fa-face-glasses fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Algorithm"
+                        >
+                            <span>
+                                ALGORITHM
+                            </span>
+                            
+                                <i class="fa-regular fa-face-explode fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Ai"
+                        >
+                            <span>
+                                AI
+                            </span>
+                            
+                                <i class="fa-regular fa-alien-8bit fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Sundry"
+                        >
+                            <span>
+                                SUNDRY
+                            </span>
+                            
+                                <i class="fa-regular fa-earth-asia fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Catégories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">36</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">【Class】MIT 6.006(2011) Introduction to Algorithms&#39;</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/staravatar.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">tiny_star</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv4</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-05-03 23:49:09</span>
+        <span class="mobile">2026-05-03 23:49:09</span>
+        <span class="hover-info">Créé</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-05-05 10:03:35</span>
+            <span class="mobile">2026-05-05 10:03:35</span>
+            <span class="hover-info">Mis à jour</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Algorithm/">Algorithm</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h2 id="课程"><a href="#课程" class="headerlink" title="课程"></a>课程</h2><p>2011年课程</p>
+<h3 id="课程视频"><a href="#课程视频" class="headerlink" title="课程视频"></a>课程视频</h3><p><a class="link"   target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=HtSuA80QTyo" >Lecture 1: Algorithmic Thinking, Peak Finding - YouTube<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<h3 id="课程信息"><a href="#课程信息" class="headerlink" title="课程信息"></a>课程信息</h3><p><a class="link"   target="_blank" rel="noopener" href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/" >Introduction to Algorithms | Electrical Engineering and Computer Science | MIT OpenCourseWare<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<h2 id="Unit-1-Introduction"><a href="#Unit-1-Introduction" class="headerlink" title="Unit 1: Introduction"></a>Unit 1: Introduction</h2><h2 id="Lecture-1-Introduction-and-Peak-Finding"><a href="#Lecture-1-Introduction-and-Peak-Finding" class="headerlink" title="Lecture 1: Introduction and Peak Finding"></a>Lecture 1: Introduction and Peak Finding</h2><h3 id="Course-Overview"><a href="#Course-Overview" class="headerlink" title="Course Overview"></a>Course Overview</h3><p><strong>This course covers:</strong><br>	Efficient procedures for solving problems on large inputs (Ex: U.S. Highway Map, Human Genome)<br>	Scalability<br>	Classic data structures and elementary algorithms (CLRS text)<br>	Real implementations in Python<br>	Fun problem sets!  </p>
+<p><strong>The course is divided into 8 modules — each of which has a motivating problem and problem set(s) (except for the last module). Tentative module topics and motivating problems are as described below:</strong><br>	1.Algorithmic Thinking: Peak Finding<br>	2.Sorting &amp; Trees: Event Simulation<br>	3.Hashing: Genome Comparison<br>	4.Numerics: RSA Encryption<br>	5.Graphs: Rubik’s Cube<br>	6.Shortest Paths: Caltech → MIT<br>	7.Dynamic Programming: Image Compression<br>	8.Advanced Topics  </p>
+<h3 id="“Peak-finding”-problem-—-1D-and-2D-versions"><a href="#“Peak-finding”-problem-—-1D-and-2D-versions" class="headerlink" title="“Peak finding” problem — 1D and 2D versions"></a>“Peak finding” problem — 1D and 2D versions</h3><p><strong>One-dimensional Version</strong><br>	Position 2 is a peak if and only if b ≥ a and b ≥ c<br>	Position 9 is a peak if i ≥ h<br>	<style>.qsoyqxpbzoio{zoom: 80%;}</style><br>		a-i are numbers<br>	Problem: Find a peak if it exists (Does it always exist?)  </p>
+<p><strong>Straightforward Algorithm</strong><br>	Start from left<br>	<style>.zcyrxetbansw{zoom: 80%;}</style><br>		Look at n&#x2F;2 elements on average, could look at n elements in the worst case<br>	What if we start in the middle? For the configuration below, we would look at n&#x2F;2 elements<br>	Would we have to ever look at more than n&#x2F;2 elements if we start in the middle, and choose a direction based on which neighboring element is larger that the middle element?<br>	<style>.rjejvgkbkcnr{zoom:80%;}</style></p>
+<p><strong>Can we do better?</strong><br>	<style>.urlijthjtifx{zoom:80%;}</style><br>		Divide &amp; Conquer<br>	If a[n&#x2F;2] &lt; a[n&#x2F;2 − 1] then only look at left half 1 . . . n&#x2F;2 . . . 1 to look for peak<br>	Else if a[n&#x2F;2] &lt; a[n&#x2F;2 + 1] then only look at right half n&#x2F;2+1 . . . n to look for peak<br>	Else n&#x2F;2 position is a peak: WHY?<br>		a[n&#x2F;2] ≥ a[n&#x2F;2 − 1]<br>		a[n&#x2F;2] ≥ a[n&#x2F;2 + 1]  </p>
+<p><strong>Complexity</strong>  </p>
+<style>.yfrxonmoqlcb{zoom:80%;}</style>
+
+<p><strong>Two-dimensional Version</strong><br>	<style>.etjxippjwiou{zoom:80%;}</style><br>		Greedy Ascent Algorithm: Θ(nm) complexity, Θ(n<sup>2</sup>) algorithm if m &#x3D; n<br>	a is a 2D-peak if a ≥ b, a ≥ d, a ≥ c, a ≥ e  </p>
+<p><strong>Extend 1D Divide and Conquer to 2D</strong><br>	Pick middle column j &#x3D; m&#x2F;2<br>	Find global maximum on column j at (i, j)<br>	Compare (i, j − 1), (i, j), (i, j + 1)<br>	Pick left columns of (i, j − 1) &gt; (i, j)<br>	Similarly for right<br>	(i, j) is a 2D-peak if neither condition holds ← WHY?<br>	Solve the new problem with half the number of columns<br>	When you have a single column, find global maximum and you‘re done  </p>
+<p><strong>Example</strong><br>	<style>.pirveragktmo{zoom:80%;}</style></p>
+<p><strong>Complexity</strong><br>	<style>.bhtoanltniwz{zoom:80%;}</style><br>	不行，反例如下：<br>	1 2 3 3 3<br>	5 6 5 3 3<br>	6 7 2 3 3<br>	7 8 9 3 3<br>	5 6 2 3 3<br>	先选择 5(2, 3)<br>	再选择 8(4, 2)<br>	由于 7(4, 1) 小于 8(4, 2)，第3列以及之后的列被丢弃，则认为 8 是峰值，但是第3列的 9 大于 8，9才是峰值  </p>
+<h2 id="Lecture-2-Models-of-Computation"><a href="#Lecture-2-Models-of-Computation" class="headerlink" title="Lecture 2: Models of Computation"></a>Lecture 2: Models of Computation</h2><h3 id="What-is-an-algorithm-What-is-time"><a href="#What-is-an-algorithm-What-is-time" class="headerlink" title="What is an algorithm? What is time?"></a>What is an algorithm? What is time?</h3><p><strong>What is an Algorithm?</strong><br>	Mathematical abstraction of computer program<br>	Computational procedure to solve a problem<br>	<style>.jevrtekwplja{zoom:80%;}</style></p>
+<h3 id="Model-of-computation-specifies"><a href="#Model-of-computation-specifies" class="headerlink" title="Model of computation specifies"></a>Model of computation specifies</h3><p>what operations an algorithm is allowed<br>cost (time, space, . . . ) of each operation<br>cost of algorithm &#x3D; sum of operation costs  </p>
+<p><strong>Random access machine (RAM)</strong><br>	<style>.eepqsnabmmyp{zoom:80%;}</style><br>	Random Access Memory (RAM) modeled by a big array<br>	Θ(1) registers (each 1 word)<br>	In Θ(1) time, can<br>		load word @ r<sub>i</sub> into register r<sub>j</sub><br>		compute (+, −, ∗, &#x2F;, &amp;, |, ˆ) on registers<br>		store register r<sub>j</sub> into memory @ r<sub>i</sub><br>	What’s a word? w ≥ lg (memory size) bits<br>		assume basic objects (e.g., int) fit in word<br>		unit 4 in the course deals with big numbers<br>	realistic and powerful → implement abstractions  </p>
+<p><strong>Pointer machine</strong><br>	<style>.ggenijhkkcpr{zoom:80%;}</style><br>	dynamically allocated objects (namedtuple)<br>	object has O(1) fields<br>	field &#x3D; word (e.g., int) or pointer to object&#x2F;null (a.k.a. reference)<br>	weaker than (can be implemented on) RAM  </p>
+<p><strong>Python model</strong><br>	Python lets you use either mode of thinking<br>		① “list” is actually an array → RAM<br>			L[i] &#x3D; L[j] +5 → Θ(1) time<br>		② object with O(1) attributes (including references) → pointer machine<br>			x &#x3D; x.next → Θ(1) time<br>	Python has many other operations. To determine their cost, imagine implementation in terms of ① or ②:<br>		<style>.ycraouhuujmc{zoom:80%;}</style><br>		<style>.obciridsvktl{zoom:80%;}</style><br>		<style>.iialaesgvmjo{zoom:80%;}</style></p>
+<h3 id="Document-distance-problem-algorithms"><a href="#Document-distance-problem-algorithms" class="headerlink" title="Document distance: problem &amp; algorithms"></a>Document distance: problem &amp; algorithms</h3><p><strong>Document Distance Problem — compute d(D<sub>1</sub>, D<sub>2</sub>)</strong><br>	The document distance problem has applications in finding similar documents, detecting duplicates (Wikipedia mirrors and Google) and plagiarism, and also in web search (D<sub>2</sub> &#x3D; query)<br>	Some Definitions:<br>		Word &#x3D; sequence of alphanumeric characters<br>		Document &#x3D; sequence of words (ignore space, punctuation, etc.)<br>	The idea is to define distance in terms of shared words<br>	Think of document D as a vector:  D[w] &#x3D; # occurrences of word W<br>	For example:<br>		<style>.cqqmyysyvtvl{zoom:80%;}</style><br>	As a first attempt, define document distance as<br>$$<br>d’(D_1, D_2) &#x3D; D_1 \cdot D_2 &#x3D; \sum_{W} D_1[W] \cdot D_2[W]<br>$$<br>​	The problem is that this is not scale invariant<br>​		This means that long documents with 99% same words seem farther than short documents with 10% same words<br>​	This can be fixed by normalizing by the number of words:<br>$$<br>d’’(D_1, D_2) &#x3D; \frac{D_1 \cdot D_2}{|D_1| \cdot |D_2|}<br>$$<br>​		where |D<sub>i</sub>| is the number of words in document i<br>​	The geometric (rescaling) interpretation of this would be that:<br>$$<br>d(D_1, D_2) &#x3D; \arccos(d’’(D_1, D_2))<br>$$<br>​		or the document distance is the angle between the vectors<br>​		An angle of 0◦ means the two documents are identical whereas an angle of 90◦ means there are no common words<br>​		This approach was introduced by [Salton, Wong, Yang 1975]  </p>
+<p><strong>Document Distance Algorithm</strong><br>	① split each document into words<br>	② count word frequencies (document vectors)<br>	③ compute dot product (&amp; divide)<br>	<style>.bofruurtljai{zoom:80%;}</style><br>	<style>.fhbeuoivvweu{zoom:80%;}</style><br>	<style>.ktwfphrjmkjw{zoom:80%;}</style></p>
+<p><strong>Dictionary Approach</strong><br>	<style>.phsftdzmqocy{zoom:80%;}</style></p>
+<p><strong>Code (lecture2 code.zip &amp; data.zip on website)</strong><br>	Code (lecture2 code.zip &amp; data.zip on website)<br>	t3.lewis.txt 1,031,470 chars&#x2F;182,355 words&#x2F;8534 uniq<br>	seconds on Pentium 4, 2.8 GHz, C-Python 2.62, Linux 2.6.26<br>		docdist1: 228.1 — (1), (2), (3) (with extra sorting)<br>										words &#x3D; words + words on line<br>		docdist2: 164.7 — words +&#x3D; words on line<br>		docdist3: 123.1 — (3)’ . . . with insertion sort<br>		docdist4: 71.7 — (2)’ but still sort to use (3)’<br>		docdist5: 18.3 — split words via string.translate<br>		docdist6: 11.5 — merge sort (vs. insertion)<br>		docdist7: 1.8 — (3) (full dictionary)<br>		docdist8: 0.2 — whole doc, not line by line  </p>
+<h2 id="Unit-2-Sorting-and-Trees"><a href="#Unit-2-Sorting-and-Trees" class="headerlink" title="Unit 2: Sorting and Trees"></a>Unit 2: Sorting and Trees</h2><h2 id="Unit-3-Hashing"><a href="#Unit-3-Hashing" class="headerlink" title="Unit 3: Hashing"></a>Unit 3: Hashing</h2><h2 id="Unit-4-Numerics"><a href="#Unit-4-Numerics" class="headerlink" title="Unit 4: Numerics"></a>Unit 4: Numerics</h2><h2 id="Unit-5-Graphs"><a href="#Unit-5-Graphs" class="headerlink" title="Unit 5: Graphs"></a>Unit 5: Graphs</h2><h2 id="Unit-6-Shortest-Paths"><a href="#Unit-6-Shortest-Paths" class="headerlink" title="Unit 6: Shortest Paths"></a>Unit 6: Shortest Paths</h2><h2 id="Unit-7-Dynamic-Programming"><a href="#Unit-7-Dynamic-Programming" class="headerlink" title="Unit 7: Dynamic Programming"></a>Unit 7: Dynamic Programming</h2><h2 id="Unit-8-Advanced-Topics"><a href="#Unit-8-Advanced-Topics" class="headerlink" title="Unit 8: Advanced Topics"></a>Unit 8: Advanced Topics</h2>
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Titre:</strong> 【Class】MIT 6.006(2011) Introduction to Algorithms&#39;</li>
+        <li><strong>Auteur:</strong> tiny_star</li>
+        <li><strong>Créé à
+                :</strong> 2026-05-03 23:49:09</li>
+        
+            <li>
+                <strong>Mis à jour à
+                    :</strong> 2026-05-05 10:03:35
+            </li>
+        
+        <li>
+            <strong>Lien:</strong> https://tiny-star3.github.io/2026/05/03/Algorithm/[Class]MIT 6.006(2011) Introduction to Algorithms/
+        </li>
+        <li>
+            <strong>
+                Licence:
+            </strong>
+            
+
+            
+                Cette œuvre est sous licence <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2026/05/09/Ai/%5BClass%5DStanford%20CS336%20Language%20Modeling%20from%20Scratch/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">【Class]Stanford CS336 Language Modeling from Scratch】</span>
+						<span class="post-nav-item">Articles précédents</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/05/03/Life/World%20Class%20ComputerBasic/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">World Class ComputerBasic</span>
+						<span class="post-nav-item">Articles suivants</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Commentaires
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">Sur cette page</div>
+		<div class="page-title">【Class】MIT 6.006(2011) Introduction to Algorithms&#39;</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B"><span class="nav-text">课程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E8%A7%86%E9%A2%91"><span class="nav-text">课程视频</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E4%BF%A1%E6%81%AF"><span class="nav-text">课程信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unit-1-Introduction"><span class="nav-text">Unit 1: Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-1-Introduction-and-Peak-Finding"><span class="nav-text">Lecture 1: Introduction and Peak Finding</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Course-Overview"><span class="nav-text">Course Overview</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%80%9CPeak-finding%E2%80%9D-problem-%E2%80%94-1D-and-2D-versions"><span class="nav-text">“Peak finding” problem — 1D and 2D versions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lecture-2-Models-of-Computation"><span class="nav-text">Lecture 2: Models of Computation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#What-is-an-algorithm-What-is-time"><span class="nav-text">What is an algorithm? What is time?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Model-of-computation-specifies"><span class="nav-text">Model of computation specifies</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Document-distance-problem-algorithms"><span class="nav-text">Document distance: problem &amp; algorithms</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unit-2-Sorting-and-Trees"><span class="nav-text">Unit 2: Sorting and Trees</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unit-3-Hashing"><span class="nav-text">Unit 3: Hashing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unit-4-Numerics"><span class="nav-text">Unit 4: Numerics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unit-5-Graphs"><span class="nav-text">Unit 5: Graphs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unit-6-Shortest-Paths"><span class="nav-text">Unit 6: Shortest Paths</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unit-7-Dynamic-Programming"><span class="nav-text">Unit 7: Dynamic Programming</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unit-8-Advanced-Topics"><span class="nav-text">Unit 8: Advanced Topics</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2025</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">tiny_star</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        36  posts au total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITEURS</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">NOMBRE TOTAL DE PAGES VUES</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                Blog en ligne depuis <span class="odometer" id="runtime_days" ></span> Jours <span class="odometer" id="runtime_hours"></span> Hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="recherche..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>

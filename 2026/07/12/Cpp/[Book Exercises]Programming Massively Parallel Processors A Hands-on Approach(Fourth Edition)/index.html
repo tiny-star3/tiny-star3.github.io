@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="tiny_star">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://tiny-star3.github.io/2026/07/12/cpp/[book exercises]programming massively parallel processors a hands-on approach(fourth edition)/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tiny_star_blog">
+<meta property="og:url" content="http://tiny-star3.github.io/2026/07/12/Cpp/[Book%20Exercises]Programming%20Massively%20Parallel%20Processors%20A%20Hands-on%20Approach(Fourth%20Edition)/index.html">
+<meta property="og:site_name" content="tiny_star_blog">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale">
+<meta property="og:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-07-12T13:10:14.707Z">
+<meta property="article:modified_time" content="2026-07-13T04:52:21.817Z">
+<meta property="article:author" content="tiny_star">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tiny-star3.github.io/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/mystar.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/mystar.png">
+    <meta name="theme-color" content="#6495ed">
+    <link rel="shortcut icon" href="/images/mystar.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            tiny_star_blog - tiny_star
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"tiny-star3.github.io","root":"/","language":"zh","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":4,"number":false,"expand":false,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#6495ed","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"tiny_star","subtitle":{"text":["渺如尘埃，灿若星辰！","You are more than what you have become. Remember who you are!"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#87CEFA","dark":"#6495ED"},"text_style":{"title_size":"3rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Life":{"path":"/categories/Life","icon":"fa-regular fa-face-awesome"},"Metaphysics":{"path":"/categories/Metaphysics","icon":"fa-regular fa-stars"},"Cpp":{"icon":"fa-regular fa-face-glasses","path":"/categories/Cpp"},"Algorithm":{"path":"/categories/Algorithm","icon":"fa-regular fa-face-explode"},"Ai":{"path":"/categories/Ai","icon":"fa-regular fa-alien-8bit"},"Sundry":{"path":"/categories/Sundry","icon":"fa-regular fa-earth-asia"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2025/7/22 22:28:54"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/images/mystar.png" class="w-full h-full rounded-xs">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                tiny_star_blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    ACCUEIL
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Life"
+                                        >
+                                    <i class="fa-regular fa-face-awesome fa-fw"></i>
+                                    LIFE
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Metaphysics"
+                                        >
+                                    <i class="fa-regular fa-stars fa-fw"></i>
+                                    METAPHYSICS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Cpp"
+                                        >
+                                    <i class="fa-regular fa-face-glasses fa-fw"></i>
+                                    CPP
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Algorithm"
+                                        >
+                                    <i class="fa-regular fa-face-explode fa-fw"></i>
+                                    ALGORITHM
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Ai"
+                                        >
+                                    <i class="fa-regular fa-alien-8bit fa-fw"></i>
+                                    AI
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/Sundry"
+                                        >
+                                    <i class="fa-regular fa-earth-asia fa-fw"></i>
+                                    SUNDRY
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                ACCUEIL
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Life"
+                        >
+                            <span>
+                                LIFE
+                            </span>
+                            
+                                <i class="fa-regular fa-face-awesome fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Metaphysics"
+                        >
+                            <span>
+                                METAPHYSICS
+                            </span>
+                            
+                                <i class="fa-regular fa-stars fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Cpp"
+                        >
+                            <span>
+                                CPP
+                            </span>
+                            
+                                <i class="fa-regular fa-face-glasses fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Algorithm"
+                        >
+                            <span>
+                                ALGORITHM
+                            </span>
+                            
+                                <i class="fa-regular fa-face-explode fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Ai"
+                        >
+                            <span>
+                                AI
+                            </span>
+                            
+                                <i class="fa-regular fa-alien-8bit fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/Sundry"
+                        >
+                            <span>
+                                SUNDRY
+                            </span>
+                            
+                                <i class="fa-regular fa-earth-asia fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Catégories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">36</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3"></h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/staravatar.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">tiny_star</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv4</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-07-12 21:10:14</span>
+        <span class="mobile">2026-07-12 21:10:14</span>
+        <span class="hover-info">Créé</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-07-13 12:52:21</span>
+            <span class="mobile">2026-07-13 12:52:21</span>
+            <span class="hover-info">Mis à jour</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h1 id="CHAPTER1-Introduction"><a href="#CHAPTER1-Introduction" class="headerlink" title="CHAPTER1 Introduction"></a>CHAPTER1 Introduction</h1><h1 id="Part-I-Fundamental-Concepts"><a href="#Part-I-Fundamental-Concepts" class="headerlink" title="Part I Fundamental Concepts"></a>Part I Fundamental Concepts</h1><h1 id="CHAPTER2-Heterogeneous-data-parallel-computing"><a href="#CHAPTER2-Heterogeneous-data-parallel-computing" class="headerlink" title="CHAPTER2 Heterogeneous data parallel computing"></a>CHAPTER2 Heterogeneous data parallel computing</h1><ol>
+<li><p>If we want to use each thread in a grid to calculate one output element of a vector addition, what would be the expression for mapping the thread&#x2F;block indices to the data index (i)?  </p>
+<p>(A) i &#x3D; threadIdx.x + threadIdx.y;<br>(B) i &#x3D; blockIdx.x + threadIdx.x;<br>(C) i &#x3D; blockIdx.x * blockDim.x + threadIdx.x;<br>(D) i &#x3D; blockIdx.x * threadIdx.x;  </p>
+<p><strong>C</strong>  </p>
+</li>
+<li><p>Assume that we want to use each thread to calculate two adjacent elements of a vector addition. What would be the expression for mapping the thread&#x2F;block indices to the data index (i) of the first element to be processed by a thread?  </p>
+<p>(A) i &#x3D; blockIdx.x * blockDim.x + threadIdx.x + 2;<br>(B) i &#x3D; blockIdx.x * threadIdx.x * 2;<br>(C) i &#x3D; (blockIdx.x * blockDim.x + threadIdx.x) * 2;<br>(D) i &#x3D; blockIdx.x * blockDim.x * 2 + threadIdx.x;  </p>
+<p><strong>C</strong>  </p>
+</li>
+<li><p>We want to use each thread to calculate two elements of a vector addition. Each thread block processes 2 * blockDim.x consecutive elements that form two sections. All threads in each block will process a section first, each processing one element. They will then all move to the next section, each processing one element. Assume that variable i should be the index for the first element to be processed by a thread. What would be the expression for mapping the thread&#x2F;block indices to data index of the first element?  </p>
+<p>(A) i &#x3D; blockIdx.x * blockDim.x + threadIdx.x + 2;<br>(B) i &#x3D; blockIdx.x * threadIdx.x * 2;<br>(C) i &#x3D; (blockIdx.x * blockDim.x + threadIdx.x) * 2;<br>(D) i &#x3D; blockIdx.x * blockDim.x * 2 + threadIdx.x;  </p>
+<p><strong>D</strong>  </p>
+</li>
+<li><p>For a vector addition, assume that the vector length is 8000, each thread calculates one output element, and the thread block size is 1024 threads. The programmer configures the kernel call to have a minimum number of thread blocks to cover all output elements. How many threads will be in the grid?  </p>
+<p>(A) 8000<br>(B) 8196<br>(C) 8192<br>(D) 8200  </p>
+<p><strong>C</strong>  </p>
+</li>
+<li><p>If we want to allocate an array of v integer elements in the CUDA device global memory, what would be an appropriate expression for the second argument of the cudaMalloc call?  </p>
+<p>(A) n<br>(B) v<br>(C) n * sizeof(int)<br>(D) v * sizeof(int)  </p>
+<p><strong>D</strong>  </p>
+</li>
+<li><p>If we want to allocate an array of n floating-point elements and have a floating-point pointer variable A_d to point to the allocated memory, what would be an appropriate expression for the first argument of the cudaMalloc () call?  </p>
+<p>(A) n<br>(B) (void *) A_d<br>(C) *A_d<br>(D) (void **) &amp;A_d  </p>
+<p><strong>D</strong>  </p>
+</li>
+<li><p>If we want to copy 3000 bytes of data from host array A_h (A_h is a pointer to element 0 of the source array) to device array A_d (A_d is a pointer to element 0 of the destination array), what would be an appropriate API call for this data copy in CUDA?  </p>
+<p>(A) cudaMemcpy(3000, A_h, A_d, cudaMemcpyHostToDevice);<br>(B) cudaMemcpy(A_h, A_d, 3000, cudaMemcpyDeviceTHost);<br>(C) cudaMemcpy(A_d, A_h, 3000, cudaMemcpyHostToDevice);<br>(D) cudaMemcpy(3000, A_d, A_h, cudaMemcpyHostToDevice);  </p>
+<p><strong>C</strong>  </p>
+</li>
+<li><p>How would one declare a variable err that can appropriately receive the returned value of a CUDA API call?  </p>
+<p>(A) int err;<br>(B) cudaError err;<br>(C) cudaError_t err;<br>(D) cudaSuccess_t err;  </p>
+<p>**C ** </p>
+</li>
+<li><p>Consider the following CUDA kernel and the corresponding host function that calls it:  </p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">foo_kernel</span><span class="params">(<span class="type">float</span>* a, <span class="type">float</span>* b, <span class="type">unsigned</span> <span class="type">int</span> N)</span></span>&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> i = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">	<span class="keyword">if</span>(i &lt; N) &#123;</span><br><span class="line">		b[i] = <span class="number">2.7f</span> * a[i] - <span class="number">4.3f</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">float</span>* a_d, <span class="type">float</span>* b_d)</span> </span>&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> N = <span class="number">200000</span>;</span><br><span class="line">    foo_kernel &lt;&lt;&lt; (N + <span class="number">128</span> - <span class="number">1</span>)/<span class="number">128</span>, <span class="number">128</span> &gt;&gt;&gt; (a_d, b_d, N);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>a. What is the number of threads per block?<br>128<br>b. What is the number of threads in the grid?<br>1563 * 128 &#x3D; 200064<br>c. What is the number of blocks in the grid?<br>1563<br>d. What is the number of threads that execute the code on line 02?<br>200064<br>e. What is the number of threads that execute the code on line 04?<br>200000  </p>
+</li>
+<li><p>⭐A new summer intern was frustrated with CUDA. He has been complaining that CUDA is very tedious. He had to declare many functions that he plans to execute on both the host and the device twice, once as a host function and once as a device function. What is your response?  </p>
+<p>只需要在函数声明前同时加上 <code>__host__</code> 和 <code>__device__</code> 关键字，编译器就会自动生成两份编译版本—— 一份给 CPU（主机）用，一份给 GPU（设备）用</p>
+</li>
+</ol>
+<h1 id="CHAPTER3-Multidimensional-grids-and-data"><a href="#CHAPTER3-Multidimensional-grids-and-data" class="headerlink" title="CHAPTER3 Multidimensional grids and data"></a>CHAPTER3 Multidimensional grids and data</h1><ol>
+<li><p>In this chapter we implemented a matrix multiplication kernel that has each thread produce one output matrix element. In this question, you will implement different matrix-matrix multiplication kernels and compare them.<br>a. Write a kernel that has each thread produce one output matrix row. Fill in the execution configuration parameters for the design.  </p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">MatMulKernel_Row</span><span class="params">(<span class="type">float</span>* A, <span class="type">float</span>* B, <span class="type">float</span>* C, <span class="type">int</span> M, <span class="type">int</span> N, <span class="type">int</span> K)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> row = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="keyword">if</span>(row &lt; M)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>; j&lt;N; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">float</span> sum = <span class="number">0.0f</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> k=<span class="number">0</span>; k&lt;K; k++)&#123;</span><br><span class="line">                sum += A[row*K+k] * N[k*N+j];</span><br><span class="line">            &#125;</span><br><span class="line">            C[row*N+j] = sum;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MatMul_Row</span><span class="params">(<span class="type">float</span>* A, <span class="type">float</span>* B, <span class="type">float</span>* C, <span class="type">int</span> M, <span class="type">int</span> N, <span class="type">int</span> K)</span></span>&#123;</span><br><span class="line">    <span class="function">dim3 <span class="title">threadsPerBlock</span><span class="params">(<span class="number">512</span>)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">blocksPerGrid</span><span class="params">((M+threadsPerBlock.x<span class="number">-1</span>) / threadsPerBlock.x)</span></span>;</span><br><span class="line">    MatMulKernel_Row&lt;&lt;&lt; blocksPerGrid, threadsPerBlock &gt;&gt;&gt;(A, B, C, M, N, K);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>​    b. Write a kernel that has each thread produce one output matrix column. Fill in the execution configuration parameters for the design.  </p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">MatMulKernel_Col</span><span class="params">(<span class="type">float</span>* A, <span class="type">float</span>* B, <span class="type">float</span>* C, <span class="type">int</span> M, <span class="type">int</span> N, <span class="type">int</span> K)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> col = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="keyword">if</span>(col &lt; N)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;M; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">float</span> sum = <span class="number">0.0f</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> k=<span class="number">0</span>; k&lt;K; k++)&#123;</span><br><span class="line">                sum += A[i*K+k] * B[k*N+col];</span><br><span class="line">            &#125;</span><br><span class="line">            C[i*N+col] = sum;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MatMul_Col</span><span class="params">(<span class="type">float</span>* A, <span class="type">float</span>* B, <span class="type">float</span>* C, <span class="type">int</span> M, <span class="type">int</span> N, <span class="type">int</span> K)</span></span>&#123;</span><br><span class="line">    <span class="function">dim3 <span class="title">threadsPerBlock</span><span class="params">(<span class="number">512</span>)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">blocksPerGrid</span><span class="params">((N+threadsPerBlock.x<span class="number">-1</span>) / threadsPerBlock.x)</span></span>;</span><br><span class="line">    MatMulKernel_Col&lt;&lt;&lt; blocksPerGrid, threadsPerBlock &gt;&gt;&gt;(A, B, C, M, N, K);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>​    c.⭐ Analyze the pros and cons of each of the two kernel designs.<br>​        行优先内核 (MatMulKernel_Row)<br>​            优点：<br>​                矩阵 A 的读取复用性高： 对于固定的 row，线程在计算该行中所有 N 个元素时，会重复使用 A[row &times; K + k]。由于这行数据被加载到寄存器中，有效地减少了对全局内存（Global Memory）中 A 的重复读取次数<br>​            缺点：<br>​                写入 C 非合并： 在执行 <code>C[row*N + j] = sum</code> 时，Warp 内的 32 个线程写入的是 <code>row</code> 不同的地址。其地址跨度为 N。当 N 较大时，内存访问完全非合并，显存带宽利用率极低<br>​                矩阵 B 读取不连续： 内层循环访问 B[k &times; N + j]。对于同一列 j，相邻的 k 访问在内存中跨度为 N，属于非合并读取<br>​        列优先内核 (MatMulKernel_Col)<br>​            优点：<br>​                矩阵 B 的读取复用性高： 对于固定的 col，线程在计算该列所有 M 个元素时，会重复使用 B[k &times; N + col]。这减少了对矩阵 B 的重复读取次数<br>​            缺点：<br>​                写入 C 非合并： 在执行 <code>C[i*N + col] = sum</code> 时，随着 i 的变化，Warp 内的线程需要跳跃 N 的跨度去写入 C。这同样导致了严重的非合并写入问题<br>​                矩阵 A 读取不连续： 内层循环访问 A[i &times; K + k]。对于同一行 i，相邻的 k 访问在内存中跨度为 K。对于较大的矩阵，这也会导致非合并读取  </p>
+</li>
+<li><p>A matrix-vector multiplication takes an input matrix B and a vector C and produces one output vector A. Each element of the output vector A is the dot product of one row of the input matrix B and C, that is, A[i] &#x3D; &Sigma;<sup>j</sup> B[i][j]*C[j]. For simplicity we will handle only square matrices whose elements are single precision floating-point numbers. Write a matrix-vector multiplication kernel and the host stub function that can be called with four parameters: pointer to the output matrix, pointer to the input matrix, pointer to the input vector, and the number of elements in each dimension. Use one thread to calculate an output vector element.  </p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">MatVecMulKernel</span><span class="params">(<span class="type">float</span>* output, <span class="type">float</span>* input_mat, <span class="type">float</span>* input_vec, <span class="type">int</span> N)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> row = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="keyword">if</span>(row &lt; N)&#123;</span><br><span class="line">        <span class="type">float</span> sum = <span class="number">0.0f</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> k=<span class="number">0</span>; k&lt;N; k++)&#123;</span><br><span class="line">            sum += input_mat[row*N+k]*input_vec[k];</span><br><span class="line">        &#125;</span><br><span class="line">        output[row] = sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MatVecMul</span><span class="params">(<span class="type">float</span>* output, <span class="type">float</span>* input_mat, <span class="type">float</span>* input_vec, <span class="type">int</span> N)</span></span>&#123;</span><br><span class="line">    <span class="function">dim3 <span class="title">threadsPerBlock</span><span class="params">(<span class="number">512</span>)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">blocksPerGrid</span><span class="params">((N+threadsPerBlock.x<span class="number">-1</span>) / threadPerBlock.x)</span></span>;</span><br><span class="line">    MatVecMulKernel&lt;&lt;&lt; blocksPerGrid, threadsPerBlock &gt;&gt;&gt;(output, input_mat, input_vec, N);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>Consider the following CUDA kernel and the corresponding host function that calls it:  </p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">foo_kernel</span><span class="params">(<span class="type">float</span>* a, <span class="type">float</span>* b, <span class="type">unsigned</span> <span class="type">int</span> M, <span class="type">unsigned</span> <span class="type">int</span> N)</span></span>&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> row = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> col = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">	<span class="keyword">if</span>(row &lt; M &amp;&amp; col &lt; N) &#123;</span><br><span class="line">		b[row*N + col] = a[row*N + col]/<span class="number">2.1f</span> + <span class="number">4.8f</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">float</span>* a_d, <span class="type">float</span>* b_d)</span> </span>&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> M = <span class="number">150</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> N = <span class="number">300</span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">bd</span><span class="params">(<span class="number">16</span>, <span class="number">32</span>)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">gd</span><span class="params">((N<span class="number">-1</span>)/<span class="number">16</span><span class="number">+1</span>, (M<span class="number">-1</span>)/<span class="number">32</span><span class="number">+1</span>)</span></span>;</span><br><span class="line">    foo_kernel &lt;&lt;&lt; gd, bd &gt;&gt;&gt; (a_d, b_d, M, N);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>a. What is the number of threads per block?<br>512<br>b. What is the number of threads in the grid?<br>19 * 5 * 512 &#x3D; 48640<br>c. What is the number of blocks in the grid?<br>19 * 5 &#x3D; 95<br>d. What is the number of threads that execute the code on line 05?<br>150 * 300 &#x3D; 45000  </p>
+</li>
+<li><p>Consider a 2D matrix with a width of 400 and a height of 500. The matrix is stored as a one-dimensional array. Specify the array index of the matrix element at row 20 and column 10:  </p>
+<p>a. If the matrix is stored in row-major order.<br>20 * 400 + 10 &#x3D; 8010<br>b. If the matrix is stored in column-major order.<br>10 * 500 + 20 &#x3D; 5020  </p>
+</li>
+<li><p>Consider a 3D tensor with a width of 400, a height of 500, and a depth of 300. The tensor is stored as a one-dimensional array in row-major order. Specify the array index of the tensor element at x &#x3D; 10, y &#x3D; 20, and z &#x3D; 5.  </p>
+<p>5 * 400 * 500 + 20 * 400 + 10 &#x3D; 1008010</p>
+</li>
+</ol>
+<h1 id="CHAPTER4-Compute-architecture-and-scheduling"><a href="#CHAPTER4-Compute-architecture-and-scheduling" class="headerlink" title="CHAPTER4 Compute architecture and scheduling"></a>CHAPTER4 Compute architecture and scheduling</h1><ol>
+<li><p>Consider the following CUDA kernel and the corresponding host function that calls it:  </p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">foo_kernel</span> <span class="params">(<span class="type">int</span>* a, <span class="type">int</span>* b)</span> </span>&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> i = blockIdx.x*blockDim.x + threadIdx.x;</span><br><span class="line"> <span class="keyword">if</span> (threadIdx.x &lt; <span class="number">40</span> || threadIdx.x &gt;= <span class="number">104</span>) &#123;</span><br><span class="line">        b[i] = a[i] + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(i%<span class="number">2</span> == <span class="number">0</span>) &#123; </span><br><span class="line">        a[i] = b[i] *<span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">unsigned</span> <span class="type">int</span> j = <span class="number">0</span>; j &lt; <span class="number">5</span> - (i%<span class="number">3</span>); ++j) &#123;</span><br><span class="line">        b[i] += j;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span> <span class="params">(<span class="type">int</span>* a_d, <span class="type">int</span>* b_d)</span> </span>&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> N = <span class="number">1024</span>;</span><br><span class="line">    foo_kernel &lt;&lt;&lt; (N + <span class="number">128</span> - <span class="number">1</span>)/<span class="number">128</span>, <span class="number">128</span> &gt;&gt;&gt; (a_d, b_d);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>a. What is the number of warps per block?<br>4<br>b. What is the number of warps in the grid?<br>8 * 4 &#x3D; 32<br>c. For the statement on line 04:<br>i. How many warps in the grid are active?<br>    8 * 3 &#x3D; 24<br>ii. How many warps in the grid are divergent?<br>    8 * 2 &#x3D; 16<br>iii. What is the SIMD efficiency (in %) of warp 0 of block 0?<br>    100%<br>iv. What is the SIMD efficiency (in %) of warp 1 of block 0?<br>    25%<br>v. What is the SIMD efficiency (in %) of warp 3 of block 0?<br>    75%<br>d. For the statement on line 07:<br>i. How many warps in the grid are active?<br>    32<br>ii. How many warps in the grid are divergent?<br>    32<br>iii. What is the SIMD efficiency (in %) of warp 0 of block 0?<br>    50%<br>e. ⭐For the loop on line 09:<br>i. How many iterations have no divergence?<br>    j &#x3D; 0, 1, 2 (all threads participate) → 3 iterations<br>ii. How many iterations have divergence?<br>    j &#x3D; 3, 4 (threads drop out) → 2 iterations  </p>
+</li>
+<li><p>For a vector addition, assume that the vector length is 2000, each thread calculates one output element, and the thread block size is 512 threads. How many threads will be in the grid?  </p>
+<p>2048  </p>
+</li>
+<li><p>⭐For the previous question, how many warps do you expect to have divergence due to the boundary check on vector length?  </p>
+<p>1<br>The valid thread indices are 0 to 1999. The grid launches 2048 threads, so indices 2000–2047 are out of bounds. The boundary lies within warp 62 (threads 1984–2015), where threads 1984–1999 are valid and threads 2000–2015 are not. All other warps are either fully valid (warps 0–61) or fully out of bounds (warp 63), resulting in no divergence.  </p>
+</li>
+<li><p>Consider a hypothetical block with 8 threads executing a section of code before reaching a barrier. The threads require the following amount of time (in microseconds) to execute the sections: 2.0, 2.3, 3.0, 2.8, 2.4, 1.9, 2.6, and 2.9; they spend the rest of their time waiting for the barrier. What percentage of the threads’ total execution time is spent waiting for the barrier?  </p>
+<p>17.08%  </p>
+</li>
+<li><p>⭐A CUDA programmer says that if they launch a kernel with only 32 threads in each block, they can leave out the __syncthreads() instruction wherever barrier synchronization is needed. Do you think this is a good idea? Explain.  </p>
+<p>即使一个块只有32个线程，省去 <code>__syncthreads()</code> 也不是好主意。虽然线程在同一个 warp 内锁步执行，但 <code>__syncthreads()</code> 还承担内存屏障的作用，能保证共享内存的写入对其他线程可见，并防止编译器重排指令。省略它可能导致数据竞争和不确定结果，且代码将依赖特定 warp 大小，移植性变差  </p>
+</li>
+<li><p>If a CUDA device’s SM can take up to 1536 threads and up to 4 thread blocks, which of the following block configurations would result in the most number of threads in the SM?  </p>
+<p>a. 128 threads per block<br>b. 256 threads per block<br>c. 512 threads per block<br>d. 1024 threads per block  </p>
+<p><strong>C</strong>  </p>
+</li>
+<li><p>Assume a device that allows up to 64 blocks per SM and 2048 threads per SM. Indicate which of the following assignments per SM are possible. In the cases in which it is possible, indicate the occupancy level.  </p>
+<p>a. 8 blocks with 128 threads each<br>可行，占用率 50%<br>b. 16 blocks with 64 threads each<br>可行，占用率 50%<br>c. 32 blocks with 32 threads each<br>可行，占用率 50%<br>d. 64 blocks with 32 threads each<br>可行，占用率 100%<br>e. 32 blocks with 64 threads each<br>可行，占用率 100%  </p>
+</li>
+<li><p>Consider a GPU with the following hardware limits: 2048 threads per SM, 32 blocks per SM, and 64K (65,536) registers per SM. For each of the following kernel characteristics, specify whether the kernel can achieve full occupancy. If not, specify the limiting factor.  </p>
+<p>a. The kernel uses 128 threads per block and 30 registers per thread.<br>能够 100% 占用<br>b. The kernel uses 32 threads per block and 29 registers per thread.<br>不能 100% 占用，只有 50% 占用率，限制因素是 32 blocks per SM<br>c. The kernel uses 256 threads per block and 34 registers per thread.<br>不能 100% 占用，限制因素是 64K (65,536) registers per SM  </p>
+</li>
+<li><p>A student mentions that they were able to multiply two 1024 &times; 1024 matrices using a matrix multiplication kernel with 32 &times; 32 thread blocks. The student is using a CUDA device that allows up to 512 threads per block and up to 8 blocks per SM. The student further mentions that each thread in a thread block calculates one element of the result matrix. What would be your reaction and why?  </p>
+<p>他使用 32 &times; 32 thread blocks 总共有 1024 threads，而 CUDA device that allows up to 512 threads per block，该配置超出了硬件限制，根本无法启动内核</p>
+</li>
+</ol>
+<h1 id="CHAPTER5-Memory-architecture-and-data-locality"><a href="#CHAPTER5-Memory-architecture-and-data-locality" class="headerlink" title="CHAPTER5 Memory architecture and data locality"></a>CHAPTER5 Memory architecture and data locality</h1><ol>
+<li><p>Consider matrix addition. Can one use shared memory to reduce the global memory bandwidth consumption? Hint: Analyze the elements that are accessed by each thread and see whether there is any commonality between threads.  </p>
+<p>不能利用共享内存来减少全局内存带宽消耗，每个元素只访问了一次  </p>
+</li>
+<li><p>Draw the equivalent of Fig. 5.7 for a 8 &times; 8 matrix multiplication with 2 &times; 2 tiling and 4 &times; 4 tiling. Verify that the reduction in global memory bandwidth is indeed proportional to the dimension size of the tiles  </p>
+<style>.wiyxzrbsalwn{zoom:67%;}</style>
+
+<p>2 &times; 2 tiling  </p>
+<style>.prfheohcuqjz{zoom: 80%;}</style>
+
+<p>4 &times; 4 tiling  </p>
+<style>.uybxbsjkrpyc{zoom:80%;}</style>
+</li>
+<li><p>What type of incorrect execution behavior can happen if one forgot to use one or both __syncthreads() in the kernel of Fig. 5.9?  </p>
+<style>.vehyqlnceyvm{zoom: 80%;}</style>
+
+<p>忘记使用 __syncthreads() 会导致 shared memory 中的数值无法及时更新，最终导致结果错误  </p>
+<p>忘记使用 <code>__syncthreads()</code> 会引发数据竞争（Data Race）<br>忘记第一个同步会导致 RAW（先写后读）冲突：快线程会在慢线程完成 Shared Memory 数据加载前就开始计算，导致读到无效数据<br>忘记第二个同步会导致 WAR（先读后写）冲突：快线程会在慢线程完成当前阶段计算前，就进入下一轮循环并覆盖 Shared Memory 中的旧数据，导致慢线程读到错误阶段的数据  </p>
+</li>
+<li><p>⭐Assuming that capacity is not an issue for registers or shared memory, give one important reason why it would be valuable to use shared memory instead of registers to hold values fetched from global memory? Explain your answer.  </p>
+<p>即使寄存器和共享内存容量无限，使用共享内存代替寄存器保存全局内存数据的一个重要原因是：共享内存可以被同一线程块内的所有线程访问，从而实现数据共享和复用。寄存器是每个线程私有的，无法在线程间传递数据。当多个线程需要读取相同的全局内存地址时，只需一个线程将数据加载到共享内存，其余线程从共享内存读取，这能大幅减少重复的全局内存访问，显著提升带宽利用率和性能  </p>
+</li>
+<li><p>For our tiled matrix-matrix multiplication kernel, if we use a 32 &times; 32 tile, what is the reduction of memory bandwidth usage for input matrices M and N?  </p>
+<p>加载一次到 shared memory，而使用了 32 次，内存带宽使用减少了32倍  </p>
+</li>
+<li><p>Assume that a CUDA kernel is launched with 1000 thread blocks, each of which has 512 threads. If a variable is declared as a local variable in the kernel, how many versions of the variable will be created through the lifetime of the execution of the kernel?  </p>
+<p>512 * 1000 &#x3D; 512000  </p>
+</li>
+<li><p>In the previous question, if a variable is declared as a shared memory variable, how many versions of the variable will be created through the lifetime of the execution of the kernel?  </p>
+<p>1000  </p>
+</li>
+<li><p>Consider performing a matrix multiplication of two input matrices with dimensions N &times; N. How many times is each element in the input matrices requested from global memory when:  </p>
+<p>a. There is no tiling?<br>对于每个元素从 global memory 读取 N 次<br>b. Tiles of size T &times; T are used?<br>对于每个元素从 global memory 读取 &lceil;N&#x2F;T&rceil; 次  </p>
+</li>
+<li><p>A kernel performs 36 floating-point operations and seven 32-bit global memory accesses per thread. For each of the following device properties, indicate whether this kernel is compute-bound or memory bound.  </p>
+<p>a. Peak FLOPS&#x3D;200 GFLOPS, peak memory bandwidth&#x3D;100 GB&#x2F;second<br>kernel compute intensity &#x3D; 36 &#x2F; 7*4 ≈ 1.286 FLOP&#x2F;B<br>Peak compute intensity &#x3D; 200 &#x2F; 100 &#x3D; 2 FLOP&#x2F;B<br>1.286 &lt; 2, memory bound<br>b. Peak FLOPS&#x3D;300 GFLOPS, peak memory bandwidth&#x3D;250 GB&#x2F;second<br>kernel compute intensity &#x3D; 36 &#x2F; 7*4 ≈ 1.286 FLOP&#x2F;B<br>Peak compute intensity &#x3D; 300 &#x2F; 250 &#x3D; 1.2 FLOP&#x2F;B<br>1.286 &gt; 1.2, compute-bound  </p>
+</li>
+<li></li>
+</ol>
+<h1 id="CHAPTER6-Performance-considerations"><a href="#CHAPTER6-Performance-considerations" class="headerlink" title="CHAPTER6 Performance considerations"></a>CHAPTER6 Performance considerations</h1><ol>
+<li>Write a matrix multiplication kernel function that corresponds to the design illustrated in Fig. 6.4.</li>
+</ol>
+<h1 id="Part-II-Parallel-Patterns"><a href="#Part-II-Parallel-Patterns" class="headerlink" title="Part II Parallel Patterns"></a>Part II Parallel Patterns</h1><h1 id="CHAPTER7-Convolution"><a href="#CHAPTER7-Convolution" class="headerlink" title="CHAPTER7 Convolution"></a>CHAPTER7 Convolution</h1><h1 id="CHAPTER8-Stencil"><a href="#CHAPTER8-Stencil" class="headerlink" title="CHAPTER8 Stencil"></a>CHAPTER8 Stencil</h1><h1 id="CHAPTER9-Parallel-histogram"><a href="#CHAPTER9-Parallel-histogram" class="headerlink" title="CHAPTER9 Parallel histogram"></a>CHAPTER9 Parallel histogram</h1><h1 id="CHAPTER10-Reduction"><a href="#CHAPTER10-Reduction" class="headerlink" title="CHAPTER10 Reduction"></a>CHAPTER10 Reduction</h1><h1 id="Part-IV-Advanced-Practices"><a href="#Part-IV-Advanced-Practices" class="headerlink" title="Part IV Advanced Practices"></a>Part IV Advanced Practices</h1><h1 id="CHAPTER20-Programming-a-heterogeneous-computing-cluster"><a href="#CHAPTER20-Programming-a-heterogeneous-computing-cluster" class="headerlink" title="CHAPTER20 Programming a heterogeneous computing cluster"></a>CHAPTER20 Programming a heterogeneous computing cluster</h1><h1 id="CHAPTER21-CUDA-dynamic-parallelism"><a href="#CHAPTER21-CUDA-dynamic-parallelism" class="headerlink" title="CHAPTER21 CUDA dynamic parallelism"></a>CHAPTER21 CUDA dynamic parallelism</h1>
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Titre:</strong> </li>
+        <li><strong>Auteur:</strong> tiny_star</li>
+        <li><strong>Créé à
+                :</strong> 2026-07-12 21:10:14</li>
+        
+            <li>
+                <strong>Mis à jour à
+                    :</strong> 2026-07-13 12:52:21
+            </li>
+        
+        <li>
+            <strong>Lien:</strong> https://tiny-star3.github.io/2026/07/12/Cpp/[Book Exercises]Programming Massively Parallel Processors A Hands-on Approach(Fourth Edition)/
+        </li>
+        <li>
+            <strong>
+                Licence:
+            </strong>
+            
+
+            
+                Cette œuvre est sous licence <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2026/07/15/Ai/%5BProject%5DXstar-Infer/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">【Project】Xstar-Infer</span>
+						<span class="post-nav-item">Articles précédents</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/05/09/Ai/%5BClass%5DStanford%20CS336%20Language%20Modeling%20from%20Scratch/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">【Class]Stanford CS336 Language Modeling from Scratch】</span>
+						<span class="post-nav-item">Articles suivants</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Commentaires
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">Sur cette page</div>
+		<div class="page-title"></div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CHAPTER1-Introduction"><span class="nav-text">CHAPTER1 Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-I-Fundamental-Concepts"><span class="nav-text">Part I Fundamental Concepts</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CHAPTER2-Heterogeneous-data-parallel-computing"><span class="nav-text">CHAPTER2 Heterogeneous data parallel computing</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CHAPTER3-Multidimensional-grids-and-data"><span class="nav-text">CHAPTER3 Multidimensional grids and data</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CHAPTER4-Compute-architecture-and-scheduling"><span class="nav-text">CHAPTER4 Compute architecture and scheduling</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CHAPTER5-Memory-architecture-and-data-locality"><span class="nav-text">CHAPTER5 Memory architecture and data locality</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CHAPTER6-Performance-considerations"><span class="nav-text">CHAPTER6 Performance considerations</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-II-Parallel-Patterns"><span class="nav-text">Part II Parallel Patterns</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CHAPTER7-Convolution"><span class="nav-text">CHAPTER7 Convolution</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CHAPTER8-Stencil"><span class="nav-text">CHAPTER8 Stencil</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CHAPTER9-Parallel-histogram"><span class="nav-text">CHAPTER9 Parallel histogram</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CHAPTER10-Reduction"><span class="nav-text">CHAPTER10 Reduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-IV-Advanced-Practices"><span class="nav-text">Part IV Advanced Practices</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CHAPTER20-Programming-a-heterogeneous-computing-cluster"><span class="nav-text">CHAPTER20 Programming a heterogeneous computing cluster</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CHAPTER21-CUDA-dynamic-parallelism"><span class="nav-text">CHAPTER21 CUDA dynamic parallelism</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2025</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">tiny_star</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        36  posts au total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITEURS</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">NOMBRE TOTAL DE PAGES VUES</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                Blog en ligne depuis <span class="odometer" id="runtime_days" ></span> Jours <span class="odometer" id="runtime_hours"></span> Hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="recherche..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>
